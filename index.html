@@ -74,38 +74,6 @@
 .game-type-pill{background:#e8f5ee;color:#187247;padding:2px 5px;font-weight:700;font-size:10px}.game-type-pill.tetris{background:#e7edf8;color:#315c9e}
 @media(max-width:780px){.tetris-shell{display:block;padding:10px 10px 75px}.tetris-sidebar{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:9px}.tetris-sidebox{margin:0}.tetris-match{gap:9px}.tetris-sheet{padding:9px}.tetris-controls button{height:43px;min-width:40px}}
 
-/* Spreadsheet Minesweeper Battle: self-built boards + a live opponent view */
-.mine-shell{max-width:1450px;margin:12px auto 100px;padding:0 17px;display:grid;grid-template-columns:minmax(0,1fr) 215px;gap:12px;align-items:start}
-.mine-workbook{min-width:0;background:#fff;border:1px solid #cedbd0;box-shadow:0 1px 3px #1833260a}
-.mine-topline{background:#edf4ee;border-bottom:1px solid #d1dcd4;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 11px;font-size:11px}
-.mine-topline strong{font-size:12px;color:#24583b}.mine-timer{font-weight:700;color:#0d6335;font-variant-numeric:tabular-nums;font-size:13px}
-.mine-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid #d7e2d9}
-.mine-metric{border-right:1px solid #dbe5de;padding:7px 9px;min-width:0;background:#fcfdfc}.mine-metric:last-child{border:0}
-.mine-metric small{display:block;color:#6b8172;font-size:10px;margin-bottom:3px;white-space:nowrap}.mine-metric strong{font-size:12px;color:#234834;font-variant-numeric:tabular-nums}
-.mine-board-pair{display:grid;grid-template-columns:minmax(385px,1.6fr) minmax(265px,1fr);gap:12px;padding:12px;align-items:start}
-.mine-board-main,.mine-board-rival{min-width:0;border:1px solid #d9e3db;background:white}
-.mine-board-heading{background:#f1f5f1;border-bottom:1px solid #d6e0d8;padding:7px 10px;font-size:11px;display:flex;justify-content:space-between;gap:10px;color:#45614b}
-.mine-board-heading span{color:#819082;font-size:10px}
-.mine-grid-wrap{padding:7px;overflow:auto}
-.mine-grid{border-collapse:collapse;table-layout:fixed;width:100%;margin:0 auto;user-select:none}
-.mine-grid th,.mine-grid td{border:1px solid #d7dfd8;padding:0;text-align:center}
-.mine-grid th{background:#edf2ee;color:#65796a;font-weight:500;font-size:10px;height:19px;min-width:15px}
-.mine-grid th:first-child{width:24px}.mine-grid td{height:32px;background:white}
-.mine-grid button{appearance:none;border:0;background:#f6f9f6;color:#274435;display:block;width:100%;height:32px;padding:0;border-radius:0;font-size:12px;font-weight:700;cursor:cell;touch-action:manipulation}
-.mine-grid button:hover{background:#e4efe6}.mine-grid button:focus-visible{outline:2px solid #16824a;outline-offset:-3px}
-.mine-grid button.forbidden{background:#f1f2f1;color:#b0bbb3;cursor:not-allowed}
-.mine-grid button.mine-set{background:#d8ecdd;color:#147849}.mine-grid button.opened{background:#fff;color:#3d5c43;cursor:default}
-.mine-grid button.exploded{background:#fbdcda;color:#a5221b}.mine-grid button.flagged{background:#fff7e3;color:#b0781d}
-.mine-grid button.num-1{color:#175fbb}.mine-grid button.num-2{color:#148143}.mine-grid button.num-3{color:#c54125}
-.mine-grid button.num-4{color:#6846a5}.mine-grid button.num-5{color:#8d5424}.mine-grid button.num-6{color:#128e9f}
-.mine-rival-grid button{height:23px;font-size:10px;cursor:default}.mine-rival-grid td{height:23px}
-.mine-rival-grid th{height:16px;font-size:9px}.mine-rival-grid button:disabled{opacity:1}.mine-board-sub{border-top:1px solid #eef2ef;text-align:center;padding:7px;color:#7a8d7f;font-size:10px}
-.mine-actions{padding:10px 12px;border-top:1px solid #d9e2dc;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.mine-hint{font-size:11px;color:#587261;flex:1;min-width:160px}.mine-action{border:1px solid #b9d4c0;background:#f6fff8;color:#12653a;padding:8px 11px;border-radius:2px;font-weight:700;font-size:11px}
-.mine-action.primary{background:#107c41;color:white}.mine-action:disabled{opacity:.4}
-.mine-side{display:flex;flex-direction:column;gap:10px}.mine-box{border:1px solid #d0dbd2;background:#fff}.mine-box h3{padding:9px 11px;margin:0;border-bottom:1px solid #dce6dd;background:#f2f6f3;color:#3f5a47;font-size:11px}
-.mine-box-row{display:flex;justify-content:space-between;padding:9px 10px;gap:8px;font-size:10px;border-bottom:1px solid #edf1ed}.mine-box-row:last-child{border:0}.mine-box-row b{font-variant-numeric:tabular-nums}
-.mine-note{padding:9px 10px;font-size:10px;color:#738577;line-height:1.6}.game-choice.mine-choice .choice-symbol{color:#197646}
 /* Memo can now be collapsed without hiding message history. */
 .chat:not([hidden]){display:flex!important}
 .chat .chat-title{width:100%;cursor:pointer}
@@ -113,8 +81,6 @@
 .chat.collapsed .chat-body{display:none!important}
 .chat.collapsed .chat-title{border-bottom:0;padding:9px 11px}
 .chat.collapsed .chat-toggle{font-size:15px}
-@media(max-width:1160px){.mine-shell{grid-template-columns:1fr;max-width:1020px}.mine-side{display:grid;grid-template-columns:1fr 1fr}.mine-board-pair{grid-template-columns:minmax(360px,1.5fr) minmax(230px,1fr)}}
-@media(max-width:710px){.mine-shell{margin:7px auto 80px;padding:0 8px}.mine-board-pair{display:block;padding:6px}.mine-board-rival{margin-top:9px}.mine-grid-wrap{padding:4px}.mine-grid td,.mine-grid button{height:clamp(25px,7.1vw,34px)}.mine-rival-grid button,.mine-rival-grid td{height:22px}.mine-metrics{grid-template-columns:repeat(2,1fr)}.mine-metric:nth-child(2){border-right:0}.mine-metric:nth-child(-n+2){border-bottom:1px solid #d5e0d7}.mine-side{grid-template-columns:1fr 1fr}.chat{bottom:35px;max-height:48dvh}.chat-messages{height:125px}}
 
 /* Quiet worksheet appearance - presentation-only; no changes to networking or game rules. */
 .stone,.stone.white{width:18px;height:18px;margin-left:10px;border-radius:2px;background:#5f6d63;border:1px solid #4e5b52;display:block;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
@@ -139,51 +105,9 @@
 .tetris-controls button:active{background:#e9efea}
 @media(max-width:700px){.tetris-grid-columns{grid-template-columns:21px repeat(10,minmax(0,1fr));height:18px}.tetris-grid-columns>span{font-size:9px;line-height:17px}.tetris-grid-body{grid-template-columns:21px minmax(0,1fr)}.tetris-grid-rows span{font-size:9px}}
 
-/* Online Mine vs Robot: uses quiet spreadsheet cells, leaving Omok & Tetris styles untouched. */
-#mine-game[hidden]{display:none!important}
-#mine-game{max-width:1120px;margin:9px auto 95px;padding:0 17px;display:grid;grid-template-columns:minmax(0,1fr) 252px;gap:13px;align-items:start}
-.hunter-panel,.hunter-asidebox{background:#fff;border:1px solid #ccd9cf;box-shadow:0 1px 2px #18352410;min-width:0}
-.hunter-top{background:#f1f5f2;border-bottom:1px solid #d6e2da;padding:10px 13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.hunter-top strong{font-size:12px;color:#315a40}.hunter-top span{color:#748779;font-size:11px}
-.hunter-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid #dce6de}
-.hunter-stat{padding:9px;border-right:1px solid #dce6de;background:#fbfcfb}.hunter-stat:last-child{border:0}
-.hunter-stat small{font-size:10px;color:#78877b;display:block}.hunter-stat strong{display:block;color:#31513a;margin-top:2px;font-size:13px}
-.hunter-actions{padding:10px 12px;border-bottom:1px solid #e1e8e3;display:flex;gap:7px;align-items:center;flex-wrap:wrap}
-.hunter-btn{padding:7px 11px;border:1px solid #bfcfc2;background:#f9fcf9;color:#376248;font-size:11px;border-radius:2px;font-weight:650;cursor:pointer}
-.hunter-btn:hover:not(:disabled){background:#eaf5ee}.hunter-btn.on{background:#dfeee3;border-color:#74a989;color:#166c3d}.hunter-btn.primary{background:#107c41;color:#fff;border-color:#107c41}
-.hunter-btn:disabled{opacity:.42;cursor:default}
-.hunter-info{font-size:11px;color:#6a806e;line-height:1.65;margin:0;padding:9px 12px;background:#fafcfa}
-.hunter-sheet{padding:9px 12px 15px;min-width:0}.hunter-grid-wrap{overflow:auto;display:flex;justify-content:center}
-#mine-grid{display:grid;grid-template-columns:24px repeat(12,minmax(0,1fr));width:min(100%,612px);min-width:328px;border-top:1px solid #cbd8cd;border-left:1px solid #cbd8cd;user-select:none;touch-action:manipulation}
-.hunter-cell{aspect-ratio:1;min-width:0;display:grid;place-items:center;border-right:1px solid #e0e7e1;border-bottom:1px solid #e0e7e1;font-size:11px}
-.hunter-axis{background:#f0f3f0;color:#79887b;font-size:10px;aspect-ratio:auto;min-height:21px}
-.hunter-square{padding:0;background:#fff;color:#3c5543;border-top:0;border-left:0;border-radius:0;cursor:cell;font-weight:700;position:relative}
-.hunter-square:hover:not(:disabled){background:#f3f8f3}.hunter-square:disabled{opacity:1;cursor:default}
-.hunter-square.hunter-zone{background:#f2f8f4}.hunter-square.hunter-visited{background:#f5f8f5}
-.hunter-square.hunter-legal{box-shadow:inset 0 0 0 2px #8fc09b;background:#eaf5ed}
-.hunter-square.hunter-selected{box-shadow:inset 0 0 0 2px #327c4b}
-.hunter-square.hunter-robot{background:#d9e9f1;color:#246383;font-size:10.5px;letter-spacing:-.7px}
-.hunter-square.hunter-hunter{background:#f0dfdc;color:#8d4b3b;font-size:11px}
-.hunter-square.hunter-mine{background:#f2e8e1;color:#8a5e4b}
-.hunter-square.hunter-disarmed{background:#edf0eb;color:#a3a9a0}
-.hunter-square.hunter-alert{outline:2px solid #cb9a59;outline-offset:-3px}
-.hunter-square.hunter-clear{background:#eaf6ee;color:#75a081}
-.hunter-square.hunter-risk{background:#fff0d9;color:#ac8139}
-.hunter-square.hunter-noted{background:#f3edf8;color:#86629d}
-.hunter-legend{display:flex;gap:11px;flex-wrap:wrap;font-size:10px;color:#75877a;margin:10px 0 0}
-.hunter-side{display:flex;flex-direction:column;gap:12px;min-width:0}
-.hunter-asidebox h3{font-size:11px;padding:9px 11px;color:#4f6754;background:#f3f7f4;border-bottom:1px solid #dfebe1;margin:0}
-.hunter-asiderow{display:flex;justify-content:space-between;padding:9px 10px;border-bottom:1px solid #eff3ef;font-size:11px;gap:7px}.hunter-asiderow:last-child{border:0}
-.hunter-sensor{padding:10px 11px;background:#f8fbf8;color:#587362;border-bottom:1px solid #e3ece5;font-size:11px;line-height:1.8}
-.hunter-log-row{padding:7px 11px;border-bottom:1px solid #eef3ef;color:#607363;font-size:10.5px}
-.hunter-muted{padding:10px 11px;line-height:1.8;color:#7c8a7e;font-size:10.5px}
-.hunter-minihead{font-weight:bold;color:#40654a;font-size:10.5px;margin:0 9px 6px}
-@media(max-width:900px){#mine-game{grid-template-columns:1fr;max-width:780px}.hunter-side{display:grid;grid-template-columns:1fr 1fr}}
-@media(max-width:620px){#mine-game{padding:0 7px;margin:7px auto 74px}.hunter-sheet{padding:8px 6px 12px}.hunter-stat{padding:7px 5px}.hunter-stat strong{font-size:11px}.hunter-side{display:flex}.hunter-cell{font-size:9px}.hunter-grid-wrap{justify-content:flex-start}.hunter-btn{padding:7px 9px;font-size:10.5px}}
 
-
-#rematch-btn,#tetris-rematch,#mine-rematch{display:none!important}
-/* Shared 1P Start / 2P Ready controls above Omok, Tetris and Mine game content. */
+#rematch-btn,#tetris-rematch{display:none!important}
+/* Shared 1P Start / 2P Ready controls above Omok and Tetris. */
 .match-gate{border-bottom:1px solid #c7d9ca;background:#f7fbf8;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 17px;flex-wrap:wrap}
 .match-gate-info{display:flex;flex-direction:column;gap:3px;min-width:210px;flex:1;font-size:11px;color:#52685a}
 .match-gate-info strong{color:#185e37;font-size:12px}
@@ -506,12 +430,6 @@
 .oe-social-chat .holdem-chat-feedback[hidden]{display:none}
 @media(max-width:620px){.oe-social-section{grid-template-columns:1fr}.oe-waiting-panel{border-right:0;border-bottom:1px solid #d6e4d9}.oe-waiting-list{max-height:130px;min-height:40px}.oe-social-chat .holdem-chat-messages{height:170px}}
 
-/* Under/Over: worksheet panel embedded between the sheet tabs. */
-#underover-view[hidden]{display:none!important}
-body:has(#underover-view:not([hidden])) .ribbon{display:none}
-body:has(#underover-view:not([hidden])) #underover-frame{height:calc(100dvh - 177px)!important;min-height:550px}
-@media(max-width:700px){body:has(#underover-view:not([hidden])) #underover-frame{height:calc(100dvh - 145px)!important;min-height:560px}}
-
 /* Sheet1 event: zero-balance relief claim, Excel ribbon style. */
 .member-tools .relief-event-btn{background:#fff9ed;color:#79520b;border:1px solid #cba659;font-weight:800;min-height:30px;white-space:nowrap}
 .member-tools .relief-event-btn:hover:not(:disabled){background:#fff0c9;border-color:#b78b30}
@@ -614,43 +532,13 @@ body.superleague-active #superleague-view{height:calc(100dvh - 145px);min-height
  <aside class="tetris-sidebar"><div class="tetris-sidebox"><h3>참가자</h3><div class="tetris-details">1P · <strong id="tetris-p1">대기</strong><br>2P · <strong id="tetris-p2">대기</strong></div></div><div class="tetris-sidebox"><h3>대기자</h3><div id="tetris-queue" class="tetris-details">없음</div></div></aside>
 </main>
 
-<main id="mine-game" hidden>
- <section class="hunter-panel">
-  <div class="hunter-top"><strong id="mine-phase">시작 대기</strong><span>12×12 · 온라인 1:1 · 시간 제한 없음</span></div>
-  <div class="hunter-stats">
-   <div class="hunter-stat"><small>내 역할</small><strong id="mine-role">대기</strong></div>
-   <div class="hunter-stat"><small>남은 탐색꾼</small><strong id="mine-robot-count">2 / 2</strong></div>
-   <div class="hunter-stat"><small>잔여 지뢰</small><strong id="mine-mine-count">3 / 3</strong></div>
-   <div class="hunter-stat"><small>탐색꾼 행동</small><strong id="mine-turn-count">0 / 36</strong></div>
-  </div>
-  <div id="mine-setup-controls">
-   <div class="hunter-actions" id="mine-setup-buttons"></div>
-   <div class="hunter-actions"><span id="mine-setup-hint" style="font-size:11px;color:#69806f;flex:1"></span><button id="mine-setup-random" type="button" class="hunter-btn">자동 배치</button></div>
-  </div>
-  <div id="mine-play-controls" hidden>
-   <div class="hunter-actions"><button type="button" id="mine-move" class="hunter-btn on">이동</button><button type="button" id="mine-defuse" class="hunter-btn">지뢰 해체</button><button type="button" id="mine-note-mode" class="hunter-btn">? 의심 표시</button></div>
-  </div>
-  <p class="hunter-info" id="mine-note" role="status">대기 중입니다.</p><div id="mine-reward-status" class="arcade-reward-status" role="status" aria-live="polite">지뢰찾기: 시작 +100P · 승리 10% / 5연승 15% / 10연승 20% (상대 10% 차감 · 상대 포인트가 더 낮으면 내 포인트 5%)</div>
-  <div class="hunter-sensor" id="mine-signal">탐색꾼 주변 3×3칸 지뢰 신호 · 정확한 위치 비공개</div>
-  <div class="hunter-sheet">
-   <div class="hunter-minihead">지뢰 대결 게임판 · 탐색꾼은 지뢰 해체, 설치꾼은 탐색꾼 추격</div>
-   <div class="hunter-grid-wrap"><div id="mine-grid" role="grid" aria-label="12×12 지뢰 탐색꾼과 설치꾼 대결 게임판"></div></div>
-   <div class="hunter-legend"><span>🧭 <b>탐1·탐2</b> = 지뢰 탐색꾼 1·2</span><span>🛡️ <b>설</b> = 지뢰 설치꾼</span><span>◆ = 설치된 지뢰</span><span>⚠ = 주변 지뢰 감지 · ✓ = 안전</span></div>
-  </div>
-  <div class="hunter-actions"><button id="mine-ready" type="button" class="hunter-btn primary" hidden>배치 완료</button><button id="mine-rematch" type="button" class="hunter-btn primary" hidden>재대결 · 역할 교대</button><button id="mine-leave" type="button" class="hunter-btn">시트 닫기</button></div>
- </section>
- <aside class="hunter-side">
-  <div class="hunter-asidebox"><h3>참가자 · 역할</h3><div class="hunter-asiderow"><span id="mine-host-name">1P</span><b id="mine-host-progress">지뢰 설치꾼</b></div><div class="hunter-asiderow"><span id="mine-guest-name">2P</span><b id="mine-guest-progress">지뢰 탐색꾼</b></div></div>
-  <div class="hunter-asidebox"><h3>대국 현황</h3><div class="hunter-asiderow"><span>라운드</span><b id="mine-round">1</b></div><div class="hunter-asiderow"><span>결과</span><b id="mine-result">-</b></div><div class="hunter-asiderow"><span>내 전적 (승 / 패)</span><b id="mine-record">0 / 0</b></div><div class="hunter-muted">🧭 지뢰 탐색꾼: 탐1 또는 탐2를 선택해 상하좌우 1칸 이동한 뒤, 추가 이동하거나 주변 지뢰를 해체합니다. 🛡 지뢰 설치꾼: 지뢰 3개를 숨기고 설치꾼(설)을 대각선 포함 1칸 이동해 탐색꾼을 잡습니다. 탐색꾼의 36번째 행동이 끝날 때까지 지뢰가 남으면 설치꾼 승리입니다.</div></div>
-  <div class="hunter-asidebox"><h3>작업 기록</h3><div id="mine-log"></div></div>
- </aside>
-</main>
+
 
 </section>
 
 <div id="create-modal" class="game-chooser" hidden role="dialog" aria-modal="true" aria-labelledby="chooser-title">
  <div class="chooser-panel"><div class="chooser-top"><span id="chooser-title">새 시트 만들기</span><button type="button" class="chooser-close" id="chooser-close" aria-label="닫기">×</button></div>
-  <div class="chooser-grid"><button type="button" class="game-choice" data-choice="gomoku"><span class="choice-symbol">▣ ▤</span><span>오목</span></button><button type="button" class="game-choice" data-choice="tetris"><span class="choice-symbol">▦</span><span>테트리스</span></button><button type="button" class="game-choice mine-choice" data-choice="mine_battle"><span class="choice-symbol">▥</span><span>지뢰탐색게임</span></button><button type="button" class="game-choice" data-choice="holdem"><span class="choice-symbol">♠</span><span>홀덤 (2~6명)</span></button><button type="button" class="game-choice" data-choice="oddeven"><span class="choice-symbol">⚀ ⚄</span><span>홀짝 (1~6명)</span></button><button type="button" class="game-choice" data-choice="underover"><span class="choice-symbol">⚁ ?</span><span>언더오버 (1:1)</span></button><button type="button" class="game-choice" data-choice="race"><span class="choice-symbol">🏁</span><span>레이스 (사람 + 컴퓨터)</span></button></div><p class="chooser-note">선택하면 새 시트가 생성됩니다.</p>
+  <div class="chooser-grid"><button type="button" class="game-choice" data-choice="gomoku"><span class="choice-symbol">▣ ▤</span><span>오목</span></button><button type="button" class="game-choice" data-choice="tetris"><span class="choice-symbol">▦</span><span>테트리스</span></button><button type="button" class="game-choice" data-choice="holdem"><span class="choice-symbol">♠</span><span>홀덤 (2~6명)</span></button><button type="button" class="game-choice" data-choice="oddeven"><span class="choice-symbol">⚀ ⚄</span><span>홀짝 (1~6명)</span></button><button type="button" class="game-choice" data-choice="race"><span class="choice-symbol">🏁</span><span>레이스 (사람 + 컴퓨터)</span></button></div><p class="chooser-note">선택하면 새 시트가 생성됩니다.</p>
  </div>
 </div>
 <section id="holdem-view" hidden aria-label="텍사스 홀덤 시트">
@@ -690,9 +578,7 @@ body.superleague-active #superleague-view{height:calc(100dvh - 145px);min-height
  </div>
 </section>
 
-<section id="underover-view" hidden aria-label="언더오버 1:1 시트" style="min-height:calc(100dvh - 230px);background:#f5f8f6">
- <iframe id="underover-frame" title="언더오버 1대1 게임" style="border:0;width:100%;height:calc(100dvh - 230px);min-height:590px;display:block;background:#f5f8f6" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-</section>
+
 <section id="oddeven-view" hidden aria-label="온라인 홀짝 게임 시트">
  <div class="oe-header"><div><strong id="oe-sheet">홀짝</strong> <span> · ODD / EVEN · 1~6인 온라인</span><code class="oe-online-code" id="oe-room-code"></code></div><div><button type="button" id="oe-share">친구 초대 링크 복사</button> <button type="button" id="oe-exit">Sheet1</button></div></div>
 <div class="oe-multiplayer-note">같은 방에 최대 6명 참가합니다. 친구에게 위 방 코드 또는 초대 링크를 보내세요. 각각 다른 회원 계정으로 로그인해야 별도의 참가 좌석을 사용할 수 있습니다.</div>
@@ -1095,7 +981,7 @@ $('gift-form').addEventListener('submit',async e=>{
  }finally{giftSubmitting=false;$('gift-send').disabled=false;$('gift-close').disabled=false;}
 });
 
-function saveMemberToken(token){stopMemberRestoreRetry();memberRestoreErrors=0;memberToken=token||'';if(!memberToken){memberGomokuStreak=null;gomokuRewardData=null;gomokuRewardSyncAt=0;memberArcadeStreaks={tetris:null,mine_battle:null};arcadeRewardData=null;arcadeRewardSyncAt=0;}try{if(memberToken)localStorage.setItem(MEMBER_TOKEN_KEY,memberToken);else localStorage.removeItem(MEMBER_TOKEN_KEY);}catch(_){}try{deliverUnderOverAuth();}catch(_){}}
+function saveMemberToken(token){stopMemberRestoreRetry();memberRestoreErrors=0;memberToken=token||'';if(!memberToken){memberGomokuStreak=null;gomokuRewardData=null;gomokuRewardSyncAt=0;memberArcadeStreaks={tetris:null,mine_battle:null};arcadeRewardData=null;arcadeRewardSyncAt=0;}try{if(memberToken)localStorage.setItem(MEMBER_TOKEN_KEY,memberToken);else localStorage.removeItem(MEMBER_TOKEN_KEY);}catch(_){}}
 // Wealth titles: points are treated as 1P = 1 won; server balance stays authoritative.
 // Static levels 1–14 are tied to monetary milestones, not to old 10,000P = Lv.50 scaling.
 const RANK_TIERS=[
@@ -1251,7 +1137,7 @@ function paintMemberPanel(){
    }
    panel.append(line,meter,hint);
    if(memberGomokuStreak!==null){const streak=document.createElement('div');streak.className='member-arcade-streak';streak.textContent='오목 '+memberGomokuStreak+'연승';panel.append(streak);}
-   if(memberArcadeStreaks.tetris!==null||memberArcadeStreaks.mine_battle!==null){const streak=document.createElement('div');streak.className='member-arcade-streak';streak.textContent='테트리스 '+(memberArcadeStreaks.tetris??'—')+'연승 · 지뢰찾기 '+(memberArcadeStreaks.mine_battle??'—')+'연승 (5승 15% · 10승 20%)';panel.append(streak);}
+   if(memberArcadeStreaks.tetris!==null){const streak=document.createElement('div');streak.className='member-arcade-streak';streak.textContent='테트리스 '+(memberArcadeStreaks.tetris??'—')+'연승 (5승 15% · 10승 20%)';panel.append(streak);}
   }
  }
  if(top){top.hidden=!signed;top.replaceChildren();if(signed){const rank=rankInfo(memberProfile.level,memberProfile.nickname);top.className='member-level-tag '+rank.css;top.textContent=rank.isOperator?rank.mark+' 운영자':rank.isTop3?rank.mark+' '+rank.name:rank.mark+' '+rank.name+' · Lv.'+rank.level;}else top.className='member-level-tag';}
@@ -1402,9 +1288,7 @@ function maybeOpenInitialRoom(){
   return;
  }
  if(/^u-[a-f0-9]{12}$/.test(id)){
-  if(!memberToken){lobbyNotify('언더오버 초대 링크입니다. 로그인 후 자동 입장합니다.');return;}
-  if(!hasSavedNickname())return;
-  initialDeepLink=null;openRoom(id);return;
+  initialDeepLink=null;lobbyNotify('언더오버 게임은 종료되었습니다. 슈퍼리그를 이용해 주세요.',true);return;
  }
  if(!hasSavedNickname())return;
  initialDeepLink=null;
@@ -1425,7 +1309,7 @@ const SUPABASE_PUBLISHABLE_KEY='sb_publishable_dWxi5S2-WH8Rn2sE0ADHJQ_JvbBjGBu';
 function makeUuid(){if(globalThis.crypto&&typeof crypto.randomUUID==='function')return crypto.randomUUID();const a=new Uint8Array(16);crypto.getRandomValues(a);a[6]=(a[6]&15)|64;a[8]=(a[8]&63)|128;const h=[...a].map(x=>x.toString(16).padStart(2,'0')).join('');return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);}
 function makeClientId(){try{const value=sessionStorage.getItem('renju-multi-client-v1');if(value && /^[a-f0-9-]{36}$/.test(value))return value;const id=crypto.randomUUID();sessionStorage.setItem('renju-multi-client-v1',id);return id;}catch(_){return makeUuid();}}
 const CLIENT_ID=makeClientId();
-const ROOM_REGEX=/^(?:r-[0-9a-f]{10}|h-[0-9a-f]{12}|e-[0-9a-f]{12}|u-[0-9a-f]{12})$/;
+const ROOM_REGEX=/^(?:r-[0-9a-f]{10}|h-[0-9a-f]{12}|e-[0-9a-f]{12})$/;
 let geometry={size:600,header:31,step:37.93},hover=null;
 let state=null,myNumber=null,mySeat='waiting',connected=false;
 let activeRoom=null,openRooms=[],roomCache=new Map(),roomList=[],waitingList=[]; let activeRace=false,raceSheetOpen=false,activeSuperleague=false;
@@ -1433,7 +1317,7 @@ let chatLastSeen='',movePending=false,pendingMovePoint=null,chatPending=false,re
 let tick=0,polling=false,stopped=false,pollTimer=null,initialDeepLink=new URLSearchParams(location.search).get('room');
 let lobbyHealthy=false,lobbyReady=false,creating=false,lobbySignature="";
 let lobbyAnyConfirmedAt=0; // A *successful* source response, not a failed optional request.
-let hunterLobbyStatuses=new Map(),matchGateLobbyStatuses=new Map(),holdemLobbyRooms=[],oddEvenLobbyRooms=[],underOverLobbyRooms=[],raceOnlineRooms=[];
+let hunterLobbyStatuses=new Map(),matchGateLobbyStatuses=new Map(),holdemLobbyRooms=[],oddEvenLobbyRooms=[],raceOnlineRooms=[];
 // Freshly created races must be visible immediately even before Supabase's next heartbeat/list refresh.
 // Optimistic rows expire quickly and can never revive an abandoned historical room.
 const raceNewlyCreated=new Map();
@@ -1947,16 +1831,17 @@ function visibleHoldemRooms(rooms){
  });
 }
 function mergedRoomList(){
- const legacyRooms=(lastLegacyLobbyPayload?.rooms||[]).filter(r=>r?.game!=='race'&&r?.game!=='holdem'&&r?.game!=='oddeven'&&r?.game!=='홀짝'&&r?.game!=='underover'&&!/^(?:h-|rc-|e-|u-)/.test(String(r?.id||'')));
+ const legacyRooms=(lastLegacyLobbyPayload?.rooms||[]).filter(r=>r?.game!=='race'&&r?.game!=='holdem'&&r?.game!=='oddeven'&&r?.game!=='홀짝'&&r?.game!=='underover'&&r?.game!=='mine_battle'&&!/^(?:h-|rc-|e-|u-)/.test(String(r?.id||'')));
  // A single missing lobby snapshot must not erase an active Gomoku match.
  // The grace cache expires, so deleted/abandoned rooms cannot persist forever.
  const now=Date.now();
  const protectedGomoku=[...gomokuLiveRoomGrace.values()]
   .filter(x=>now-x.seenAt<GOMOKU_LOBBY_GRACE_MS)
   .map(x=>({...x.room,status:'playing'}));
- const incoming=[...raceOnlineRooms,...underOverLobbyRooms,...visibleOddEvenRooms(oddEvenLobbyRooms),...visibleHoldemRooms(holdemLobbyRooms),...legacyRooms,...protectedGomoku];
+ const incoming=[...raceOnlineRooms,...visibleOddEvenRooms(oddEvenLobbyRooms),...visibleHoldemRooms(holdemLobbyRooms),...legacyRooms,...protectedGomoku];
  const seen=new Set();
  return incoming.filter(r=>{
+  if(['mine_battle','underover'].includes(r?.game)||/^u-/.test(String(r?.id||'')))return false;
   if(!r||typeof r.id!=='string'||seen.has(r.id))return false;
   seen.add(r.id);return !(r.id.startsWith('e-')&&!visibleOddEvenRooms([r]).length);
  });
@@ -2096,14 +1981,9 @@ function pollLobbyInBackground(force=false){
    if(notice?.textContent?.startsWith('기본 게임방 조회 지연'))lobbyNotify('기본 로비 연결이 복구되었습니다.');
    refreshCombinedLobby();maybeOpenInitialRoom();
    const legacyRooms=Array.isArray(data.rooms)?data.rooms:[];
-   if(legacyRooms.some(r=>r?.game==='mine_battle')){
-    scheduleLobbyRead('hunter-status',20000,50000,async()=>{
-     const h=await callRpc('renju_hunter_lobby_status',{});
-     if(Array.isArray(h)){hunterLobbyStatuses=new Map(h.map(z=>[z.room_id,z]));refreshCombinedLobby();}
-    },force);
-   }
+
    // No game-room gate statuses are needed when there are no legacy rooms.
-   if(legacyRooms.some(r=>r&&r.game!=='race'&&r.game!=='holdem'&&r.game!=='oddeven'&&r.game!=='underover')){
+   if(legacyRooms.some(r=>r&&['gomoku','tetris'].includes(r.game))){
     scheduleLobbyRead('gate-status',17000,45000,async()=>{
      const g=await callRpc('renju_match_gate_lobby_status',{});
      if(Array.isArray(g)){matchGateLobbyStatuses=new Map(g.map(z=>[z.room_id,z]));refreshCombinedLobby();}
@@ -2130,17 +2010,6 @@ function pollLobbyInBackground(force=false){
  scheduleLobbyRead('holdem-list',20000,45000,async()=>{
   const h=await holdemRpc('list');
   if(Array.isArray(h.rooms)){lobbyAnyConfirmedAt=Date.now();holdemLobbyLastSuccessAt=Date.now();holdemLobbyRooms=h.rooms;refreshCombinedLobby();}
- },force);
- scheduleLobbyRead('under-over-list',20000,45000,async()=>{
-  const h=await callRpc('renju_uo_live_lobby',{},false,12000);
-  if(Array.isArray(h.rooms)){
-   lobbyAnyConfirmedAt=Date.now();
-   underOverLobbyRooms=h.rooms.map(r=>({...r,game:'underover',
-    status:r.status==='waiting'?'waiting':r.status==='finished'?'finished':'playing',
-    waiting:Math.max(0,2-Number(r.count||0)),moves:r.hand||0,
-    black:null,white:null,title:(r.p1||'방장')+' / '+(r.p2||'대기 중')}));
-   refreshCombinedLobby();
-  }
  },force);
  scheduleLobbyRead('race-list',20000,45000,async()=>{
   await refreshRaceOnlineRooms();
@@ -2173,8 +2042,7 @@ async function refresh(){
   // Avoid making result detection wait behind the room and permission heartbeats.
   if(id){
    try{
-    if(id.startsWith('u-')){/* 언더오버는 독립 프레임에서 1.5초 간격으로 안전하게 동기화합니다. */}
-    else if(id.startsWith('h-')){applyHoldemData(id,await holdemRpc('sync',id));}
+    if(id.startsWith('h-')){applyHoldemData(id,await holdemRpc('sync',id));}
     else if(id.startsWith('e-')){applyOddEvenData(id,await oddEvenRpc('sync',id));}
     else {
     let gamePolled=false;
@@ -2224,9 +2092,9 @@ function renderLobby(){const list=$('lobby-cells');const rows=[];let n=1;
  const display=roomList.slice(0,100);
  for(const room of display){const status=room.status==='placing'?'설치 중':room.game==='race'&&room.status==='ready'?'베팅 접수':room.status==='playing'?'진행 중':room.status==='ready'?'준비 완료':room.status==='finished'?'완료':room.status==='done'?'완료':'대기 중';
   const tr=row(n++,[room.sheet,'',room.title,'',room.game==='race'?'-':'',room.black?nicknameFor(room.black):'-',room.white?nicknameFor(room.white):'-',room.waiting,room.count,room.moves,''],['sheet-link','','','','','','','','','']);tr.className='room-row';tr.dataset.room=room.id;if(room.black)nameWithRank(tr.children[5],room.black);if(room.white)nameWithRank(tr.children[6],room.white);
-  const gameLabel=document.createElement('span');gameLabel.className='game-type-pill'+(room.game==='tetris'?' tetris':'');gameLabel.textContent=room.game==='tetris'?'테트리스':room.game==='mine_battle'?'지뢰탐색게임':room.game==='holdem'?'홀덤':room.game==='oddeven'?'홀짝':room.game==='underover'?'언더오버':room.game==='race'?'레이스':'오목';tr.children[2].append(gameLabel);
+  const gameLabel=document.createElement('span');gameLabel.className='game-type-pill'+(room.game==='tetris'?' tetris':'');gameLabel.textContent=room.game==='tetris'?'테트리스':room.game==='holdem'?'홀덤':room.game==='oddeven'?'홀짝':room.game==='race'?'레이스':'오목';tr.children[2].append(gameLabel);
   const statusTd=tr.children[4],pill=document.createElement('span');pill.className='status-pill '+(room.status==='playing'?'':room.status);pill.textContent=status;statusTd.append(pill);
-  const joinBtn=document.createElement('button');joinBtn.type='button';joinBtn.className='room-open';joinBtn.textContent=room.game==='underover'&&Number(room.count||0)>=2?'관전':room.game==='race'?'입장':'열기';joinBtn.setAttribute('aria-label',room.sheet+(joinBtn.textContent==='관전'?' 관전':' 열기'));tr.lastElementChild.append(joinBtn);
+  const joinBtn=document.createElement('button');joinBtn.type='button';joinBtn.className='room-open';joinBtn.textContent=room.game==='race'?'입장':'열기';joinBtn.setAttribute('aria-label',room.sheet+(joinBtn.textContent==='관전'?' 관전':' 열기'));tr.lastElementChild.append(joinBtn);
   rows.push(tr);
  }
  if(roomList.length>display.length)rows.push(row(n++,['표시 제한: '+(roomList.length-display.length)+'개 방은 목록에 표시되지 않습니다. 방 코드로 입장하세요.','','','','','','','','',''],['muted']));
@@ -2243,20 +2111,14 @@ function renderLobby(){const list=$('lobby-cells');const rows=[];let n=1;
  if(!activeRoom){$('cell-address').textContent='A1';$('formula-value').textContent='=COUNTIF(방현황,"접속중")';}
 }
 function formatTime(input){if(!input)return '-';const d=new Date(input);if(Number.isNaN(d.valueOf()))return '-';return new Intl.DateTimeFormat('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(d);}
-function roomLabel(id){return roomList.find(r=>r.id===id)?.sheet||(id.startsWith('u-')?'언더오버':'Room');}
+function roomLabel(id){return roomList.find(r=>r.id===id)?.sheet||'Room';}
 function updateSheetTabs(){const nav=$('sheet-nav');nav.querySelectorAll('[data-room-tab]').forEach(e=>e.remove());
- for(const id of openRooms){const tab=document.createElement('button');tab.type='button';tab.className='sheet-tab'+(id===activeRoom?' active':'');tab.dataset.roomTab=id;tab.title='시트 열기';tab.textContent=roomLabel(id)+(roomList.find(r=>r.id===id)?.game==='tetris'?' · T':roomList.find(r=>r.id===id)?.game==='mine_battle'?' · M':id.startsWith('h-')?' · H':id.startsWith('e-')?' · O':id.startsWith('u-')?' · U':'');
+ for(const id of openRooms){const tab=document.createElement('button');tab.type='button';tab.className='sheet-tab'+(id===activeRoom?' active':'');tab.dataset.roomTab=id;tab.title='시트 열기';tab.textContent=roomLabel(id)+(roomList.find(r=>r.id===id)?.game==='tetris'?' · T':roomList.find(r=>r.id===id)?.game==='mine_battle'?' · M':id.startsWith('h-')?' · H':id.startsWith('e-')?' · O':'');
   const close=document.createElement('span');close.className='tab-close';close.textContent='×';close.title='시트 닫기';close.dataset.closeRoom=id;tab.append(close);nav.insertBefore(tab,$('add-sheet-btn'));}
  const raceTab=$('race-sheet-tab');raceTab.hidden=!raceSheetOpen;raceTab.classList.toggle('active',activeRace);
  const superTab=$('superleague-lobby-btn');if(superTab)superTab.classList.toggle('active',activeSuperleague);
  const lobby=nav.querySelector('[data-sheet="lobby"]');lobby.classList.toggle('active',activeRoom===null&&!activeRace&&!activeSuperleague);}
 function changeUrl(id){const url=new URL(location.href);if(id)url.searchParams.set('room',id);else url.searchParams.delete('room');try{history.replaceState(null,'',url.pathname+url.search+url.hash);}catch(_){}}
-function setUnderOverFrameVisible(visible){
- const frame=$('underover-frame');
- try{if(frame?.contentWindow&&frame.getAttribute('src'))
-  frame.contentWindow.postMessage({type:'UO_VIEW_STATE',visible:!!visible},location.origin);
- }catch(_){}
-}
 function switchView(id){
  // Superleague is a separately loaded game: unload it on exit to release CPU, timers and memory.
  if(id!=='__superleague__' && activeSuperleague){
@@ -2267,13 +2129,12 @@ function switchView(id){
  document.body.classList.remove('superleague-active');
  if(id==='__superleague__'){
   if(activeRoom||activeRace){lobbyNotify('진행 중인 게임방을 나와 Sheet1에서 슈퍼리그를 열어 주세요.',true);return;}
-  setUnderOverFrameVisible(false);
   if(!memberToken||!memberProfile){lobbyNotify('슈퍼리그는 회원 로그인 후 이용할 수 있습니다.',true);openMemberPanel('login');return;}
   if(!requireNickname())return;
   document.body.classList.add('superleague-active');
   activeSuperleague=true;activeRoom=null;activeRace=false;
   $('race-view').hidden=true;$('lobby-view').hidden=true;$('room-view').hidden=true;$('chat').hidden=true;
-  $('holdem-view').hidden=true;$('oddeven-view').hidden=true;$('underover-view').hidden=true;
+  $('holdem-view').hidden=true;$('oddeven-view').hidden=true;
   $('superleague-view').hidden=false;
   const frame=$('superleague-frame');
   if(!frame.getAttribute('src'))frame.src=frame.dataset.src;
@@ -2282,37 +2143,23 @@ function switchView(id){
  }
  // A CSS-hidden iframe does not receive a reliable document.visibilitychange event.
  // Pause its RPC heartbeats when returning to Sheet1 or another game.
- if(!(typeof id==='string'&&id.startsWith('u-')))setUnderOverFrameVisible(false);
  document.body.classList.toggle('race-active',id==='__race__');
  if(id==='__race__'){
   raceSheetOpen=true;activeRace=true;activeRoom=null;
   $('lobby-view').hidden=true;$('room-view').hidden=true;$('chat').hidden=true;
-  $('holdem-view').hidden=true;$('oddeven-view').hidden=true;$('underover-view').hidden=true;
+  $('holdem-view').hidden=true;$('oddeven-view').hidden=true;
   $('race-view').hidden=false;
   const frame=$('race-frame');if(!frame.getAttribute('src'))frame.src=frame.dataset.src;
   $('cell-address').textContent='A1';$('formula-value').textContent='=RACE(차고,드라이버,베팅)';
   updateSheetTabs();changeUrl(raceCurrentInviteId||currentRaceRoomId()||null);return;
  }
  $('race-view').hidden=true;activeRace=false;
- if(id&&id.startsWith('u-')){
-  if(!memberToken){lobbyNotify('언더오버는 회원 로그인 후 이용할 수 있습니다.',true);openMemberPanel('login');return;}
-  if(!requireNickname())return;
-  activeRoom=id;
-  $('lobby-view').hidden=true;$('room-view').hidden=true;
-  $('holdem-view').hidden=true;$('oddeven-view').hidden=true;$('chat').hidden=true;
-  $('underover-view').hidden=false;
-  const frame=$('underover-frame');const src='./underover.html?build=uo109&room='+encodeURIComponent(id);
-  if(!frame.getAttribute('src')||!frame.getAttribute('src').endsWith(encodeURIComponent(id)))frame.src=src;
-  setTimeout(()=>{deliverUnderOverAuth();setUnderOverFrameVisible(true);},0);
-  $('cell-address').textContent='A1';$('formula-value').textContent='=언더오버(1:1)';
-  updateSheetTabs();changeUrl(id);return;
- }
- $('underover-view').hidden=true;
+
  if(id && !requireNickname())return;
  const f=$('match-role-feedback');if(f){f.hidden=true;f.textContent='';f.classList.remove('error');}activeRoom=id;const poker=Boolean(id&&id.startsWith('h-')),parity=Boolean(id&&id.startsWith('e-'));$('lobby-view').hidden=!!id;$('room-view').hidden=!id||poker||parity;$('holdem-view').hidden=!poker;$('oddeven-view').hidden=!parity;$('chat').hidden=!id||poker||parity;chatLastSeen='';hover=null;
  $('chat-title-button').firstElementChild.firstChild.textContent='메모 ';
  showOperatorMessage('');if(!id){sheet1LastPaint='';paintSheet1Chat();setTimeout(()=>syncSheet1Chat(true),0);setTimeout(()=>pollLobbyInBackground(),0);}
- if(id&&!poker&&!parity){gomokuRewardRoom=null;gomokuRewardData=null;gomokuRewardSyncAt=0;arcadeRewardRoom=null;arcadeRewardData=null;arcadeRewardSyncAt=0;setTimeout(()=>{syncGomokuRewards(true);syncArcadeRewards(true);},350);const item=roomList.find(r=>r.id===id);$('room-name').textContent=(item?.sheet||'Sheet')+'  '+(item?.game==='mine_battle'?'지뢰탐색게임':(item?.title||''));$('room-info').textContent='  '+id;activateCache();setTimeout(resizeCanvas,30);}else{$('cell-address').textContent='A1';$('formula-value').textContent='=COUNTIF(방현황,"접속중")';}
+ if(id&&!poker&&!parity){gomokuRewardRoom=null;gomokuRewardData=null;gomokuRewardSyncAt=0;arcadeRewardRoom=null;arcadeRewardData=null;arcadeRewardSyncAt=0;setTimeout(()=>{syncGomokuRewards(true);syncArcadeRewards(true);},350);const item=roomList.find(r=>r.id===id);$('room-name').textContent=(item?.sheet||'Sheet')+'  '+(item?.title||'');$('room-info').textContent='  '+id;activateCache();setTimeout(resizeCanvas,30);}else{$('cell-address').textContent='A1';$('formula-value').textContent='=COUNTIF(방현황,"접속중")';}
  updateSheetTabs();changeUrl(id);if(parity){renderOddEven();oddEvenSocialState(id).signature=null;oddEvenSocialSync(id,true);}else if(poker){$('holdem-admin-guide').hidden=!(myNickname==='운영자'&&adminToken&&memberProfile);renderHoldem();holdemChatState(id).signature=null;holdemChatFeedback('');holdemChatRender(id);holdemChatSync(id,true);}else{renderTetrisRoom();renderMineRoom();renderMatchGate();}}
 function isKickedError(error){return /강퇴되었습니다/.test(String(error?.message||error||''));}
 const kickedRooms=new Set();
@@ -2392,32 +2239,21 @@ function launchRaceRoom(roomId=null,makeNew=false){
  else if(makeNew){raceCurrentInviteId='';frame.dataset.roomId='';}
  switchView('__race__');
 }
-async function openRoom(id){if(id?.startsWith('rc-')){launchRaceRoom(id);return;}if(id?.startsWith('u-')){
- if(!memberToken){initialDeepLink=id;openMemberPanel('login');return;}
- if(!requireNickname())return;
- if(!openRooms.includes(id)){if(openRooms.length>=8){lobbyNotify('동시에 열 수 있는 시트는 최대 8개입니다.',true);return;}openRooms.push(id);}
- if(!roomList.some(r=>r.id===id)){roomList.push({id,game:'underover',title:'언더오버 1:1',sheet:'언더오버',status:'waiting',count:1,waiting:1,moves:0});}
- switchView(id);return;
-}if(id?.startsWith('e-')){await joinOddEvenOnline(id);return;}if(!requireNickname())return;
+async function openRoom(id){if(id?.startsWith('rc-')){launchRaceRoom(id);return;}if(id?.startsWith('u-')){lobbyNotify('언더오버는 종료되었습니다.',true);return;}if(id?.startsWith('e-')){await joinOddEvenOnline(id);return;}if(!requireNickname())return;
  if(kickedRooms.has(id)){lobbyNotify('해당 방에서는 강퇴되어 다시 입장할 수 없습니다.',true);return;}if(!ROOM_REGEX.test(id)){lobbyNotify('잘못된 방 주소입니다.',true);return;}
  if(!roomList.some(r=>r.id===id)){lobbyNotify('현재 목록에 없는 시트입니다.',true);return;}
+ if(roomList.find(r=>r.id===id)?.game==='mine_battle'){lobbyNotify('지뢰찾기는 종료되었습니다.',true);return;}
  if(!openRooms.includes(id)){if(openRooms.length>=8){lobbyNotify('동시에 열 수 있는 시트는 8개입니다.',true);return;}openRooms.push(id);}
  switchView(id);try{if(id.startsWith('e-')){if(!memberToken)throw new Error('홀짝은 회원 로그인이 필요합니다.');applyOddEvenData(id,await oddEvenRpc('join',id));}else if(id.startsWith('h-')){if(!memberToken)throw new Error('홀덤은 회원 로그인이 필요합니다.');await callRpc('renju_holdem_chat',{p_client:CLIENT_ID,p_token:memberToken,p_room:id,p_action:'list',p_text:null});applyHoldemData(id,await holdemRpc('join',id));}else{applyRoom(id,await roomRpc(id));applyGate(id,await gateRpc(id));}notify('');}catch(e){if(isKickedError(e))returnKickedToLobby(id);else if(id.startsWith('e-')){switchView(null);lobbyNotify(e.message,true);}else notify(e.message,true);}
 }
 function createRoom(){if(!requireNickname())return;$('create-modal').hidden=false;}
 function closeCreateModal(){$('create-modal').hidden=true;}
-async function doCreateRoom(game){if(!requireNickname())return;if(creating)return;closeCreateModal();creating=true;$('create-room-btn').disabled=true;$('add-sheet-btn').disabled=true;lobbyNotify('새 시트 생성 중...');
+async function doCreateRoom(game){if(['mine_battle','underover'].includes(game)){lobbyNotify('종료된 게임입니다. 슈퍼리그를 이용해 주세요.',true);return;}if(!requireNickname())return;if(creating)return;closeCreateModal();creating=true;$('create-room-btn').disabled=true;$('add-sheet-btn').disabled=true;lobbyNotify('새 시트 생성 중...');
  try{if(game==='race'){
    if(!memberToken){openMemberPanel('login');throw new Error('레이스는 회원 로그인이 필요합니다.');}
    launchRaceRoom(null,true);
    lobbyNotify('레이스 경기장 생성 중 · 경기장 탭에서 컴퓨터 수와 트랙을 설정하세요.');
-  }else if(game==='underover'){
-  if(!memberToken){openMemberPanel('login');throw new Error('언더오버는 회원 로그인 후 이용할 수 있습니다.');}
-  const data=await underOverRpc('create');if(!data.created_room)throw new Error('언더오버 방 생성에 실패했습니다.');
-  const item={id:data.created_room,sheet:'언더오버',title:'언더오버 1:1',game:'underover',status:'waiting',count:1,waiting:1,moves:0};
-  underOverLobbyRooms=[item,...underOverLobbyRooms];roomList=[...roomList.filter(r=>r.id!==item.id),item];
-  renderLobby();await openRoom(data.created_room);lobbyNotify('언더오버 온라인방 생성 완료');
- }else if(game==='oddeven'){
+  }else if(game==='oddeven'){
    if(!memberToken){openMemberPanel('login');throw new Error('홀짝은 회원 로그인 후 이용할 수 있습니다.');}
    const data=await oddEvenRpc('create');if(!data.created_room)throw new Error('홀짝 방 생성에 실패했습니다.');
    oddEvenLobbyRooms=[{id:data.created_room,sheet:data.sheet,title:data.stake+'P 홀짝',game:'oddeven',status:'waiting',count:1,waiting:5,moves:0},...oddEvenLobbyRooms];
@@ -2442,7 +2278,6 @@ async function closeRoom(id){
  if(!openRooms.includes(id))return;
  openRooms=openRooms.filter(x=>x!==id);roomCache.delete(id);tetrisDataByRoom.delete(id);tetrisLocalByRoom.delete(id);mineDataByRoom.delete(id);matchGateByRoom.delete(id);matchGateRestarting.delete(id);
  if(activeRoom===id)switchView(null);else updateSheetTabs();
- if(id.startsWith('u-')){underOverRpc('leave',id).catch(()=>{});return;}
  if(id.startsWith('e-')){
   oddEvenDataByRoom.delete(id);oddEvenRevealUntil.delete(id);oddEvenSocialByRoom.delete(id);
   Promise.allSettled([oddEvenSocialRpc('leave',id),oddEvenRpc('leave',id)]).then(()=>{
@@ -2511,20 +2346,6 @@ async function copyShare(){
 }
 $('copy-link-btn').addEventListener('click',copyShare);$('room-copy').addEventListener('click',copyShare);
 $('room-lobby').addEventListener('click',()=>switchView(null));
-function deliverUnderOverAuth(){
- const frame=$('underover-frame');
- if(!frame?.contentWindow||!frame.getAttribute('src'))return;
- // Target only our same-origin game frame. Do not use '*' or URL credentials.
- frame.contentWindow.postMessage({type:'UO_AUTH',client:CLIENT_ID,token:memberToken||''},location.origin);
-}
-$('underover-frame').addEventListener('load',()=>{
- deliverUnderOverAuth();setUnderOverFrameVisible(!$('underover-view').hidden);
-});
-window.addEventListener('message',event=>{
- if(event.origin!==location.origin||event.source!==$('underover-frame').contentWindow)return;
- if(event.data?.type==='UO_AUTH_REQUEST'){deliverUnderOverAuth();return;}
- if(event.data?.type==='UO_CLOSE' && activeRoom?.startsWith('u-'))switchView(null);
-});
 $('create-room-btn').addEventListener('click',createRoom);$('add-sheet-btn').addEventListener('click',createRoom);
 updateNicknameInput();refreshNicknameAccess();
 $('member-open').addEventListener('click',()=>openMemberPanel());
@@ -2914,7 +2735,7 @@ async function syncArcadeRewards(force=false){
  if(!memberToken||document.hidden||arcadeRewardPending||coreAuthBusy()||(!lobbyReady&&!activeRoom))return;
  const now=Date.now();if(!force&&now-arcadeRewardSyncAt<20000)return;
  arcadeRewardPending=true;arcadeRewardSyncAt=now;
- const room=activeRoom&&['tetris','mine_battle'].includes(currentGameType())?activeRoom:null;
+ const room=activeRoom&&currentGameType()==='tetris'?activeRoom:null;
  try{
   const result=await callRpc('renju_arcade_status',{p_client:CLIENT_ID,p_token:memberToken,p_room:room});
   if(!result?.ok)return;
@@ -3341,206 +3162,12 @@ function drawTetris(){
 }
 setInterval(tetrisFrame,34);
 
-// Mine vs Robot v2.5 — server-authoritative online 1:1 integration.
-// The existing Excel lobby and Omok/Tetris code remain unchanged.
-let mineServer=null,mineDataByRoom=new Map(),mineRequestQueue=Promise.resolve();
-let hunterPick=null,hunterMode='move',hunterSetupPiece='mine',hunterSetupSlot=1,hunterNotes=new Set(),hunterNotesKey='';
-const MINE_SIDE=12,MINE_MAX_TURNS=36,MINE_COLS='ABCDEFGHIJKL';
-function isMineRoom(){return !!activeRoom&&currentGameType()==='mine_battle';}
-const mineEphemeralTokens=new Map();
-function mineToken(id){
- const key='renju-mine-auth:'+id;
- try{let token=sessionStorage.getItem(key);if(token&&/^[a-f0-9-]{36}$/.test(token))return token;
-  token=makeUuid();sessionStorage.setItem(key,token);return token;}
- catch(_){if(!mineEphemeralTokens.has(id))mineEphemeralTokens.set(id,makeUuid());return mineEphemeralTokens.get(id);}
-}
-function mineRpc(id,action='sync',index=null,piece=null,slot=null){
- return callRpc('renju_hunter_sync',{p_room:id,p_client:CLIENT_ID,p_token:mineToken(id),p_action:action,p_index:index,p_piece:piece,p_slot:slot});
-}
-function mineCoord(i){return Number.isInteger(i)&&i>=0?MINE_COLS[i%12]+(Math.floor(i/12)+1):'-';}
-function mineRow(i){return Math.floor(i/12);}
-function mineCol(i){return i%12;}
-function mineAdj(a,b){return a!=null&&b!=null&&Math.abs(mineRow(a)-mineRow(b))+Math.abs(mineCol(a)-mineCol(b))===1;}
-function mineNear(a,b){return a!=null&&b!=null&&a!==b&&Math.max(Math.abs(mineRow(a)-mineRow(b)),Math.abs(mineCol(a)-mineCol(b)))===1;}
-function mineNeighbors(i,diag){return Array.from({length:144},(_,n)=>n).filter(n=>diag?mineNear(i,n):mineAdj(i,n));}
-function buildMineGrid(){let root=$('mine-grid');if(root.children.length)return;
- const head=document.createElement('div');head.className='hunter-cell hunter-axis';head.textContent='';root.append(head);
- for(let x=0;x<12;x++){const c=document.createElement('div');c.className='hunter-cell hunter-axis';c.textContent=MINE_COLS[x];root.append(c);}
- for(let y=0;y<12;y++){
-  const row=document.createElement('div');row.className='hunter-cell hunter-axis';row.textContent=y+1;root.append(row);
-  for(let x=0;x<12;x++){
-   const button=document.createElement('button');button.type='button';button.className='hunter-cell hunter-square';button.dataset.hunterIdx=String(y*12+x);button.setAttribute('aria-label',MINE_COLS[x]+(y+1));root.append(button);
-  }
- }
-}
-function saveHunterNotes(){if(!activeRoom)return;try{localStorage.setItem(hunterNotesKey,JSON.stringify([...hunterNotes]));}catch(_){}}
-function loadHunterNotes(d){const key='mine-hunter-notes:'+activeRoom+':'+d.round;
- if(key===hunterNotesKey)return;hunterNotesKey=key;hunterNotes=new Set();hunterPick=null;hunterMode='move';hunterSetupPiece=d.role==='robot'?'robot':'mine';hunterSetupSlot=1;
- try{let items=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(items))hunterNotes=new Set(items.filter(n=>Number.isInteger(n)&&n>=0&&n<144));}catch(_){}
- hunterNotesKey=key;
-}
-function applyMineData(id,data){
- if(!data?.ok){if(id===activeRoom)$('mine-note').textContent=data?.error||'연결 오류';return;}
- const old=mineDataByRoom.get(id);
- if(old&&data.round===old.round&&Number(data.revision)<Number(old.revision))return;
- mineDataByRoom.set(id,data);if(id!==activeRoom)return;
- const prior=mineServer;mineServer=data;
- if(!prior||prior.round!==data.round||prior.phase!==data.phase||prior.turn!==data.turn||prior.chosen_robot!==data.chosen_robot){hunterPick=null;hunterMode='move';}
- if(!old||old.phase!==data.phase||old.round!==data.round)syncArcadeRewards(true);
- loadHunterNotes(data);renderMineRoom();renderMatchGate();
-}
-function hunterCanAct(d){return hasMatchStarted()&&d&&d.phase==='playing'&&d.role===d.turn;}
-function mineAction(action,index=null,piece=null,slot=null){
- if(!activeRoom||!isMineRoom()||!hasMatchStarted())return Promise.resolve();
- const room=activeRoom;
- mineRequestQueue=mineRequestQueue.catch(()=>{}).then(async()=>{
-  if(activeRoom!==room)return;
-  try{applyMineData(room,await mineRpc(room,action,index,piece,slot));}
-  catch(error){if(activeRoom===room)$('mine-note').textContent=error.message;}
- });return mineRequestQueue;
-}
-function mineSetupSlot(piece,slot){hunterSetupPiece=piece;hunterSetupSlot=slot;renderMineRoom();}
-async function hunterAutoPlace(){
- const d=mineServer;if(!hasMatchStarted()||!d||d.phase!=='placing'||!['robot','mine'].includes(d.role))return;
- const rnd=a=>a[Math.floor(Math.random()*a.length)];
- const shuffle=a=>{let b=[...a];for(let i=b.length-1;i>0;i--){let k=Math.floor(Math.random()*(i+1));[b[i],b[k]]=[b[k],b[i]];}return b;};
- const pool=Array.from({length:144},(_,i)=>i);
- if(d.role==='robot'){
-  const picks=shuffle(pool.filter(i=>mineCol(i)<=2));
-  await mineAction('place',picks[0],'robot',1);
-  await mineAction('place',picks.find(i=>Math.abs(mineRow(i)-mineRow(picks[0]))+Math.abs(mineCol(i)-mineCol(picks[0]))>=3)||picks[1],'robot',2);
- }else{
-  let picks=shuffle(pool.filter(i=>mineCol(i)>=3&&mineCol(i)<=9));let chosen=[];
-  for(let slot=1;slot<=3;slot++){
-   let choice=rnd(picks.filter(i=>!chosen.includes(i)&&chosen.every(k=>Math.abs(mineRow(i)-mineRow(k))+Math.abs(mineCol(i)-mineCol(k))>=3)));
-   if(choice==null)choice=picks.find(i=>!chosen.includes(i));chosen.push(choice);
-   await mineAction('place',choice,'mine',slot);
-  }
-  await mineAction('place',rnd(pool.filter(i=>mineCol(i)>=10)),'hunter',null);
- }
-}
-function hunterClick(i){
- const d=mineServer;if(!isMineRoom()||!d||!hasMatchStarted())return;
- if(d.phase==='placing'){
-  if(!['robot','mine'].includes(d.role)||(d.role==='mine'?d.ready_mine:d.ready_robot))return;
-  const pos=d.role==='robot'?d.robots?.[hunterSetupSlot-1]:hunterSetupPiece==='hunter'?d.hunter:d.mines?.[hunterSetupSlot-1];
-  mineAction('place',i===pos?null:i,hunterSetupPiece,hunterSetupPiece==='hunter'?null:hunterSetupSlot);return;
- }
- if(!hunterCanAct(d))return;
- if(d.role==='mine'){
-  if(i===d.hunter){hunterPick='H';renderMineRoom();return;}
-  if(hunterPick==='H'&&mineNear(d.hunter,i))mineAction('mine_move',i);
-  else{$('mine-note').textContent='게임판의 지뢰 설치꾼(설)을 선택하고 주변 8칸 중 이동할 칸을 누르세요.';}
-  return;
- }
- if(d.role!=='robot')return;
- if(hunterMode==='note'){
-  hunterNotes.has(i)?hunterNotes.delete(i):hunterNotes.add(i);saveHunterNotes();renderMineRoom();return;
- }
- const robots=d.robots||[];let slot=null;
- if(d.robot_steps===1){slot=d.chosen_robot;hunterPick=slot;}
- else if(hunterPick&&robots[hunterPick-1]!=null)slot=hunterPick;
- if(d.robot_steps===0&&(i===robots[0]||i===robots[1])){
-   hunterPick=i===robots[0]?1:2;hunterMode='move';renderMineRoom();return;
- }
- if(!slot){$('mine-note').textContent='먼저 지뢰 탐색꾼 1(탐1) 또는 탐색꾼 2(탐2)를 선택하세요.';return;}
- const here=robots[slot-1];if(here==null)return;
- if(hunterMode==='defuse'){
-  if(d.robot_steps!==1){$('mine-note').textContent='한 칸 이동한 다음 해체할 수 있습니다.';return;}
-  if(!mineNear(here,i)){$('mine-note').textContent='주변 8칸 중 하나를 지정해 해체하세요.';return;}
-  mineAction('robot_defuse',i,null,slot);return;
- }
- if(!mineAdj(here,i)){$('mine-note').textContent='지뢰 탐색꾼은 상하좌우로 한 칸씩 이동할 수 있습니다.';return;}
- if(robots.some((p,j)=>j!==slot-1&&p===i))return;
- mineAction('robot_move',i,null,slot);
-}
-function hunterToggleNotes(i){const d=mineServer;if(!isMineRoom()||d?.role!=='robot'||d.phase!=='playing')return;
- hunterNotes.has(i)?hunterNotes.delete(i):hunterNotes.add(i);saveHunterNotes();renderMineRoom();}
-function mineReadableLog(message){return String(message).replace(/\bR([12])\b/g,(_,n)=>'탐색꾼 '+n).replace(/\bM([123])\b/g,(_,n)=>'지뢰 '+n).replace(/\bH\b/g,'지뢰 설치꾼');}
-function renderMineRoom(){
- const visible=isMineRoom();$('mine-game').hidden=!visible;if(!visible)return;
- buildMineGrid();mineServer=mineDataByRoom.get(activeRoom)||null;const d=mineServer;
- if(!d){$('mine-phase').textContent='연결 중';$('mine-note').textContent=hasMatchStarted()?'서버에서 게임 정보를 불러오는 중입니다.':'2P 준비 후 1P가 시작하면 배치할 수 있습니다.';return;}
- const mineSide=d.role==='mine',robotSide=d.role==='robot',inSetup=d.phase==='placing',inPlay=d.phase==='playing',finished=d.phase==='finished';
- const myTurn=hunterCanAct(d),myReady=mineSide?d.ready_mine:d.ready_robot;
- const robotSlots=d.robots||[null,null];const mineSlots=d.mines||[];
- const alive=robotSlots.filter(x=>x!=null).length;
- $('mine-phase').textContent=d.phase==='waiting'?'상대 접속 대기':inSetup?'초기 배치':inPlay?(d.turn==='robot'?'지뢰 탐색꾼 차례':'지뢰 설치꾼 차례'):'대국 종료';
- $('mine-round').textContent=String(d.round||1);
- $('mine-robot-count').textContent=(inSetup?'2':alive)+' / 2';
- $('mine-mine-count').textContent=Number(d.remaining_mines??3)+' / 3';
- $('mine-turn-count').textContent=String(d.robot_turns||0)+' / '+MINE_MAX_TURNS;
- $('mine-result').textContent=finished?(d.winner==='robot'?'지뢰 탐색꾼 승리':'지뢰 설치꾼 승리'):'진행 중';
- nameWithRankByServer($('mine-host-name'),d.players?.host?.name||'Player 1');
- nameWithRankByServer($('mine-guest-name'),d.players?.guest?.name||'Player 2');
- $('mine-host-progress').textContent=d.mine_seat==='host'?'지뢰 설치꾼':'지뢰 탐색꾼';
- $('mine-guest-progress').textContent=d.mine_seat==='guest'?'지뢰 설치꾼':'지뢰 탐색꾼';
- $('mine-record').textContent=(d.record?.won||0)+' / '+(d.record?.lost||0);paintArcadeRewards('mine_battle');
- const roleText=robotSide?'지뢰 탐색꾼':mineSide?'지뢰 설치꾼':'관전자';
- $('mine-role').textContent=roleText;
- $('mine-ready').hidden=!inSetup||!['robot','mine'].includes(d.role);
- $('mine-ready').disabled=!hasMatchStarted()||Boolean(myReady)||!((robotSide&&robotSlots.every(v=>v!=null))||(mineSide&&mineSlots.length===3&&mineSlots.every(v=>v>=0)&&d.hunter!=null));
- $('mine-ready').textContent=myReady?'확정 · 상대 대기':'배치 완료';
- $('mine-rematch').hidden=!finished||!['robot','mine'].includes(d.role);
- $('mine-rematch').textContent=(d.mine_seat===d.seat?d.ready_mine:d.ready_robot)?'재대결 취소':'재대결 · 역할 교대';
- $('mine-setup-controls').hidden=!inSetup||!['robot','mine'].includes(d.role);
- $('mine-play-controls').hidden=!inPlay||!['robot','mine'].includes(d.role);
- const setupBtns=$('mine-setup-buttons');setupBtns.replaceChildren();
- if(inSetup&&['robot','mine'].includes(d.role)){
-  const opts=mineSide?[['mine',1,'지뢰 1'],['mine',2,'지뢰 2'],['mine',3,'지뢰 3'],['hunter',null,'지뢰 설치꾼']]:[['robot',1,'지뢰 탐색꾼 1'],['robot',2,'지뢰 탐색꾼 2']];
-  for(const [piece,slot,label] of opts){let b=document.createElement('button');b.className='hunter-btn'+(piece===hunterSetupPiece&&slot===hunterSetupSlot?' on':'');b.type='button';b.textContent=label;b.disabled=!!myReady;b.onclick=()=>mineSetupSlot(piece,slot);setupBtns.append(b);}
- }
- $('mine-setup-hint').textContent=robotSide?'지뢰 탐색꾼 2명을 A~C열에 배치하세요. 게임판에서는 탐1·탐2로 표시됩니다.':mineSide?'지뢰 3개는 D~J열, 지뢰 설치꾼은 K~L열에 배치하세요. 설치꾼은 게임판에서 설로 표시됩니다.':'관전 중';
- $('mine-setup-random').disabled=!hasMatchStarted()||!!myReady;
- $('mine-move').classList.toggle('on',hunterMode==='move');$('mine-defuse').classList.toggle('on',hunterMode==='defuse');$('mine-note-mode').classList.toggle('on',hunterMode==='note');
- $('mine-move').disabled=!myTurn||!robotSide;
- $('mine-defuse').disabled=!myTurn||!robotSide||d.robot_steps!==1;
- $('mine-note-mode').disabled=!robotSide;
- if(inSetup)$('mine-note').textContent=!hasMatchStarted()?'1P의 시작 버튼을 기다리는 중입니다.':!['robot','mine'].includes(d.role)?'관전 중':myReady?'배치 확정 · 상대를 기다리는 중':'배치한 말을 다시 누르면 배치 취소 · 완료 버튼으로 확정';
- else if(inPlay)$('mine-note').textContent=!['robot','mine'].includes(d.role)?'관전 중':!myTurn?'상대 차례입니다.':mineSide?'지뢰 설치꾼(설)을 선택해 대각선 포함 1칸 이동하고 탐색꾼을 잡으세요.':d.robot_steps===1?'이제 같은 탐색꾼으로 1칸 더 이동하거나 지뢰를 해체하세요.':'탐색꾼(탐1·탐2) 선택 → 상하좌우 1칸 이동 → 추가 이동 또는 지뢰 해체';
- else if(finished)$('mine-note').textContent=(d.winner==='robot'?'탐색꾼이 지뢰를 모두 해체했습니다.':d.reason==='turns'?'탐색꾼 행동 36회 소진 · 설치꾼 승리':'탐색꾼이 모두 잡혔습니다.')+' · 재대결하면 역할이 바뀝니다.';
- else $('mine-note').textContent='2P가 준비하면 1P가 시작할 수 있습니다.';
- const sig=d.signals||[null,null];
- $('mine-signal').textContent=robotSide&&inPlay?robotSlots.map((p,k)=>p==null?'탐색꾼 '+(k+1)+' 탈락':`탐색꾼 ${k+1} ${sig[k]?'⚠ 주변에 지뢰가 있습니다':'✓ 주변에 지뢰 신호가 없습니다'}`).join(' · '):mineSide?'지뢰 3개는 고정 · 지뢰 설치꾼(설)은 8방향 이동':'지뢰 탐색꾼 주변 3×3칸의 지뢰 감지 · 정확한 위치 비공개';
- const logRoot=$('mine-log');logRoot.replaceChildren();for(const x of (d.log||[]).slice(0,7)){const li=document.createElement('div');li.className='hunter-log-row';li.textContent=mineReadableLog(x.message||'');logRoot.append(li);}
- if(!(d.log||[]).length)logRoot.textContent='행동 기록 없음';
- const safe=new Set(d.safe||[]),defused=new Set(d.defused||[]),clues=d.clues||{};
- let allowed=new Set();let chosenPos=null;
- if(myTurn){
-  if(robotSide){const slot=d.robot_steps===1?d.chosen_robot:hunterPick;chosenPos=slot?robotSlots[slot-1]:null;
-   if(chosenPos!=null){allowed=new Set(hunterMode==='defuse'&&d.robot_steps===1?mineNeighbors(chosenPos,true):mineNeighbors(chosenPos,false).filter(i=>!robotSlots.includes(i)));}}
-  if(mineSide){chosenPos=hunterPick==='H'?d.hunter:null;if(chosenPos!=null)allowed=new Set(mineNeighbors(chosenPos,true));}
- }
- const mineVisible=mineSide||finished;
- const pieces=Array.from($('mine-grid').querySelectorAll('button[data-hunter-idx]'));
- for(const el of pieces){const i=Number(el.dataset.hunterIdx);let token='',css='hunter-cell hunter-square',label=mineCoord(i);
-  if(inSetup){if(robotSide&&mineCol(i)<=2||mineSide&&((hunterSetupPiece==='hunter'&&mineCol(i)>=10)||(hunterSetupPiece==='mine'&&mineCol(i)>=3&&mineCol(i)<=9)))css+=' hunter-zone';}
-  else if(robotSide&&safe.has(i))css+=' hunter-visited';
-  if(inPlay&&robotSide&&Object.prototype.hasOwnProperty.call(clues,String(i)))css+=clues[i]?' hunter-risk':' hunter-clear';
-  if(allowed.has(i))css+=' hunter-legal';if(chosenPos===i)css+=' hunter-selected';
-  if(defused.has(i)){css+=' hunter-disarmed';token='×';}
-  if(mineVisible&&mineSlots.includes(i)&&!defused.has(i)&&mineSlots.length){css+=' hunter-mine';token='◆';label+=' · 설치된 지뢰';}
-  if(d.hunter===i&&(finished||mineSide||inPlay)){css+=' hunter-hunter';token='설';label+=' · 지뢰 설치꾼';}
-  if((finished||inPlay||robotSide&&inSetup)&&robotSlots.includes(i)){
-   css+=' hunter-robot';token='탐'+(robotSlots[0]===i?1:2);label+=' · 지뢰 탐색꾼 '+(robotSlots[0]===i?1:2);
-   if(robotSide&&inPlay&&sig[robotSlots[0]===i?0:1])css+=' hunter-alert';
-  }
-  if(!token&&inPlay&&robotSide&&hunterNotes.has(i)){css+=' hunter-noted';token='?';}
-  if(!token&&inPlay&&robotSide&&Object.prototype.hasOwnProperty.call(clues,String(i)))token=clues[i]?'!':'·';
-  el.className=css;el.textContent=token;el.title=label;el.setAttribute('aria-label',label);el.disabled=!hasMatchStarted()||finished||!(['robot','mine'].includes(d.role)&&((inSetup&&!myReady)||(inPlay&&myTurn)));
- }
-}
-$('mine-grid').addEventListener('click',e=>{const cell=e.target.closest('[data-hunter-idx]');if(cell)hunterClick(Number(cell.dataset.hunterIdx));});
-$('mine-grid').addEventListener('contextmenu',e=>{const cell=e.target.closest('[data-hunter-idx]');if(cell){e.preventDefault();hunterToggleNotes(Number(cell.dataset.hunterIdx));}});
-$('mine-setup-random').addEventListener('click',hunterAutoPlace);
-$('mine-ready').addEventListener('click',()=>mineAction('ready'));
-$('mine-rematch').addEventListener('click',()=>mineAction('rematch'));
-$('mine-leave').addEventListener('click',()=>{if(activeRoom)closeRoom(activeRoom);});
-$('mine-move').addEventListener('click',()=>{hunterMode='move';renderMineRoom();});
-$('mine-defuse').addEventListener('click',()=>{hunterMode='defuse';renderMineRoom();});
-$('mine-note-mode').addEventListener('click',()=>{hunterMode=hunterMode==='note'?'move':'note';renderMineRoom();});
-
-
+// Mine Battle retired for Superleague test build. No Hunter RPCs run.
+const mineDataByRoom=new Map();
+function isMineRoom(){return false;}
+function mineRpc(){return Promise.reject(new Error('지뢰찾기는 종료되었습니다.'));}
+function applyMineData(){}
+function renderMineRoom(){}
 
 /* Poker sheet. Server handles the deck, player wallet, betting turns and showdown. */
 const holdemDataByRoom=new Map();
@@ -3654,7 +3281,6 @@ function renderHoldemReadout(own,board,isPlayer){
  return new Set(best.cards);
 }
 
-function underOverRpc(action='list',room=null,choice=null,amount=null){return callRpc('renju_uo_safe_rpc',{p_action:action,p_client:CLIENT_ID,p_token:memberToken||null,p_room:room,p_choice:choice,p_amount:amount});}
 function holdemRpc(action='list',room=null,amount=null){
  return callRpc('renju_holdem_rpc',{p_action:action,p_client:CLIENT_ID,p_token:memberToken||null,p_room:room,p_amount:amount});
 }
