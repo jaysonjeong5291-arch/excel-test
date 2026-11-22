@@ -260,9 +260,9 @@ function block(title,content,right=''){return `<section class="block"><div class
 function table(headers,rows,cls=''){return `<div class="scrolltable"><table class="excel ${cls}"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`}
 function dayLabel(){return `시즌 ${s.season} · ${DAYS[s.day]}요일`}
 function topRefresh(){$('r-club').textContent=hasSelected()?mine().name:'구단 선택';$('r-season').textContent=String(s.season);$('r-day').textContent=DAYS[s.day];$('r-points').textContent=`${fmt(s.points)} P`;}
-const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['calendar','경기 일정'],['friendly','친선경기'],['league','리그 순위'],['match','경기 기록']];
+const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['items','아이템'],['calendar','경기 일정'],['friendly','친선경기'],['league','리그 순위'],['match','경기 기록']];
 function sheetNav(){$('side-navigation').innerHTML=TABS.map(([key,label])=>`<button class="side-btn ${s.tab===key?'active':''}" type="button" data-action="tab" data-value="${key}" ${s.tab===key?'aria-current="page"':''} title="${label}"><span class="navtxt">${label}</span></button>`).join('')}
-function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${DAYS[s.day]}요일)`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 실제 포인트 또는 서버 DB를 사용하지 않습니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
+function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${DAYS[s.day]}요일)`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 실제 포인트 또는 서버 DB를 사용하지 않습니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
 function unselected(){return page('슈퍼리그 운영 대시보드','참가 구단 20개 · 구단 선택 후 테스트 시작')+block('초기 설정','<div class="note">구단을 선택하면 소속 선수 8명(GK·DF·MF·FW 각 2명), 초기 데모 포인트 12,500P로 게임을 시작합니다. 구단별 선수는 중복되지 않으며, 전설 선수 40명은 FA로 별도 등록되어 있습니다.</div>')}
 function renderChooser(){return `<div class="overlay"><div class="choose"><div class="choosehead"><div class="eyebrow">슈퍼리그 개막 준비 / 구단 배정</div><h1>운영할 구단을 선택하세요</h1><div class="muted">총 20개 구단 중 원하는 구단을 선택하세요 · 시작 후 변경하려면 초기화가 필요합니다</div></div><div class="choosebody"><div class="choosegrid">${s.teams.map(t=>`<button class="chooseclub" data-action="choose" data-id="${t.id}"><span class="tag">${flagLeague(t.league)}</span><b>${esc(t.name)}</b><span class="overall">기본 전력 ${power(t.id)}</span><br><small>GK 2 · DF 2 · MF 2 · FW 2</small></button>`).join('')}</div><div class="note" style="margin-top:12px">모든 구단은 GK·DF·MF·FW 각 2명으로 시작합니다. 전체 20개 구단의 대표 선수 구성은 게임 플레이를 위한 가상 편성입니다.</div></div></div></div>`}
 function overviewCalendar(){let next=todaysOpponent();const f=selectedFriend();return `<div class="line between"><div><b>${dayLabel()}</b> <span class="tag ${s.day>4?'gold':''}">${seasonStatus()}</span></div><button class="btn xs" data-action="tab" data-value="calendar">전체 일정 열기</button></div><div class="spacer"></div>${s.day<=4?`<div class="note">리그 상대: <b>${next===null?'완료':esc(s.teams[next].name)}</b> · ${s.results[s.day]?'오늘 경기 완료':'1게임일 10경기 CPU 자동 진행'}</div>`:'<div class="note">주말 FA 이적시장 운영 중 · 월~금 5개 라운드가 진행됩니다.</div>'}<div class="spacer"></div><div class="small">친선경기: ${f?`${esc(s.teams[f.opponent].name)} / ${f.status==='finished'?'완료':'등록됨'}`:'미등록'} · 친선 상대 지정은 왼쪽 경기 일정 메뉴에서만 가능합니다.</div>`}
@@ -3020,6 +3020,7 @@ async function slCommand(action,payload={}){
   notice('구단 배정 최종 확인에 실패했습니다. 온라인 서버 계정·구단 정보를 확인하세요.');return false;
  }
  if(!updated){notice('명령은 처리됐으나 결과 조회에 실패했습니다. 연결을 다시 시도하세요.');return false;}
+ if(action==='fa_sign')window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
  notice(response.message||({claim:'서버에서 구단 배정 확인 완료',respond:'응답 완료',cancel:'이적 철회 완료',fa_sign:'레전드 영입 완료',release:'레전드 방출 완료',advance:'공용 1일 진행 완료'}[action]||'서버 반영 완료'));
  return true;
 }
@@ -3044,6 +3045,15 @@ function slApply(data){
   if(s.ui.transferTeam===undefined)s.ui.transferTeam=(s.selected+1)%20;
  }
  applyCareerSeason();
+ // Server is authoritative for legend career; modern players never age or grow.
+ if(slEmbedded && data.v423){
+  for(const p of PLAYERS){if(!p.legend){p.age=p.ageBaseline;p.ovr=p.baseOvr;}}
+  for(const row of data.players||[]){const p=ply(row.id);if(!p||!p.legend)continue;
+   p.age=Number(row.age);p.ovr=Number(row.ovr);p.retired=Boolean(row.retired);
+   p.signingFee=Number(row.salary);p.retireAge=Number(row.retireAge);
+  }
+  statsCache.clear();
+ }
 }
 function slManagerName(id){return sl.snapshot?.clubs?.[id]?.manager||V414_REAL_MANAGERS[id]||'CPU';}
 v414ManagerName=function(tid){return slEmbedded&&sl.ready?slManagerName(tid):(tid===s.selected&&hasSelected()?v414Nickname():V414_REAL_MANAGERS[tid]||'미확인');};
@@ -3242,4 +3252,94 @@ if(slEmbedded){
   });
  }
 }
+
+// V4.23 — online-only item shop and legend signing bonus.
+const SL_V423_TICKET_COST=500000000000;
+function slV423Money(n){try{return BigInt(n??0).toLocaleString('ko-KR')+'P'}catch(_){return Number(n||0).toLocaleString('ko-KR')+'P'}}
+function slV423Uuid(){
+ const c=window.crypto;
+ if(!c?.getRandomValues)throw new Error('보안 난수 생성이 지원되지 않는 브라우저입니다. HTTPS 환경에서 접속하세요.');
+ const bytes=new Uint8Array(16);c.getRandomValues(bytes);
+ bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;
+ const h=Array.from(bytes,x=>x.toString(16).padStart(2,'0')).join('');
+ return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
+}
+function slV423Available(){return (sl.snapshot?.players||[]).filter(x=>ply(x.id)?.legend&&x.club===null&&!x.retired&&Number(x.age)>=16)}
+function slV423ItemsPage(){
+ if(!slEmbedded)return page('아이템','온라인 공용 아이템 상점')+block('안내','슈퍼리그는 엑셀 게임에서 회원 로그인 후 이용해 주세요.');
+ const tickets=Number(sl.snapshot?.items||0), wallet=sl.snapshot?.wallet||0;
+ const free=slV423Available();const roster=hasSelected()?mine().roster.length:0;
+ const current=free.find(p=>p.id===s.ui.v423SelectedLegend)||free[0];
+ const options=free.map(p=>`<option value="${esc(p.id)}" ${p.id===current?.id?'selected':''}>${esc(ply(p.id)?.name)} · ${p.age}세 · OVR ${p.ovr}</option>`).join('');
+ return page('아이템','레전드 영입권 · 언제든 사용 가능한 특별 계약')
+ +block('선수영입권 · 5,000억 P',`<div class="line between"><strong>내 공용 포인트: ${slV423Money(wallet)}</strong><span class="tag">보유 ${tickets}장</span></div><div class="spacer"></div><div class="note">1회 구매 5,000억P · 사용하면 FA 레전드 1명을 즉시 영입합니다. 주말 제한과 일반 FA 2명 제한을 건너뜁니다. <b>선수단 10명 미만</b>이어야 하며, 아이템을 사용한 경우 별도의 계약금은 차감하지 않습니다.</div><div class="spacer"></div><button class="btn primary" type="button" data-action="sl-v423-buy" ${sl.busy||Number(wallet)<SL_V423_TICKET_COST?'disabled':''}>선수영입권 구매 · 5,000억 P</button>`)
+ +block('선수영입권 사용',`<div>현재 선수단 <b>${roster}/10명</b> · 남은 FA 레전드 ${free.length}명</div><div class="spacer"></div><label>영입할 FA 레전드</label><select id="sl-v423-target" class="field" style="width:100%;margin:8px 0">${options||'<option value="">현재 영입 가능한 레전드가 없습니다.</option>'}</select><div class="spacer"></div><button class="btn primary" type="button" data-action="sl-v423-use" ${!tickets||roster>=10||!current||sl.busy?'disabled':''}>영입권 1장 사용 · 지금 영입</button><div class="small muted" style="margin-top:10px">이미 소속된 선수, 은퇴한 선수 또는 16세 미만 선수에게는 사용할 수 없습니다. 구매 및 사용은 Supabase 서버가 검증합니다.</div>`);
+}
+const slV423PreviousSwitch=switchTab;
+switchTab=function(tab){if(slEmbedded&&tab==='items'){s.tab='items';render();return;}return slV423PreviousSwitch(tab)};
+const slV423PreviousRecruit=recruit;
+recruit=function(id){
+ if(!slEmbedded)return slV423PreviousRecruit(id);
+ const info=(sl.snapshot?.players||[]).find(p=>p.id===id);
+ if(!info||info.retired||info.club!==null)return notice('FA 선수 여부를 다시 확인하세요.');
+ if(!window.confirm(`${ply(id)?.name} 선수의 최초 계약금 ${slV423Money(info.salary)}를 공용 회원 포인트에서 차감하고 주말 FA 영입을 진행할까요?`))return;
+ void slCommand('fa_sign',{player:id});
+};
+marketPage=function(){
+ if(!slEmbedded)return page('레전드 영입','온라인 게임에 로그인 후 이용하세요.');
+ const pos=s.ui.marketPos||'ALL',q=(s.ui.marketSearch||'').trim().toLowerCase();
+ const all=(sl.snapshot?.players||[]).filter(v=>ply(v.id)?.legend&&(pos==='ALL'||ply(v.id).pos===pos)&&(!q||ply(v.id).name.toLowerCase().includes(q)))
+  .sort((a,b)=>Number(a.retired)-Number(b.retired)||Number(a.club!==null)-Number(b.club!==null)||Number(b.ovr)-Number(a.ovr));
+ const start=Math.max(0,Math.min(Math.ceil(all.length/12)-1,Number(s.ui.marketPage)||0));s.ui.marketPage=start;
+ const mineClub=sl.snapshot?.clubs?.[s.selected];const legendCount=mine().roster.filter(id=>ply(id)?.legend).length;
+ return page('레전드 FA 영입','2005년 전후 실제 연봉 기반 추정 계약금 · 최초 영입할 때 공용 포인트에서 1회 차감',`<span class="tag">${s.day%7>=5?'주말 FA 진행':'평일: 영입권 사용 가능'}</span>`)
+ +block('FA 계약금 및 영입 규정',`<div class="note">회원 공용 잔액: <b>${slV423Money(sl.snapshot?.wallet)}</b> · 구단 이적 예산과 별도 · 현역 계약금 0P · 주말 일반 FA 최대 레전드 2명 및 전체 10명 · 영입권은 아이템 탭에서 언제든 1명 즉시 영입</div><div class="spacer"></div><button class="btn xs" data-action="tab" data-value="items">아이템 상점 열기 →</button>`)
+ +block('레전드 선수 목록',`<div class="line"><div class="tabs">${[['ALL','전체'],['GK','GK'],['DF','DF'],['MF','MF'],['FW','FW']].map(([v,l])=>`<button class="btn xs ${pos===v?'active':''}" data-action="market-pos" data-value="${v}">${l}</button>`).join('')}</div><input class="field search" id="market-search" placeholder="선수 이름 검색" value="${esc(s.ui.marketSearch||'')}"></div><div class="spacer"></div>${table(['선수','나이','OVR','은퇴 시점','최초 계약금','상태 / FA 영입'],all.slice(start*12,start*12+12).map(v=>{
+   const p=ply(v.id);const retired=!!v.retired;const can=!retired&&v.club===null&&s.day%7>=5&&mine().roster.length<10&&legendCount<2&&Number(sl.snapshot?.wallet)>=Number(v.salary)&&Number(v.age)>=16&&Number(mineClub?.morale)>=Math.min(98,50+Math.max(0,p.potential-80)*3);
+   const label=retired?'은퇴':v.club!==null?'소속팀 있음':s.day%7<5?'주말 영입':mine().roster.length>=10?'10/10':legendCount>=2?'레전드 2명':'조건 미충족';
+   return `<tr><td class="strong">${esc(p.name)}</td><td class="num">${v.age}세</td><td class="num">${v.ovr}</td><td>${retired?'은퇴 완료':v.retireAge+'세 예정'}</td><td class="num">${slV423Money(v.salary)}</td><td>${can?`<button class="btn xs primary" data-action="recruit" data-id="${esc(v.id)}">영입</button>`:`<span class="small muted">${label}</span>`}</td></tr>`;
+ }))}<div class="line between"><span class="small muted">${all.length}명 · ${start+1}/${Math.max(1,Math.ceil(all.length/12))}쪽</span><div><button class="btn xs" data-action="page-prev" ${start===0?'disabled':''}>이전</button> <button class="btn xs" data-action="page-next" ${(start+1)*12>=all.length?'disabled':''}>다음</button></div></div>`)
+ +block('구단 간 레전드 이적',`<div class="note">기존 구단 간 이적 제안과 수락 기능은 유지합니다. 주말에 실제 이적이 확정됩니다.</div><button class="btn xs primary" data-action="tab" data-value="transfer">이적시장 열기</button>`);
+};
+const slV423PrevSquad=squadPage;
+squadPage=function(){
+ const old=slV423PrevSquad();
+ if(!slEmbedded)return old;
+ const payRows=mine().roster.map(ply).filter(Boolean).map(p=>{const info=(sl.snapshot?.players||[]).find(x=>x.id===p.id);return `<tr><td class="strong">${esc(p.name)}</td><td>${p.legend?'레전드':'현역'}</td><td class="num">${slV423Money(p.legend?info?.salary:0)}</td><td class="num">${p.age}세</td><td class="num">${p.ovr}</td></tr>`});
+ return old+block('선수별 연봉 기준 · 최초 계약금',table(['이름','구분','연봉 기준 계약금','나이','OVR'],payRows)+`<div class="note">레전드 최초 영입 때만 계약금 1회 차감 · 현역 0P. 현역은 시즌이 지나도 나이/능력치가 고정됩니다. 레전드는 시즌 전환 때 나이/OVR이 바뀌고 37~42세에 계약과 무관하게 은퇴합니다.</div>`);
+};
+let slV423ActionBusy=false;
+async function slV423Action(action,player){
+ if(!sl.ready||!sl.verified||slV423ActionBusy)return;
+ const key=`sl_v423_pending_${sl.snapshot?.viewer?.id}_${action}_${player||'none'}`;
+ let request;try{request=sessionStorage.getItem(key)||slV423Uuid();sessionStorage.setItem(key,request);}catch(e){return notice(String(e?.message||e));}
+ slV423ActionBusy=true;
+ try{
+   const result=await slRequest('sl_v423_item_action',{p_action:action,p_player:player||null,p_request:request});
+   if(!result?.ok){sessionStorage.removeItem(key);throw new Error(result?.error||'아이템 처리가 거부되었습니다.');}
+   sessionStorage.removeItem(key);
+   await slLoad(false);
+   window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
+   notice(result.message||'아이템 처리 완료');
+ }catch(e){notice('아이템 요청 확인 필요: '+String(e?.message||e)+' · 재시도하면 동일 요청번호를 사용합니다.');}
+ finally{slV423ActionBusy=false;}
+}
+document.addEventListener('click',e=>{
+ if(!slEmbedded)return;
+ const b=e.target.closest?.('[data-action]');if(!b)return;
+ if(b.dataset.action==='sl-v423-buy'){
+  e.preventDefault();if(!window.confirm('회원 공용 포인트 5,000억P를 차감하고 선수영입권 1장을 구매하시겠습니까?'))return;
+  void slV423Action('buy',null);
+ }
+ if(b.dataset.action==='sl-v423-use'){
+  e.preventDefault();const selected=document.getElementById('sl-v423-target')?.value;
+  if(!selected)return notice('영입할 레전드를 선택하세요.');
+  if(!window.confirm(`${ply(selected)?.name} 선수에게 영입권 1장을 사용하시겠습니까? 계약금은 추가로 차감하지 않습니다.`))return;
+  void slV423Action('use',selected);
+ }
+},true);
+document.addEventListener('change',e=>{
+ if(e.target?.id==='sl-v423-target')s.ui.v423SelectedLegend=e.target.value;
+});
+
 </script></body></html>

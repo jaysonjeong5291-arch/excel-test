@@ -2461,11 +2461,12 @@ function frameSafeSlReply(requestId,payload){
 window.addEventListener('message',e=>{
  if(e.origin!==location.origin||e.source!==$('superleague-frame').contentWindow)return;
  if(e.data?.type==='SUPERLEAGUE_RETURN_TO_SHEET1'&&activeSuperleague)switchView(null);
+ if(e.data?.type==='SUPERLEAGUE_WALLET_REFRESH'&&activeSuperleague&&memberToken){void refreshMemberStats();return;}
  // Only this same-origin child can request the authenticated league RPC; the session token stays in the host.
  if(e.data?.type==='SL_RPC'&&activeSuperleague){
   const rid=String(e.data.requestId||'');
   const method=e.data.method;
-  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_admin_reset'].includes(method))return;
+  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_admin_reset','sl_v423_item_action'].includes(method))return;
   const args=e.data.args||{};
   if(method==='sl_command'&&!['claim','offer','respond','cancel','fa_sign','release','advance','post'].includes(args.p_action))return;
   (async()=>{
@@ -2479,6 +2480,8 @@ window.addEventListener('message',e=>{
       p_token:tokenAtStart,p_client:CLIENT_ID,p_admin_token:adminToken,
       p_confirm:args.p_confirm
      },false,11500);
+    }else if(method==='sl_v423_item_action'){
+     response=await callRpc('sl_v423_item_action',{p_token:tokenAtStart,p_action:args.p_action,p_player:args.p_player||null,p_request:args.p_request},false,11500);
     }else{
     response=await callRpc(method,method==='sl_snapshot'?{p_token:tokenAtStart}:method==='sl_offer_submit'?{p_token:tokenAtStart,p_request:args.p_request,p_player:args.p_player,p_amount:args.p_amount}:method==='sl_offer_status'?{p_token:tokenAtStart,p_request:args.p_request||null}:{p_token:tokenAtStart,p_action:args.p_action,p_payload:args.p_payload||{}},false,11500);
     }
