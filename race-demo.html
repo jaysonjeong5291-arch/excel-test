@@ -1,0 +1,1189 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>업무현황_레이스_VER.2026 · 온라인 v1.0.8 · 트랙 난이도 · 리타이어 · 방 생성·정산 보호 v1.1.5</title>
+<style>
+:root{font-family:Arial,'Malgun Gothic',sans-serif;background:#f0f5f2;color:#263a2e;font-size:13px;--line:#d8e5dc;--green:#107c41}*{box-sizing:border-box}body{margin:0;background:#f0f5f2}button,input,select{font:inherit}button{cursor:pointer;padding:9px 12px;border:1px solid #b8d0bd;background:white;color:#205d3b;border-radius:3px}button:hover{background:#ecf6ef}button:disabled{opacity:.42;cursor:default}button.primary{background:#107c41;color:white;border-color:#107c41;font-weight:700}button.danger{color:#ab4242}button.active{background:#d8efdf;color:#096836;font-weight:800}input,select{padding:9px;border:1px solid #c4d5ca;border-radius:2px;background:white;min-width:0}.shell{max-width:1720px;margin:0 auto;padding:12px 14px 70px}.top{border:1px solid #bfdbc7;background:#e9f5ed;padding:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}.title{font-size:17px;font-weight:800;color:#156b3c}.sub{font-size:11px;color:#688373;margin-top:5px}.head-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.smallstat{padding:8px 10px;background:white;border:1px solid #d1dfd5;font-size:12px}.smallstat strong{color:#0b7943}.greenbar{height:6px;background:#117941}.gridbox{background:white;border:1px solid #c6d8cc}.nav{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--line)}.nav button{border:0;border-radius:0;border-right:1px solid var(--line);padding:12px 18px}.nav button.active{border-bottom:3px solid #107c41;background:#f1f8f2}.formula{height:35px;display:flex;border-bottom:1px solid var(--line);align-items:center;gap:12px;color:#718778;font-family:Consolas,monospace}.formula span{width:64px;border-right:1px solid var(--line);text-align:center}.formula code{color:#506858}.pane{padding:14px}.pane[hidden]{display:none!important}.pane h2{font-size:17px;margin:3px 0 6px}.intro{color:#6a806f;font-size:12px;margin:0 0 14px}.sheethead{background:#e5f3e9;border:1px solid #d1e3d7;font-weight:800;padding:9px 11px;color:#246e42}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.twocol{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.6fr);gap:12px;align-items:start}.panel{border:1px solid var(--line);background:white;margin-bottom:12px}.pbody{padding:12px}.muted{color:#708673;font-size:12px}.label{font-size:12px;color:#365f47;font-weight:700}.status{min-height:21px;margin:9px 0;color:#117344;font-size:12px;font-weight:700}.status.err{color:#b23e3e}.hero{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.hero label{display:grid;gap:5px;flex:1}.hero input{width:100%}.tablewrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #d9e5dd;padding:9px 7px;text-align:left;vertical-align:middle}th{background:#ebf5ee;color:#42634c;font-weight:800}.theadnum{width:32px;text-align:center;background:#f0f3f0;color:#78857c}td.num{text-align:right;font-variant-numeric:tabular-nums}tr.me{background:#f0faf3}tr:hover td{background:#f6fcf8}.empty{text-align:center;color:#839486;padding:28px}.statstrip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:11px}.statstrip>div{border:1px solid var(--line);padding:11px;background:#fafcfb}.statstrip small{display:block;color:#718879}.statstrip strong{display:block;margin-top:4px;font-size:15px;color:#0d7240}.role{font-size:11px;background:#e0efea;color:#176e45;padding:4px 6px;font-weight:700}.warning{background:#fffae9;color:#745c1e;border:1px solid #f1e2ae;padding:9px 11px;font-size:12px;margin-bottom:10px}.scroll{overflow:auto}.lineups{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.lineup{border:1px solid var(--line);background:white;overflow:hidden}.lineup .picrow{display:grid;grid-template-columns:1.4fr 1fr;gap:3px;height:102px;background:#e8ecea}.lineup .picrow img{width:100%;height:102px;object-fit:cover}.lineup .info{padding:10px}.lineup b{display:block}.lineup .driver-name{color:#758777;font-size:11px;margin-top:3px}.lineup .chips{display:flex;justify-content:space-between;gap:8px;margin-top:10px}.lineup .chips span{color:#0b7a41;font-weight:800}.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:12px}.product{border:1px solid #d9e4db;background:#fff;overflow:hidden}.product img{width:100%;height:147px;object-fit:cover;background:#e3efea}.prodtext{padding:12px}.product h3{font-size:13px;margin:0 0 5px}.product p{font-size:11px;color:#6c816f;margin:0 0 12px;min-height:30px;line-height:1.5}.product .meta{font-weight:800;color:#117444}.product footer{display:flex;justify-content:space-between;gap:6px;margin-top:12px;align-items:center}.metric{display:grid;grid-template-columns:34px 1fr 24px;gap:6px;align-items:center;margin:6px 0;font-size:10px;color:#738575}.meter{background:#eaf0ec;height:6px;border-radius:10px;overflow:hidden}.meter i{background:#16824a;display:block;height:100%}.lane{display:grid;grid-template-columns:28px minmax(100px,1fr);gap:6px;align-items:center;border-bottom:1px solid #dae7de;padding:6px 0}.lane .bar{position:relative;height:25px;border-radius:3px;overflow:hidden;background:repeating-linear-gradient(90deg,#dae1dc,#dae1dc 24px,#f0f5f1 24px,#f0f5f1 50px)}.lane .racecar{height:21px;width:34px;position:absolute;top:2px;left:0;transition:left 0.9s linear;font-size:22px;line-height:1;text-shadow:1px 1px 2px #777}.race-summary{margin-top:10px;padding:10px;border:1px solid #d3e3d7;background:#f5faf6}.no-img{display:grid;place-items:center;background:linear-gradient(130deg,#dce9e1,#c2d3c8);color:#44745c;font-weight:800;min-height:110px}.key{display:inline-block;padding:3px 6px;border:1px solid #c7d9cc;background:#f8fbf9;font-size:11px;margin:1px}.betbox{display:grid;gap:10px}.betbox label{display:grid;gap:6px}.betbox input,.betbox select{width:100%}.sheetfoot{font-size:11px;color:#758b7c;padding:10px;border-top:1px solid var(--line)}.race-badge{background:#d6eadd;padding:5px 10px;color:#166d3d;font-weight:800}.track-meta{font-size:11px;color:#6a826e}.player-state{display:flex;gap:5px;flex-wrap:wrap;align-items:center}.help{font-size:11px;line-height:1.6;color:#597060;margin-top:10px}.toolbar{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:12px}.pill{padding:5px 8px;font-size:11px;border:1px solid #bdd6c7;color:#286c45;background:#f0f8f2}.photo-credit{font-size:10px;color:#8ba093;margin-top:6px}.photo-credit a{color:#5b8270;text-decoration:underline}#panes{min-height:480px}@media(max-width:900px){.twocol{grid-template-columns:1fr}.pane{padding:9px}.shell{padding:6px 6px 60px}.nav button{padding:10px 9px;font-size:12px}.statstrip{grid-template-columns:repeat(2,minmax(0,1fr))}.lineups{grid-template-columns:repeat(2,minmax(0,1fr))}.lineup .picrow{height:72px}.lineup .picrow img{height:72px}.lineup .info{padding:7px}.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.product img{height:112px}.prodtext{padding:8px}}
+
+/* v0.4: total upgrade caps and explicit paid resets */
+.upgrade-summary{border:1px solid #bdd7c3;background:#fff}
+.resetrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 12px;color:#375b44;font-size:12px}
+.resetrow button{border-color:#bdcfc3;background:#f5f9f6;white-space:nowrap;font-weight:700}
+@media(max-width:650px){.resetrow button{width:100%}}
+/* v0.3: portrait photos, tall race cards, balanced driver skill points */
+.driver-product .imagewrap{height:245px;overflow:hidden;background:linear-gradient(180deg,#eaf2ed,#dbe9e2)}
+.driver-product .imagewrap img{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;background:transparent}
+.driver-product .imagewrap .no-img{height:100%;font-size:32px}
+.lineups{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.lineup .picrow{grid-template-columns:1.22fr 1fr;height:174px;background:#e1eae5}
+.lineup .picrow .photo-slot{min-width:0;min-height:0;overflow:hidden;background:#e7f0e9}
+.lineup .picrow .photo-slot img{width:100%;height:100%;display:block}
+.lineup .picrow .driver-slot img{object-fit:contain;object-position:center top;background:#e7f0e9}
+.lineup .picrow .car-slot img{object-fit:cover;object-position:center 50%}
+.lineup .picrow .no-img{height:100%;min-height:100%;font-size:25px}
+.skill-note{border:1px solid #bedbc7;background:#edf7f0;padding:10px 12px;color:#28663d;font-size:12px;line-height:1.55}
+@media(max-width:900px){
+ .driver-product .imagewrap{height:210px}
+ .lineups{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lineup .picrow{height:162px}
+}
+@media(max-width:560px){
+ .gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .driver-product .imagewrap{height:195px}
+ .lineups{grid-template-columns:1fr}
+ .lineup .picrow{height:200px;grid-template-columns:1.25fr 1fr}
+}
+
+/* v0.6: spreadsheet-style spectators and room chat */
+.social-count{float:right;font-weight:500;font-size:11px;color:#547560}
+.spectator-list{display:flex;flex-wrap:wrap;gap:6px;max-height:140px;overflow:auto}
+.spectator-chip{border:1px solid #cdded2;padding:7px 9px;background:#f9fbfa;border-radius:2px;font-size:12px;white-space:nowrap}
+.spectator-chip.offline{color:#8b9990;background:#f4f5f4}
+.presence-dot{font-size:10px;color:#0e9956;margin-right:5px}
+.spectator-chip.offline .presence-dot{color:#a7b0a9}
+.chat-grid-header{display:grid;grid-template-columns:54px 92px minmax(0,1fr);background:#eaf4ed;border:1px solid #d9e5dd;color:#406f4f;font-weight:700;font-size:11px}
+.chat-grid-header span{padding:7px;border-right:1px solid #d9e5dd}
+.chat-history{height:240px;overflow-y:auto;border:1px solid #d9e5dd;border-top:0;background:#fff}
+.chat-line{display:grid;grid-template-columns:54px 92px minmax(0,1fr);border-bottom:1px solid #e4ece7;font-size:12px;line-height:1.45}
+.chat-line:nth-child(even){background:#f8fbf9}
+.chat-line>span{padding:7px;word-break:break-word;overflow-wrap:anywhere;border-right:1px solid #e4ece7}
+.chat-line .chat-time{font-size:11px;color:#748578;font-variant-numeric:tabular-nums}
+.chat-line .chat-sender{font-weight:700;color:#2b6242}
+.chat-line .chat-body{white-space:pre-wrap}
+.chat-empty{padding:30px 12px;text-align:center;color:#738b7a}
+.chat-compose{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:9px}
+.chat-compose input{width:100%;min-width:0}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:700px){.chat-grid-header,.chat-line{grid-template-columns:46px 76px minmax(0,1fr)}.chat-grid-header span,.chat-line>span{padding:6px 5px}.race-social-panel .pbody{padding:10px}}
+
+/* v0.8: race social connection and administrator feedback */
+.race-chat-feedback{font-size:11px;color:#496950;min-height:17px;margin:7px 0 0;overflow-wrap:anywhere}
+.race-chat-feedback.error{color:#ae4242}
+/* v1.1.3: make command errors visible immediately above chat input on mobile */
+.race-chat-feedback:not(:empty){font-weight:700;padding:10px 12px;border:1px solid #9fcdb2;background:#eaf7ee;color:#17643d;border-radius:3px;margin:8px 0}
+.race-chat-feedback.error:not(:empty){background:#fff1ee;border-color:#e0b4ae;color:#a52a25}
+.race-admin-hint{padding:8px 10px;background:#f1f7f2;border-left:3px solid #15824b;font-size:11px;margin:0 0 8px}
+
+#race-admin-guide code{color:#27653e;background:#f1f8f3;padding:2px 4px;white-space:normal}
+/* v1.1.2 global vehicle/driver sale — never discount upgrades */
+.sale-banner{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:9px 12px;background:#fff9df;border:1px solid #dfbf71;color:#735413;font-size:12px;font-weight:700;margin:0 0 11px}
+.sale-banner[hidden]{display:none!important}
+.sale-price{font-weight:900;color:#bb3e2c;font-variant-numeric:tabular-nums}
+.sale-original{font-size:11px;color:#889087;text-decoration:line-through;font-weight:400;margin-left:5px}
+.sale-shopline{font-size:11px;color:#916512;font-weight:700;margin-top:4px}
+/* v0.7: track characteristics — public weights only */
+.track-profile{background:#fbfdfb;border:1px solid #cbded0;margin:0 0 12px;padding:10px 12px}
+.track-profile-title{display:flex;gap:9px;flex-wrap:wrap;justify-content:space-between;align-items:center;border-bottom:1px solid #e1ece4;padding-bottom:7px;color:#235d3a}
+.track-profile-title span{font-size:11px;color:#637c6a}
+.track-weight-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding-top:9px}
+.track-weight{border:1px solid #e0e9e2;background:white;padding:8px;display:grid;grid-template-columns:1fr auto;gap:7px;font-size:11px}
+.track-weight span{grid-column:1/-1;color:#5a7660}
+.track-weight b{font-variant-numeric:tabular-nums;color:#136e3d}
+.track-weight-bar{height:8px;background:#e8f1eb;border-radius:4px;overflow:hidden;align-self:center}
+.track-weight-bar i{display:block;height:100%;background:#198750;border-radius:4px}
+.track-public-note{font-size:11px;color:#738777;line-height:1.6;margin-top:7px}
+@media(max-width:600px){.track-weight-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v0.9: Excel-like solo betting against server-generated bots */
+.solo-lineups{grid-template-columns:repeat(auto-fit,minmax(245px,1fr))}
+.solo-lineups .lineup.me{outline:2px solid #107c41;background:#f2faf4}
+.solo-lanes .lane{grid-template-columns:90px minmax(90px,1fr)}
+.solo-lanes .lane>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
+.solo-lanes .bar{height:30px}
+.solo-lanes .racecar{top:4px}
+.solo-score{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0}
+.solo-score>div{border:1px solid #d9e5dd;background:#f7fbf8;padding:10px}
+.solo-score small{display:block;color:#718879}
+.solo-score b{font-size:15px;color:#087a3d}
+@media(max-width:560px){.solo-score{grid-template-columns:1fr}.solo-lineups{grid-template-columns:1fr}}
+
+/* v1.0 unified rooms: humans and CPUs, no second solo game tab. */
+.mix-config-grid{display:grid;grid-template-columns:minmax(160px,1.5fr) auto minmax(180px,1.5fr) auto;gap:8px;align-items:end}
+.mix-config-grid label{display:grid;gap:5px;font-size:12px;color:#3c6446;font-weight:700}
+.mix-config-grid select{width:100%;height:37px}
+#mixed-settings{background:#fbfefc}
+#mixed-settings .sheethead{background:#daf0e2}
+@media(max-width:750px){.mix-config-grid{grid-template-columns:minmax(0,1fr) auto;gap:7px}}
+.slot-editor{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.slot-card{border:1px solid #c9dfd1;background:#f9fcfa;padding:9px;min-width:0}
+.slot-card .slot-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.slot-card .slot-top b{color:#126940}.slot-card select{width:100%;min-width:0}
+.slot-card .slot-details{font-size:11px;margin-top:8px;min-height:30px;line-height:1.5;color:#627a68}
+.slot-card.is-cpu{background:#eff8f1}.slot-card.is-closed{background:#f2f4f2;opacity:.8}
+.slot-card .ready-yes{color:#117e46;font-weight:800}.slot-card .ready-no{color:#986f3c}
+.odds-preview{font-size:11px;color:#286a49}.bet-note{background:#f1f8f3;border-left:3px solid #118246;padding:8px 10px;font-size:11px;line-height:1.55;margin-bottom:8px}
+@media(max-width:760px){.slot-editor{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:420px){.slot-editor{grid-template-columns:1fr 1fr;gap:5px}.slot-card{padding:7px}}
+
+/* v1.0.4: result banner & in-room rematches */
+.race-finish-hero{border:1px solid #b9d3c3;border-top:5px solid #107c41;background:#fff;margin-bottom:14px;padding:14px;box-shadow:0 2px 10px rgba(15,75,41,.06)}
+.race-finish-hero[hidden]{display:none!important}
+.finish-eyebrow{font-size:11px;letter-spacing:.05em;color:#436b50;font-weight:800}
+.finish-winner{display:flex;align-items:center;gap:13px;margin:8px 0;flex-wrap:wrap}
+.finish-crown{font-size:32px;line-height:1}
+.finish-winner h3{font-size:21px;line-height:1.25;color:#175e35;margin:0}
+.finish-winner p{margin:5px 0;color:#62786b;font-size:12px}
+.finish-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:6px;margin:12px 0}
+.finish-place{border:1px solid #d8e5dd;background:#f8fbf8;padding:9px 10px;min-width:0}
+.finish-place:first-child{border-color:#dfc67e;background:#fff9e5}
+.finish-place b{display:block;color:#265c39;font-size:13px}
+.finish-place small{color:#6b8372;display:block;margin-top:4px;font-size:11px}
+.finish-my-bet{background:#f0f7f2;border:1px solid #cee3d3;padding:9px 10px;line-height:1.6;font-size:12px}
+.finish-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:12px}
+.finish-actions button{font-weight:800;padding:11px 15px}
+.finish-actions small{color:#6a8173;line-height:1.5}
+.lineup.is-winning{border:2px solid #d3a731;box-shadow:0 1px 6px rgba(194,152,33,.15)}
+.race-summary.is-finished{border:1px solid #c3dccb;background:#eff8f2;line-height:1.65}
+/* small, course-shaped previews update on track selection, before save */
+.track-mini-wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;border:1px solid #d1e2d5;background:#f8fcf9;padding:8px;max-width:630px}
+.track-mini-map{flex:0 0 245px;width:245px;max-width:100%;height:138px;background:#e1eee5;border:1px solid #b9d4c2;border-radius:3px;overflow:hidden}
+.track-mini-map svg{width:100%;height:100%;display:block}
+.track-mini-detail{flex:1;min-width:155px;font-size:11px;line-height:1.75;color:#526d59}
+.track-mini-detail b{display:block;font-size:13px;color:#19643c}
+.track-mini-detail em{font-style:normal;color:#926f38}
+@media(max-width:600px){.track-mini-map{flex-basis:180px;width:180px;height:105px}.track-mini-detail{min-width:120px}.finish-winner h3{font-size:18px}}
+
+/* v1.0.5: permanent course preview and spectator-friendly racing broadcast */
+.track-map-guide{margin:5px 0 12px;font-size:11px;color:#52795e;line-height:1.45}
+.grid-setup-title{margin:12px 0 9px;padding:8px 10px}
+.track-mini-wrap{width:100%;max-width:none;min-height:170px;display:grid;grid-template-columns:minmax(240px,320px) minmax(0,1fr);gap:14px;align-items:center}
+.track-mini-map{height:180px;width:100%;min-width:0;max-width:100%;flex:auto;background:#d4e8da}
+.track-mini-map svg{display:block;width:100%!important;height:100%!important;min-height:150px;visibility:visible!important;opacity:1!important}
+.track-mini-detail{font-size:12px}
+.race-map-head{display:flex;justify-content:space-between;gap:6px;align-items:center;margin:0 0 5px;flex-wrap:wrap;color:#28613f}
+.race-map-head span{font-size:10px;color:#698572}
+.race-course-always{margin:0 0 11px;min-height:105px;grid-template-columns:150px 1fr;padding:5px 8px}
+.race-course-always .track-mini-map{height:102px;min-height:102px}
+.race-course-always .track-mini-map svg{min-height:100px}
+.race-course-always .track-mini-detail{line-height:1.5;font-size:11px}
+.race-tv{background:linear-gradient(160deg,#122723,#1c3630);border:1px solid #1d4433;border-radius:7px;padding:12px;color:#e9fff0;box-shadow:inset 0 2px 15px rgba(0,0,0,.2)}
+.race-broadcast{display:grid;grid-template-columns:.8fr 1.6fr .6fr;gap:8px;margin-bottom:10px}
+.race-broadcast>div{background:#203f34;border:1px solid #385f4b;border-radius:4px;padding:8px;min-width:0}
+.race-broadcast small{display:block;font-size:10px;color:#b3d6bb}
+.race-broadcast strong{font-size:16px;display:block;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff;font-variant-numeric:tabular-nums}
+.race-broadcast #race-clock{color:#f7d785;font-size:21px}
+.race-meter{height:8px;overflow:hidden;border-radius:8px;background:#375549;margin-bottom:12px}
+.race-meter>i{display:block;width:0;height:100%;background:linear-gradient(90deg,#31bd70,#e3cb56);transition:width .45s linear;box-shadow:0 0 11px #b6df83}
+.race-road{display:grid;gap:6px;min-height:165px}
+.race-tv-lane{display:grid;grid-template-columns:24px minmax(0,1fr) 45px;gap:7px;align-items:center;min-height:32px}
+.race-lane-number{font-size:11px;text-align:center;color:#cbdcd2}
+.race-lane-number i{display:block;width:8px;height:8px;margin:4px auto 0;border-radius:50%;background:var(--team-color,#79daba)}
+.race-tarmac{position:relative;height:36px;overflow:hidden;background:repeating-linear-gradient(90deg,#2d483d 0,#2d483d 38px,#355447 39px,#355447 41px);border-radius:4px;border:1px solid #4a6d5b}
+.race-tarmac::after{content:"";position:absolute;top:0;bottom:0;right:6%;width:8px;opacity:.75;background:repeating-conic-gradient(#f9faf7 0% 25%,#2b463e 0% 50%) 0 0 / 8px 8px}
+.race-tarmac .race-line-title{position:absolute;top:3px;left:8px;font-size:10px;max-width:calc(100% - 70px);color:#dbecdf;text-shadow:0 1px #122;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.race-tarmac .race-timing{position:absolute;top:21px;left:8px;color:#a2cbb3;font-size:9px}
+.race-tarmac .race-progress-fill{position:absolute;left:0;bottom:0;height:3px;background:var(--team-color,#70e1ad);opacity:.9;transition:width .55s linear;width:0}
+.race-tarmac .race-progress-car{position:absolute;top:9px;left:0;font-size:22px;width:36px;z-index:2;filter:drop-shadow(0 2px 3px #071a11);transition:left .55s linear;display:inline-flex;justify-content:center}
+.race-lane-rank{font-size:10px;text-align:center;font-variant-numeric:tabular-nums;color:#d3eee0}
+.race-lane-rank.leader{background:#ead27a;color:#243225;border-radius:3px;padding:5px 1px;font-weight:800}
+.race-tv-lane.is-me .race-tarmac{outline:1px solid #5abb8c}
+.race-tv-lane.is-leader .race-tarmac{border-color:#d9cb68}
+.race-announcer{font-weight:700;font-size:12px;margin-top:11px;line-height:1.6;min-height:37px;padding:8px 10px;border-left:3px solid #d6c067;background:#244537;color:#f0ffe7}
+.race-tv.is-finished{background:linear-gradient(140deg,#273721,#163d2c)}
+@media(max-width:760px){.track-mini-wrap{grid-template-columns:minmax(0,1fr)}.track-mini-map{height:160px;max-height:190px}.track-mini-detail{line-height:1.45}.race-course-always{grid-template-columns:155px minmax(0,1fr)}.race-course-always .track-mini-map{height:108px}.race-broadcast{grid-template-columns:.8fr 1.3fr .65fr;gap:4px}.race-broadcast>div{padding:5px}.race-broadcast strong{font-size:12px}.race-broadcast #race-clock{font-size:17px}.race-tv{padding:7px}.race-tv-lane{gap:4px;grid-template-columns:18px minmax(0,1fr) 36px}}
+@media(max-width:390px){.race-course-always{grid-template-columns:minmax(0,1fr)}.race-course-always .track-mini-map{height:133px}.race-course-always .track-mini-detail{padding:0 4px}}
+
+/* v1.0.6 - server-timed accident and pit repair broadcast. */
+.race-incident-hud{margin-top:10px;border:1px solid #517263;background:#18342c;overflow:hidden;border-radius:5px}
+.race-incident-head{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#25493a;padding:8px 10px;color:#f6f9e1;font-size:11px;font-weight:800}
+.race-incident-head span{font-size:10px;color:#b5d9c1;font-weight:600}
+.race-incident-highlight{padding:10px;background:#423528;color:#ffe4ad;border-left:4px solid #f9bd66;font-weight:900;font-size:13px;line-height:1.45;min-height:42px}
+.race-incident-highlight.is-danger{background:#53292c;color:#ffe2db;border-color:#fb7772;animation:race-alert-flash .48s ease 2}
+.race-incident-highlight.is-repair{background:#25443c;color:#c9f8d4;border-color:#5fd49a}
+.race-incident-log{max-height:140px;overflow:auto;padding:5px 9px 9px;display:grid;gap:4px}
+.race-incident-item{display:grid;grid-template-columns:48px 1fr;gap:7px;align-items:baseline;border-bottom:1px solid #35544b;padding:5px 3px;color:#dceee0;font-size:11px}
+.race-incident-item time{color:#9fc0a8;font-family:Consolas,monospace}
+.race-incident-item b{color:#ffe6a4;font-weight:700}
+.race-incident-idle{font-size:11px;color:#a8c1b0;padding:7px}
+.race-tarmac .race-lane-alert{position:absolute;right:10%;top:8px;z-index:3;border-radius:3px;padding:3px 5px;font-size:10px;line-height:1;font-weight:900;color:#1e2821;background:#ffe6a5;white-space:nowrap;max-width:45%;overflow:hidden;text-overflow:ellipsis}
+.race-tarmac .race-lane-alert[hidden]{display:none}
+.race-tv-lane.is-incident .race-tarmac{border-color:#f57b6e;box-shadow:inset 0 0 12px rgba(244,77,62,.45)}
+.race-tv-lane.is-repair .race-tarmac{border-color:#72d9a0;box-shadow:inset 0 0 9px rgba(90,199,126,.38)}
+@keyframes race-alert-flash{50%{filter:brightness(1.3)}}
+@media(max-width:600px){.race-incident-head{padding:7px}.race-incident-highlight{padding:8px;font-size:12px}.race-incident-log{max-height:115px}.race-incident-item{grid-template-columns:38px 1fr;font-size:10px}.race-tarmac .race-lane-alert{font-size:9px;padding:2px}}
+@media(prefers-reduced-motion:reduce){.race-incident-highlight.is-danger{animation:none}}
+
+/* v1.0.8 : race readiness / TV focus / DNF */
+.race-quickbar{position:sticky;top:0;z-index:18;background:#eff9f2;border:2px solid #a8ccb1;border-left:5px solid #0d7b3e;box-shadow:0 4px 13px rgba(12,74,36,.12);padding:10px 12px;margin:0 0 14px}
+.race-quickbar[hidden]{display:none!important}
+.race-quickbar-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px;color:#13683a}
+.race-quickbar-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:8px 0}
+.race-quickbar-actions button{min-height:42px;font-size:13px;font-weight:800}
+.ready-spotlight{background:#ffdd65;color:#34300a;border:2px solid #cc9d20;box-shadow:0 2px 7px rgba(163,126,24,.2);font-size:15px!important;min-width:160px}
+.ready-spotlight:hover{background:#f5cc43}
+.ready-spotlight.is-confirmed{background:#d8eddf;border-color:#5fb17c;color:#136c3d}
+.race-quick-note{font-size:11px;color:#536e5b;line-height:1.55}
+#race-tv-anchor{scroll-margin-top:84px}
+.race-tv-lane.is-retired .race-tarmac{border:1px solid #e0635c;background:repeating-linear-gradient(90deg,#4d3334,#4d3334 36px,#623f3f 36px,#623f3f 38px)}
+.race-tv-lane.is-retired .race-progress-car{filter:grayscale(1) drop-shadow(0 0 8px #e24f4f);opacity:.65}
+.race-tv-lane.is-retired .race-timing{color:#ff938d;font-weight:800}
+.race-tv-lane.is-retired .race-lane-rank{font-weight:900;color:#ffad8c}
+.race-tv-lane.is-retired .race-lane-alert{background:#d84e4e;color:#fff}
+@media(max-width:600px){.race-quickbar{padding:8px;top:0}.race-quickbar-actions button{flex:1;min-width:0;padding:10px 6px;font-size:11px}.race-quickbar-actions .ready-spotlight{width:100%;flex-basis:100%;font-size:15px!important}}
+
+/* v1.1.0: READY and host START are adjacent, mobile two-button row. */
+.race-quickbar-actions .start-spotlight{background:#0d6b3d;border:2px solid #064d2b;color:#fff;box-shadow:0 3px 10px rgba(10,90,40,.20);font-size:15px;min-width:152px}
+.race-quickbar-actions .start-spotlight[hidden]{display:none!important}
+@media(max-width:600px){.race-quickbar-actions .ready-spotlight,.race-quickbar-actions .start-spotlight{width:auto;flex:1 1 44%;min-width:132px;font-size:14px!important}}
+.ready-spotlight.ready-rematch{background:#ffe28a;border-color:#c28b16;color:#523909;animation:readyPulse 1.8s ease-in-out infinite}@keyframes readyPulse{0%,100%{box-shadow:0 0 0 0 rgba(220,160,18,.1)}50%{box-shadow:0 0 0 5px rgba(220,160,18,.18)}}
+/* Bet limit: client-side instant status, independent of SQL server validation. */
+.cap-warning{font-size:12px;font-weight:600;color:#597160;line-height:1.45}
+.cap-warning.over-limit{color:#c4272c}
+</style></head><body><main class="shell"><header class="top"><div><div class="title">🏁 업무현황_레이스_VER.2026</div><div class="sub">6개 출전석 · 유저/컴퓨터/닫기 · 실시간 예상 배당 · 선택 베팅 · 채팅 · 방 생성 안전복구 v1.1.5</div></div><div class="head-actions"><span class="smallstat">내 포인트 <strong id="wallet">-</strong></span><span class="smallstat">회원 <strong id="my-name">로그인 확인 중</strong></span><button id="race-reconnect" type="button" title="세션과 레이스 상태를 다시 확인합니다">↻ 연결 재확인</button><span id="sale-top-chip" class="smallstat" hidden>🎁 레이스 특가 <strong id="sale-top-percent">정상가</strong></span><button id="home" type="button">Sheet1</button></div></header><div class="greenbar"></div><div class="gridbox"><nav class="nav" id="tabs"><button data-tab="race" class="active">🏁 경기장</button><button data-tab="garage">🚗 차량</button><button data-tab="drivers">👤 드라이버</button><button data-tab="upgrades">🔧 파츠·스킬</button></nav><div class="formula"><span id="address">A1</span><strong>fx</strong><code id="formula-text">=RACE_ONLINE(포인트,차량,배당률)</code></div><div id="status" class="status" role="status"></div><div id="race-rpc-warning" class="warning" role="alert" hidden>⚠ 정산 보호 함수가 설치되지 않았습니다. 방 조회·생성·입장만 임시 사용 가능하며, <b>베팅·READY·경기 시작·구매·강화는 안전을 위해 제한</b>합니다. Supabase 정산 보호 SQL을 설치하고 새로고침해 주세요.</div><div id="sale-banner" class="sale-banner" hidden>🎉 운영자 할인 이벤트 · 차량·드라이버 <strong id="sale-banner-percent">정상가</strong> · 파츠·스킬 강화 제외 · 전체 레이스방 적용</div><div id="panes">
+<section class="pane" id="pane-lobby" hidden><div class="toolbar"><div><h2>레이스 온라인 방 목록</h2><p class="intro">2~6명이 각자 차량을 출전시키며 출전자와 관전자 모두 우승 팀에 베팅할 수 있습니다.</p></div><button id="refresh" type="button">↻ 새로고침</button></div><div class="panel"><div class="sheethead">A열 / 온라인 레이스방 생성</div><div class="pbody hero"><label>방 이름<input type="text" id="room-title" maxlength="32" value="주말 그랑프리" placeholder="방 이름"></label><button id="create" type="button" class="primary">＋ 방 만들기</button><label>초대코드 입력<input type="text" id="room-code" placeholder="rc-xxxxxxxxxxxx"></label><button id="join-code" type="button">입장</button></div></div><div class="panel"><div class="sheethead">B열 / 접속 가능한 경기</div><div class="tablewrap"><table><thead><tr><th>시트</th><th>방 이름</th><th>단계</th><th>출전자</th><th>관전자</th><th></th></tr></thead><tbody id="room-list"><tr><td colspan="6" class="empty">목록을 확인하는 중...</td></tr></tbody></table></div></div></section>
+<section class="pane" id="pane-race"><div class="toolbar"><div><h2 id="race-title">경기장</h2><p class="intro" id="race-code">Sheet1에서 방을 선택하세요</p></div><div class="row"><button id="share" type="button">초대 링크</button><button id="leave" type="button">방 나가기</button></div></div><div class="warning" id="room-help">Sheet1에서 방을 만들거나 입장하면 경기장 정보가 표시됩니다.</div>
+<div class="race-quickbar" id="race-quickbar" aria-label="출전 및 준비">
+ <div class="race-quickbar-top"><b>🏁 참가 / 관전 · READY</b><span id="role-summary" class="player-state">경기방 접속 전</span></div>
+ <div class="race-quickbar-actions"><button id="enter-race" type="button" class="primary">🏎 유저 출전하기</button><button id="spectate" type="button">👀 관전으로 이동</button><button id="ready" type="button" class="ready-spotlight">READY</button><button id="start-race" type="button" class="primary start-spotlight" hidden>🏁 경기 시작</button></div>
+ <div class="race-quick-note" id="role-quick-note">출전석이 열려 있으면 참가하고, 출발 전 언제든 관전으로 전환할 수 있습니다. READY를 누르면 방장이 시작할 수 있어요.</div>
+</div>
+<div id="race-finish-hero" class="race-finish-hero" hidden role="region" aria-label="지난 경기 우승 결과" aria-live="polite"></div>
+<div id="mixed-settings" class="panel" hidden>
+ <div class="sheethead">A열 / 6개 출전석 편성 · 유저 / 컴퓨터 / 닫기</div>
+ <div class="pbody"><div class="row" style="margin:0 0 9px"><label>이번 경기 트랙 <select id="track-choice" aria-label="트랙 변경"></select></label><button id="set-track" type="button">트랙 적용</button></div>
+ <div id="track-mini-preview" class="track-mini-wrap" aria-label="선택 트랙 코스 미리보기"></div>
+ <p class="track-map-guide">▲ 코스 지도가 이곳과 C열에 항상 표시됩니다. 트랙을 바꾸면 지도가 즉시 변경되고, ‘트랙 적용’을 눌러 저장합니다.</p>
+ <div class="sheethead grid-setup-title">출전석 편성 · 재경기 시 기존 구성 유지</div>
+ <div id="slot-editor" class="slot-editor" aria-label="6개 출전석 설정"></div>
+ <p class="help" id="mixed-config-hint">6개 칸마다 유저 참가·컴퓨터·닫기를 설정할 수 있습니다. 입장한 유저는 빈 유저 참가석을 선택할 수 있습니다.</p>
+ </div></div><div class="statstrip"><div><small>경기 단계</small><strong id="phase">준비 중</strong></div><div><small>출전 팀</small><strong id="entry-count">0 / 6</strong></div><div><small>관전자</small><strong id="spec-count">0명</strong></div><div><small>트랙</small><strong id="track-name">-</strong></div></div><div id="track-profile" class="track-profile" aria-label="트랙 공략 정보"></div><div class="twocol"><div><div class="panel"><div class="sheethead">B열 / 출전팀 · 실시간 예상 배당률</div><div class="pbody"><div class="lineups" id="lineups"></div><div class="race-summary" id="result">경기 준비 중입니다.</div></div></div><div class="panel" id="race-tv-anchor"><div class="sheethead">C열 / 레이스 중계센터 · 6레인 실황 <span id="race-duration-caption" style="float:right">20~40초</span></div><div class="pbody"><div class="race-map-head"><b>🗺 트랙 미니맵</b><span>선택하면 코스 미리보기 자동 변경</span></div><div id="race-course-preview" class="track-mini-wrap race-course-always" aria-label="경주 트랙 미니맵"></div><div class="race-tv"><div class="race-broadcast"><div><small id="race-broadcast-stage">그리드 준비</small><strong id="race-clock">READY</strong></div><div><small>레이스 실황</small><strong id="race-leader">출발 대기</strong></div><div><small>진행률</small><strong id="race-percent">0%</strong></div></div><div class="race-meter"><i id="race-meter-fill"></i></div><div id="race-road" class="race-road"></div><div id="race-announcer" class="race-announcer" role="status">🏁 출전팀이 확정되면 레이스 연출이 이곳에 나타납니다.</div>
+<div class="race-incident-hud" role="region" aria-label="실시간 사고 및 피트스톱 이벤트">
+ <div class="race-incident-head">⚠ 레이스 관제센터 · 사고 / 피트스톱 <span id="race-incident-count">이벤트 대기</span></div>
+ <div id="race-incident-highlight" class="race-incident-highlight">🟢 출전 차량 점검 중 · 레이스 이벤트는 자동 진행됩니다.</div>
+ <div id="race-incident-log" class="race-incident-log" aria-live="polite"><div class="race-incident-idle">경기 시작 후 사고와 정비 내역이 시간순으로 기록됩니다.</div></div>
+</div></div><div class="help">사고·펑크·피트스톱은 서버에서 확정하고 완주 기록에 반영됩니다. 주행 화면의 중간 순위는 연출이며 공식 순위와 베팅 정산은 서버 결과를 따릅니다.</div></div></div></div><aside><div class="panel"><div class="sheethead">D열 / 내 참여 방식</div><div class="pbody"><div class="help">참가·관전·READY·경기 시작 버튼은 경기장 상단에 고정해 두었습니다. 경주가 시작되면 새 입장은 자동 관전으로 처리됩니다.</div><div class="help">출전하려면 차량·드라이버를 보유해야 합니다. 기본 차량과 신인 드라이버는 처음에 무상 지급됩니다. 사람 출전자 1명일 때는 참가비·입상수당 0P, 2명 이상이면 사람당 참가비 1,000P를 사람 참가자들의 순위에 따라 분배합니다. 컴퓨터는 입상수당을 받지 않습니다.</div><div class="row" style="margin-top:10px"><button id="open-bets" type="button" hidden>배당 확정 / 베팅 접수</button></div></div></div><div class="panel"><div class="sheethead">E열 / 배당률 · 출전자/관전자 베팅</div><div class="pbody"><div class="tablewrap"><table><thead><tr><th>선수</th><th>종합 능력</th><th>배당</th></tr></thead><tbody id="odds-table"></tbody></table></div><div class="bet-note" id="bet-open-note">출전자 전원 레디 시 배당 확정 · 이후 베팅은 자유 선택 · 방장만 경기 시작</div><div class="betbox" style="margin-top:12px"><label>우승 예상 팀<select id="bet-target"></select></label><label>베팅 금액 (P)<input type="number" id="bet-amount" min="1" max="100000000" step="1" value="1000" inputmode="numeric"></label><div id="bet-limit-note" class="cap-warning" role="status" aria-live="polite">1회 최대 1억 P까지 베팅 가능합니다.</div><div id="expected" class="muted">베팅 가능 시 표시</div><button class="primary" id="bet-submit" type="button">베팅하기</button><div class="muted" id="bet-status">전원 READY 후 경기 시작 전까지 자유롭게 베팅 가능 · 베팅 없이도 출전할 수 있습니다.</div></div><div class="help">대기 중 예상 배당은 출전석·장비·트랙에 따라 자동으로 변합니다. 모두 레디하면 배당이 확정되고 베팅이 열립니다. 베팅은 선택 사항이며 경기 시작 시 마감합니다. 비공개 기복·내구성은 배당에 포함되지 않습니다.</div></div></div><div class="panel race-social-panel">
+ <div class="sheethead">F열 / 관전자 명단 <span id="social-online-count" class="social-count">0명 접속 중</span></div>
+ <div class="pbody"><div id="race-spectators" class="spectator-list"><span class="muted">관전자 정보를 불러오는 중…</span></div>
+ <p class="help">접속 중인 관전자는 ●로 표시됩니다. 출전자도 채팅에 참여할 수 있습니다.</p></div>
+</div>
+<div class="panel race-social-panel">
+ <div class="sheethead">G열 / 레이스 방 채팅</div>
+ <div class="pbody">
+  <div class="chat-grid-header"><span>시간</span><span>닉네임</span><span>메시지</span></div>
+  <div id="race-chat-messages" class="chat-history" role="log" aria-live="polite"><p class="muted">채팅을 불러오는 중…</p></div>
+  <p id="race-admin-hint" class="race-admin-hint" hidden>★ 운영자 할인 명령은 <b>/sale 50</b> 입력 후 <b>전송</b>을 눌러 적용합니다. 서버 인증 실패 시 바로 아래에 원인이 표시됩니다.</p>
+  <p id="race-chat-feedback" class="race-chat-feedback" role="status" aria-live="assertive"></p>
+  <form id="race-chat-form" class="chat-compose"><label for="race-chat-input" class="sr-only">채팅 메시지</label><input id="race-chat-input" maxlength="240" placeholder="같은 레이스방 참가자·관전자와 대화" autocomplete="off"><button class="primary" id="race-chat-send" type="submit">전송</button></form>
+  <p class="help">방마다 채팅이 구분됩니다. 240자 이내 · 최근 80개 메시지 표시</p>
+  <p id="race-admin-guide" class="help" hidden>★ 운영자 명령: <code>/포인트 닉네임 100,000</code> · <code>/포인트 닉네임 -50,000</code> · <code>/공지 내용</code> · <code>/강퇴 닉네임</code> · <code>/sale 50</code> (50% 가격) · <code>/sale 100</code> (정상가 복귀)</p>
+ </div>
+</div>
+</aside></div></section>
+
+<section class="pane" id="pane-solo" hidden>
+ <div class="toolbar"><div><h2>🤖 혼자 레이스 · 컴퓨터 5팀과 자동 경주</h2><p class="intro">다른 사람이 없어도 내 차로 출전하고, 나를 포함한 6팀 중 우승 후보에 베팅할 수 있습니다.</p></div><button id="solo-new" class="primary" type="button">＋ 새 솔로 경기</button></div>
+ <div class="warning">솔로 경기는 <b>우승·입상수당 0P</b>입니다. 참가비 없음 · 우승 예측 베팅의 적중금만 지급됩니다. 배당은 공개 전력 기준이며, 히든 기복·내구성은 배당에 포함되지 않습니다.</div>
+ <div class="statstrip"><div><small>경기 상태</small><strong id="solo-phase">경기 준비</strong></div><div><small>경기 번호</small><strong id="solo-round">-</strong></div><div><small>트랙</small><strong id="solo-track">-</strong></div><div><small>우승수당</small><strong>0P</strong></div></div>
+ <div id="solo-track-profile" class="track-profile" aria-label="솔로 트랙별 전략"></div>
+ <div class="twocol">
+  <div>
+   <div class="panel"><div class="sheethead">A열 / 6팀 출전 명단 · 나 1명 + 컴퓨터 5팀</div><div class="pbody"><div class="lineups solo-lineups" id="solo-lineups"><p class="muted">새 솔로 경기를 눌러 출전팀을 구성해 주세요.</p></div></div></div>
+   <div class="panel"><div class="sheethead">B열 / 6레인 자동 레이스</div><div class="pbody"><div id="solo-lanes" class="solo-lanes"></div><div class="help">경주를 시작하면 약 17초 뒤 서버에서 순위를 공개하고 베팅 결과를 정산합니다. 페이지를 닫아도 경기 상태가 보존됩니다.</div></div></div>
+   <div class="panel"><div class="sheethead">C열 / 경기 결과 및 정산</div><div id="solo-result" class="pbody muted">아직 진행한 경기가 없습니다.</div></div>
+  </div>
+  <aside>
+   <div class="panel"><div class="sheethead">D열 / 우승 배당 · 베팅</div><div class="pbody"><div class="tablewrap"><table><thead><tr><th>우승 후보</th><th>공개 전력</th><th>고정 배당</th></tr></thead><tbody id="solo-odds"></tbody></table></div>
+   <div class="betbox" style="margin-top:12px"><label>베팅할 팀<select id="solo-target"></select></label><label>베팅 포인트 (P)<input type="number" id="solo-stake" value="1000" step="1" min="1" max="100000000" inputmode="numeric"></label><div id="solo-limit-note" class="cap-warning" role="status" aria-live="polite">1회 최대 1억 P까지 베팅 가능합니다.</div><div class="muted" id="solo-expected">경기를 만들면 고정 배당이 표시됩니다.</div><div class="row"><button id="solo-bet" class="primary" type="button">포인트 베팅</button><button id="solo-cancel" type="button">베팅 취소·반환</button></div><button id="solo-start" class="primary" type="button" style="width:100%">🏁 레이스 출발</button><div id="solo-bet-state" class="help"></div></div></div></div>
+   <div class="panel"><div class="sheethead">E열 / 플레이 안내</div><div class="pbody"><p class="help">① 차고에서 내 차량·드라이버 선택 → ② 솔로 경기 생성 → ③ 내 차나 NPC의 우승에 베팅 → ④ 출발 → ⑤ 자동 주행 후 결과 정산.</p><p class="help"><b>베팅하지 않고도 출발</b>할 수 있으나, 승리수당은 언제나 0P입니다. 베팅 취소는 출발 전에만 가능합니다.</p><p class="help">혼자 레이스와 기존 온라인 2~6인 레이스는 별개입니다. 솔로 결과는 온라인 방의 승리수당이나 베팅을 변경하지 않습니다.</p></div></div>
+  </aside>
+ </div>
+</section>
+<section class="pane" id="pane-garage" hidden><h2>차고 / 동급 슈퍼카 10종 · 공개 평균 86~90</h2><p class="intro">고성능 스포츠카 10종을 약 2억 9,900만~4억 3,500만 P로 균형 있게 구성했습니다. 모든 차량의 공개 능력치 평균은 86~90이며, 직선형과 코너형 트랙에서 강점이 달라집니다. 이전에 구매한 차량은 보유권·강화 기록을 유지한 채 새 모델로 자동 변경됩니다. 기본 Artura는 최초 지급됩니다.</p><div id="cars" class="gallery"></div></section>
+<section class="pane" id="pane-drivers" hidden><h2>드라이버 / 실제 F1 선수 사진</h2><p class="intro">선수별 강점을 다르게 배분하고 공개 능력치 평균을 86~90으로 조정했습니다. 유료 드라이버 영입가는 약 2억 9,900만~4억 2,000만 P이며 실제 연봉이 아닌 게임 전용 가격입니다. 신인 드라이버는 무료입니다.</p><div id="drivers" class="gallery"></div></section>
+<section class="pane" id="pane-upgrades" hidden><h2>워크숍 / 파츠와 스킬</h2><p class="intro">선택 차량의 파츠 강화는 4종 합계 최대 4회, 드라이버 스킬은 선수별 합계 최대 3회입니다. 초기화는 차량/드라이버 각각 1,000,000P입니다.</p><div id="upgrades" class="gallery"></div></section>
+</div><div class="sheetfoot">※ 차량·선수 사진은 Wikipedia/Wikimedia Commons 공개 이미지에서 불러옵니다. 사진은 각 원저작자의 라이선스가 적용되며 링크로 출처를 확인할 수 있습니다. 온라인·솔로 레이스 모두 회원 포인트를 사용합니다. 솔로 경기 우승수당은 0P입니다.</div></div></main>
+<script>
+'use strict';
+// Display only: the underlying points, wagers and transfers remain integer values.
+function formatPointUnits(value){
+ let n;
+ try {
+  const raw=String(value??'0').trim();
+  n=/^[+-]?\d+$/.test(raw)?BigInt(raw):BigInt(Math.trunc(Number(value)||0));
+ } catch(_) { return '0'; }
+ const negative=n<0n;
+ if(negative)n=-n;
+ const parts=[];
+ for(const [unit,base] of [['조',1000000000000n],['억',100000000n],['만',10000n]]){
+  const chunk=n/base;
+  if(chunk)parts.push(chunk.toLocaleString('ko-KR')+unit);
+  n%=base;
+ }
+ if(n||!parts.length)parts.push(n.toLocaleString('ko-KR'));
+ return (negative?'-':'')+parts.join(' ');
+}
+const $=id=>document.getElementById(id),fmt=n=>formatPointUnits(n)+'P';
+const RPC_URL='https://ghijkkumzvutfzpvdekv.supabase.co/rest/v1/rpc/';
+const ANON_KEY='sb_publishable_dWxi5S2-WH8Rn2sE0ADHJQ_JvbBjGBu';
+const STORAGE='excel-games-member-session-v1';
+const CLIENT_KEY='renju-multi-client-v1';
+const CAR=[
+{id:'gtr',name:'McLaren Artura',tag:'MR · 균형형 스타터',price:299000000,color:'#d6edf1',stats:[87, 92, 88, 89],desc:'미드십 하이브리드. 가속과 안정성이 균형 잡힌 기본 지급 슈퍼카.'},
+{id:'bmw',name:'Aston Martin DB12',tag:'FR · 고속 안정',price:309000000,color:'#8ec1b0',stats:[91, 84, 84, 85],desc:'직선 주행과 노면 안정성에 강한 영국식 그랜드 투어러.'},
+{id:'porsche',name:'Porsche 911 GT3 RS',tag:'RR · 코너링',price:326000000,color:'#eee6be',stats:[85, 83, 97, 91],desc:'초고속 코너 및 정밀 핸들링이 강점인 트랙 특화 모델.'},
+{id:'audi',name:'Maserati MCPURA',tag:'MR · 기민한 가속',price:338800000,color:'#b2b4e7',stats:[88, 91, 88, 85],desc:'민첩한 반응과 안정된 가속이 강점인 미드십 슈퍼카.'},
+{id:'corvette',name:'Ferrari Roma',tag:'FR · 투어링',price:340000000,color:'#e9a3a3',stats:[92, 86, 86, 84],desc:'장거리 직선 능력과 주행 리듬이 강한 프런트 엔진 GT.'},
+{id:'mercedes',name:'Porsche 911 Turbo S',tag:'AWD · 발진 특화',price:342700000,color:'#b9c8d4',stats:[91, 96, 81, 88],desc:'강한 사륜구동 스타트와 직선 가속, 코너에서의 제동 관리가 변수.'},
+{id:'ferrari',name:'Ferrari 296 GTB',tag:'MR · 순간 가속',price:376000000,color:'#e95754',stats:[90, 97, 88, 81],desc:'폭발적인 가속이 강점이지만 까다로운 노면에서 안정성 관리 필요.'},
+{id:'jesko',name:'Ferrari Amalfi',tag:'FR · 다목적',price:385000000,color:'#bf617b',stats:[91, 90, 83, 84],desc:'폭넓은 트랙에서 고르게 대응하는 고성능 프런트 엔진 쿠페.'},
+{id:'mclaren',name:'McLaren 750S',tag:'MR · 최고속',price:431000000,color:'#fa9d4f',stats:[96, 95, 89, 80],desc:'직선 고속 구간에 특화된 경량 슈퍼카.'},
+{id:'lambo',name:'Lamborghini Huracán STO',tag:'MR · 트랙 집중',price:435000000,color:'#cfe864',stats:[88, 85, 96, 83],desc:'강력한 고속 코너링과 공격적인 레이싱 세팅.'}
+];
+const DRIVER=[
+{id:'newbie',name:'신인 테스트 드라이버',short:'Rookie',price:0,stats:[85, 87, 86, 86],talent:'기본기',desc:'무료 스타터 드라이버. 균형 잡힌 초급 능력치.'},
+{id:'sainz',name:'카를로스 사인츠',short:'SAI',price:299000000,stats:[84, 85, 87, 88],talent:'레이스 운영',desc:'안정적인 운영과 일관성에 강점을 둔 게임 해석.'},
+{id:'russell',name:'조지 러셀',short:'RUS',price:309000000,stats:[91, 86, 89, 86],talent:'퀄리파잉',desc:'정교한 한 랩 속도와 깔끔한 코너 진입.'},
+{id:'alonso',name:'페르난도 알론소',short:'ALO',price:325000000,stats:[82, 87, 89, 90],talent:'노련한 추월',desc:'레이스 운영·추월 타이밍·위기 대응 능력을 강조.'},
+{id:'hamilton',name:'루이스 해밀턴',short:'HAM',price:340000000,stats:[87, 90, 88, 87],talent:'막판 추격',desc:'경험과 추월 능력, 후반 집중력이 돋보이게 설정.'},
+{id:'piastri',name:'오스카 피아스트리',short:'PIA',price:355000000,stats:[89, 84, 92, 87],talent:'정교한 코너',desc:'침착함과 코너 공략의 일관성을 강조.'},
+{id:'leclerc',name:'샤를 르클레르',short:'LEC',price:370000000,stats:[94, 87, 89, 78],talent:'폭발적 페이스',desc:'싱글랩 페이스가 강력하지만 기복 가능성.'},
+{id:'norris',name:'랜도 노리스',short:'NOR',price:388000000,stats:[91, 89, 91, 85],talent:'코너 가속',desc:'빠른 페이스와 리듬, 유연한 코너링.'},
+{id:'verstappen',name:'막스 베르스타펜',short:'VER',price:420000000,stats:[91, 93, 91, 85],talent:'승부사',desc:'공격적인 추월과 레이스 페이스를 최상급으로 설정.'}
+];
+const TRACK=[
+{key:'city',name:'도심 그랑프리',desc:'헤어핀과 연속 감속 구간',w:[0.15,0.15,0.48,0.22],weather:'맑음',type:'코너형'},
+{key:'coast',name:'해안 고속 서킷',desc:'긴 직선과 빠른 가속 구간',w:[0.47,0.32,0.13,0.08],weather:'강풍',type:'직선형'},
+{key:'mountain',name:'산악 와인딩',desc:'굽은 산길과 고저차',w:[0.12,0.17,0.49,0.22],weather:'안개',type:'코너형'},
+{key:'rain',name:'빗길 나이트 레이스',desc:'젖은 노면과 안정성이 변수',w:[0.12,0.13,0.3,0.45],weather:'비',type:'기술형'},
+{key:'desert',name:'사막 스프린트',desc:'고온 환경에서 가속과 내구 전략',w:[0.34,0.32,0.13,0.21],weather:'폭염',type:'직선형'},
+{key:'oval',name:'오벌 스피드웨이',desc:'초장거리 직선과 완만한 회전',w:[0.62,0.27,0.07,0.04],weather:'맑음',type:'초고속'},
+{key:'technical',name:'테크니컬 서킷',desc:'S자 연속 코너와 급제동',w:[0.07,0.12,0.61,0.2],weather:'맑음',type:'극코너'},
+{key:'harbor',name:'항만 스트리트 레이스',desc:'중고속 직선과 복합 코너',w:[0.35,0.35,0.18,0.12],weather:'흐림',type:'복합형'},
+{key:'alpine',name:'알파인 다운힐',desc:'산악 코너와 노면 대응',w:[0.1,0.15,0.43,0.32],weather:'서늘함',type:'산악형'}
+];
+const PARTS=[{key:'engine',name:'고성능 엔진',tag:'출력·최고속도',desc:'직선 최고속도와 가속 능력 향상',gain:[2.6,1.1,0,0]},{key:'tires',name:'레이싱 타이어',tag:'코너링·안정성',desc:'코너의 그립과 고속 안정성 향상',gain:[0,.7,2.7,1.0]},{key:'aero',name:'에어로 키트',tag:'최고속도·다운포스',desc:'고속 코너와 직선 성능 균형 강화',gain:[1.0,0,2.4,.8]},{key:'brake',name:'브레이크 시스템',tag:'코너링·안정성',desc:'감속 구간과 급격한 코너 대응력 향상',gain:[0,.3,1.7,2.5]}];
+const CAR_UPGRADE_COSTS=[3000000,4000000,5000000,7000000];
+const DRIVER_UPGRADE_COSTS=[3000000,4000000,6000000];
+const RESET_COST=1000000;
+const SKILLS=[{key:'launch',name:'스타트 부스터',tag:'초반 출발',desc:'초반 30% 구간에서 가속 특수 보너스',bonus:[0,1.9,0,0]},{key:'corner',name:'코너 장인',tag:'코너 집중',desc:'코너가 많은 트랙에서 페이스 증가',bonus:[0,0,2.4,0]},{key:'sprint',name:'막판 스퍼트',tag:'후반 추격',desc:'최종 랩에서 강한 스퍼트 보너스',bonus:[2.1,0,0,0]},{key:'calm',name:'멘탈 관리',tag:'이변 감소',desc:'어려운 노면과 예상치 못한 이벤트 감소',bonus:[0,0,0,2.6]}];
+const PHOTO_TITLES={gtr:'McLaren_Artura', bmw:'Aston_Martin_DB12', porsche:'Porsche_911_GT3', audi:'Maserati_MC20', corvette:'Ferrari_Roma', mercedes:'Porsche_911_(992)', ferrari:'Ferrari_296', jesko:'Ferrari_Amalfi', mclaren:'McLaren_750S', lambo:'Lamborghini_Huracán', sainz:'Carlos_Sainz_Jr.',russell:'George_Russell_(racing_driver)',alonso:'Fernando_Alonso',hamilton:'Lewis_Hamilton',piastri:'Oscar_Piastri',leclerc:'Charles_Leclerc',norris:'Lando_Norris',verstappen:'Max_Verstappen'};
+const CAR_DATA=Object.fromEntries(CAR.map(x=>[x.id,x]));
+const DRIVER_DATA=Object.fromEntries(DRIVER.map(x=>[x.id,x]));
+const TRACK_DATA=Object.fromEntries(TRACK.map(x=>[x.key,x]));
+const TRACK_DURATION={"city": 28, "coast": 23, "mountain": 36, "rain": 40, "desert": 25, "oval": 20, "technical": 38, "harbor": 30, "alpine": 35};
+function raceDuration(){const start=Date.parse(room?.started_at||""),end=Date.parse(room?.ends_at||"");return Number.isFinite(start)&&Number.isFinite(end)&&end>start?Math.max(1,Math.round((end-start)/1000)):(Number(room?.duration_seconds)||TRACK_DURATION[room?.track]||28)}
+
+const IMG={};let uid='',token='',client='',profile=null,points=0,room=null,seats=[],currentId='',myBet=null,rooms=[],active='race',pending=false,animation=null,autoTimer=null,refreshing=false,photoQueue=[];
+let raceSocialBusy=false,raceChatBusy=false,raceSocialMessages=[],raceSpectators=[],raceSocialRoom='';
+let racePresenceBusy=false;let racePreviewSelection='';let raceAnimationSignature='';let lastWinnerNotice='';
+let raceEvents=[],raceEventsScope='';
+let raceFocusedKey='';let lastFinishFocusKey='';
+// One in-flight game sync per tab. Shorten checks near the official finish time,
+// instead of polling every 4.5 seconds regardless of race phase.
+let raceSyncFailures=0,raceActionRevision=0,raceLastPhase='',raceLastRound='';
+// Authentication is deliberately separate from create/bet/start. A timeout on a
+// financial command is never blindly retried: it might have committed on SQL.
+let raceInitBusy=false,raceInitComplete=false,raceAuthFailures=0,raceAuthRetryTimer=null;
+let raceWalletCheckBusy=false,raceWalletCheckAt=0,raceUnpaidSince=0,racePointsRevision=0;
+const AUTH_TRANSIENT=/(서버 응답 지연|Failed to fetch|NetworkError|fetch failed|timeout|gateway|서버 오류 5\d\d|서버 오류 429)/i;
+let soloSyncTimer=null,soloSyncFailures=0;
+const renderedHtml=new WeakMap();
+function setHtmlIfChanged(element,html){
+ if(!element||renderedHtml.get(element)===html)return;
+ renderedHtml.set(element,html);element.innerHTML=html;
+}
+
+let salePercent=100,saleFetching=false;
+function focusRaceBroadcast(){
+ if(active!=='race'||!raceFrameVisible())return;
+ const target=$('race-tv-anchor');if(!target)return;
+ try{target.scrollIntoView({behavior:'smooth',block:'start',inline:'nearest'});
+  if(window.frameElement&&window.frameElement.getClientRects().length)window.frameElement.scrollIntoView({behavior:'smooth',block:'nearest'});
+ }catch(_){target.scrollIntoView()}
+}
+function maybeFocusRace(){
+ if(!room||active!=='race'||!raceFrameVisible())return;
+ const key=room.id+'|'+room.race_no;
+ if(room.phase==='running'&&raceFocusedKey!==key){raceFocusedKey=key;setTimeout(focusRaceBroadcast,170)}
+ if(room.phase==='finished'&&lastFinishFocusKey!==key){lastFinishFocusKey=key;
+  setTimeout(()=>{if(room?.phase==='finished'&&active==='race'&&raceFrameVisible())$('race-finish-hero')?.scrollIntoView({behavior:'smooth',block:'start'})},200)}
+}
+
+let soloData=null,soloBusy=false,soloFetching=false,soloLoaded=false;
+function raceFrameVisible(){
+ if(document.hidden)return false;
+ try{
+  // frameElement has zero layout rectangles if Sheet1 has hidden the race sheet.
+  return !window.frameElement || window.frameElement.getClientRects().length>0;
+ }catch(_){return true;}
+}
+function uuid(){return crypto.randomUUID?crypto.randomUUID():('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx').replace(/[xy]/g,c=>{const n=crypto.getRandomValues(new Uint8Array(1))[0]%16;return(c==='x'?n:((n&3)|8)).toString(16)})}
+function getClient(){let x=sessionStorage.getItem(CLIENT_KEY);if(!x||!/^[a-f0-9-]{36}$/.test(x)){x=uuid();sessionStorage.setItem(CLIENT_KEY,x)}return x}
+function info(s,bad=false){$('status').textContent=s||'';$('status').classList.toggle('err',bad)}
+function text(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function rpc(name,data,timeoutMs=15000){
+ const ac=new AbortController();const timer=setTimeout(()=>ac.abort(),timeoutMs);
+ try{
+  const response=await fetch(RPC_URL+name,{method:'POST',headers:{'Content-Type':'application/json','apikey':ANON_KEY,'Content-Profile':'public'},body:JSON.stringify(data),signal:ac.signal,cache:'no-store'});
+  let result={};try{result=await response.json()}catch(_){}
+  if(!response.ok||result.ok===false)throw new Error(result.error||result.message||'서버 오류 '+response.status);
+  return result;
+ }catch(e){
+  if(e.name==='AbortError'||ac.signal.aborted)throw new Error('서버 응답 지연 · 연결을 확인하고 다시 시도합니다.');
+  throw e;
+ }finally{clearTimeout(timer)}
+}
+// v1.1.5: The v1.1.4 web client required a new server RPC for *every* action.
+// If SQL was not installed, room creation and list reads failed with PGRST202.
+// Use the installed legacy cinematic RPC ONLY for non-financial lobby operations.
+let payoutGuardState='unknown';
+const SAFE_LEGACY_RACE_ACTIONS=new Set(['list','sync','create','join','leave','role','set_slot','set_track','select']);
+function showPayoutGuardWarning(){
+ const el=$('race-rpc-warning');if(el)el.hidden=payoutGuardState!=='missing';
+}
+function missingPayoutGuard(error){
+ const message=String(error?.message||'');
+ return /renju_race_settled_rpc/i.test(message) && /Could not find the function|schema cache|PGRST202/i.test(message);
+}
+async function raceGameRPC(actionName,payload){
+ if(payoutGuardState!=='missing'){
+  try{
+   const result=await rpc('renju_race_settled_rpc',payload,actionName==='list'?15000:24000);
+   if(payoutGuardState!=='available'){payoutGuardState='available';showPayoutGuardWarning();}
+   return result;
+  }catch(error){
+   if(!missingPayoutGuard(error))throw error;
+   payoutGuardState='missing';showPayoutGuardWarning();
+  }
+ }
+ if(!SAFE_LEGACY_RACE_ACTIONS.has(actionName))
+  throw new Error('정산 보호 함수 미설치: 베팅·READY·경기 시작·구매는 차단됩니다. Supabase v1.1.5 SQL 설치 후 새로고침하세요.');
+ return rpc('renju_race_cinematic_rpc',payload,actionName==='list'?15000:24000);
+}
+function raceAdminCredential(){
+ if(($('my-name').textContent||'').trim()!=='운영자')return '';
+ try{return sessionStorage.getItem('excel-games-admin-token-v1')||''}catch(_){return ''}
+}
+function raceChatFeedback(s='',bad=false){const el=$('race-chat-feedback');if(el){el.textContent=s;el.classList.toggle('error',bad)}}
+function raceAdminGuide(){
+ const enabled=!!raceAdminCredential();
+ const el=$('race-admin-guide');if(el)el.hidden=!enabled;
+ const hint=$('race-admin-hint');if(hint)hint.hidden=!enabled;
+}
+function discountedPrice(price){return Math.max(1,Math.floor(Number(price)*salePercent/100))}
+function applySalePercent(next){
+ const pct=Number(next);
+ if(!Number.isInteger(pct)||pct<1||pct>100)return;
+ const changed=pct!==salePercent;salePercent=pct;
+ const sale=pct<100;
+ $('sale-banner').hidden=!sale;$('sale-top-chip').hidden=!sale;
+ $('sale-top-percent').textContent=pct+'% 가격';
+ $('sale-banner-percent').textContent=pct+'% 가격 ('+(100-pct)+'% 할인)';
+ if(changed&&profile){if(active==='garage')renderShop('car');if(active==='drivers')renderShop('driver')}
+}
+async function refreshRaceSale(){
+ if(saleFetching||!token||!raceFrameVisible())return;
+ saleFetching=true;
+ try{const d=await rpc('renju_race_sale_status',{},12000);applySalePercent(d.percent)}catch(_){/* retain previous displayed rate; server remains authoritative */}
+ finally{saleFetching=false}
+}
+async function processRaceOperatorCommand(message,rid){
+ const admin=raceAdminCredential();
+ if(!admin)throw new Error('레이스방에서 운영자 인증을 찾지 못했습니다. Sheet1로 이동해 운영자 계정으로 다시 로그인한 뒤 레이스방에 재입장하세요.');
+ let command='',params={p_client:client,p_token:admin,p_room:rid};
+ const point=message.match(/^\/포인트\s+(.+?)\s+([+-]?[0-9][0-9,]*)\s*$/);
+ const notice=message.match(/^\/공지\s+([\s\S]+)$/);
+ const kick=message.match(/^\/강퇴\s+(.+?)\s*$/);
+ const sale=message.match(/^\/sale\s+(\d{1,3})\s*$/i);
+ if(sale){
+  const percent=Number(sale[1]);
+  if(!Number.isInteger(percent)||percent<1||percent>100)throw new Error('사용법: /sale 1~100 (50 = 정상가 절반, 100 = 할인 종료)');
+  const d=await rpc('renju_race_sale_set',{p_client:client,p_token:admin,p_room:rid,p_percent:percent},30000);
+  applySalePercent(d.percent);
+  return {message:d.message||('차량·드라이버 '+percent+'% 가격으로 변경'),social:null};
+ }
+ if(point){
+  const nick=point[1].trim(),amount=Number(point[2].replaceAll(',',''));
+  if(!nick||nick.length>16||!Number.isSafeInteger(amount)||amount===0||Math.abs(amount)>1000000000000)
+   throw new Error('사용법: /포인트 닉네임 금액 (최대 ±1조 P)');
+  if((amount<0||amount>=1000000)&&!confirm(nick+' 회원에게 '+formatPointUnits(Math.abs(amount))+'P를 '+(amount>0?'지급':'차감')+'할까요?'))return {cancelled:true};
+  const d=await rpc('renju_admin_points_large',{p_client:client,p_token:admin,p_target_nickname:nick,p_amount:amount},30000);
+  return {message:nick+' · '+(amount>0?'+':'')+formatPointUnits(amount)+'P · 잔액 '+formatPointUnits(d.points)+'P'};
+ }
+ if(notice){
+  if(notice[1].trim().length>220)throw new Error('공지 내용은 220자 이내로 입력해 주세요.');
+  const d=await rpc('renju_race_admin_rpc',{...params,p_action:'notice',p_target:null,p_message:notice[1].trim()},30000);
+  return {message:d.message||'방 공지를 등록했습니다.',social:d};
+ }
+ if(kick){
+  if(!confirm(kick[1].trim()+' 회원을 레이스방에서 강퇴할까요? (대기/정산 완료 상태만 가능)'))return {cancelled:true};
+  const d=await rpc('renju_race_admin_rpc',{...params,p_action:'kick',p_target:kick[1].trim(),p_message:null},30000);
+  return {message:d.message||'강퇴했습니다.',social:d};
+ }
+ throw new Error('사용법: /sale 50 · /sale 100 · /포인트 닉네임 금액 · /공지 내용 · /강퇴 닉네임');
+}
+async function action(cmd,payload={},rid=currentId){if(pending)return;pending=true;raceActionRevision++;try{const d=await raceGameRPC(cmd,{p_action:cmd,p_client:client,p_token:token,p_room:rid||null,p_payload:payload});apply(d);if(['buy_car','buy_driver','select','upgrade','reset_upgrades'].includes(cmd)){info('차고 정보가 저장됐습니다.')}else if(Number(d.payout_recovered_for_me||0)===0){info('');}if(cmd==='create'||cmd==='join'){raceAnimationSignature='';racePreviewSelection='';currentId=d.room?.id||rid;if(window.parent!==window)window.parent.postMessage({type:cmd==='create'?'RACE_CREATED':'RACE_JOINED',id:currentId},location.origin);
+ // A fresh room must not wait 18 seconds for its first heartbeat.
+ void pingRacePresence();tab('race');history.replaceState(null,'','#'+encodeURIComponent(currentId));raceSocialMessages=[];raceSpectators=[];raceChatFeedback('');renderRaceSocial();raceAdminGuide();void loadRaceSocial()}if(cmd==='leave'){raceAnimationSignature='';racePreviewSelection='';currentId='';room=null;seats=[];raceSocialMessages=[];raceSpectators=[];history.replaceState(null,'',location.pathname);tab('race');await loadRooms();if(window.parent!==window)window.parent.postMessage({type:'RACE_CLOSE'},location.origin)}return d}catch(err){
+  // A timeout is ambiguous: the database may have committed even if the browser
+  // never received the response. Never automatically repeat paid actions.
+  const ambiguous=AUTH_TRANSIENT.test(String(err.message||''));
+  const moneyCommand=['bet','start','buy_car','buy_driver','upgrade','reset_upgrades','create','open_bets'].includes(cmd);
+  if(ambiguous&&moneyCommand){
+   const follow=cmd==='create'?'Sheet1의 방 목록에서 생성 여부를 확인한 후 다시 시도하세요.':'중복 클릭하지 말고 서버 상태가 갱신될 때까지 확인하세요.';
+   info('요청 결과 확인 중 · '+follow+' ('+err.message+')',true);
+  }else info(err.message,true);
+  return null;
+ }finally{
+  pending=false;render();
+  // A successful action already contains the authoritative state; schedule a fresh
+  // check quickly for the other participants' state changes, not an overlapping RPC.
+  if(currentId)scheduleRaceSync(['start','ready','join','create'].includes(cmd)?1200:null);
+ }}
+function apply(d){
+ if(d.my_id)uid=d.my_id;if(d.my_profile)profile=d.my_profile;if(d.points!==undefined){points=d.points;racePointsRevision++;}
+ const nextRoom='room'in d?d.room:room;
+ const scope=(nextRoom?.id||'')+'|'+(nextRoom?.race_no||0);
+ if(scope!==raceEventsScope){raceEvents=[];raceEventsScope=scope;if('room'in d)myBet=null;raceUnpaidSince=0}
+ if('race_events'in d)raceEvents=Array.isArray(d.race_events)?d.race_events:[];
+ if('room'in d)room=d.room;
+ if(d.seats)seats=d.seats;
+ if('my_bet'in d)myBet=d.my_bet;
+ if(Number(d.payout_recovered_for_me||0)>0)info('🏁 적중 베팅금 '+fmt(d.payout_recovered_for_me)+'P가 지급·반영됐습니다.');
+ $('wallet').textContent=fmt(points);
+}
+function planRaceAuthRetry(delay=null){
+ if(raceInitComplete||raceAuthRetryTimer!==null)return;
+ const ms=delay??Math.min(30000,2500*Math.pow(1.65,Math.min(5,raceAuthFailures)));
+ raceAuthRetryTimer=setTimeout(()=>{raceAuthRetryTimer=null;void init()},ms);
+}
+async function init(){
+ if(raceInitBusy||raceInitComplete)return;
+ client=getClient();
+ let savedToken='';try{savedToken=localStorage.getItem(STORAGE)||''}catch(_){}
+ if(!savedToken){
+  token='';$('my-name').textContent='로그인 필요';
+  info('Sheet1에서 회원 로그인 후 레이스를 이용해 주세요. 로그인 후 자동으로 다시 확인합니다.',true);
+  planRaceAuthRetry(4500);return;
+ }
+ token=savedToken;raceInitBusy=true;
+ try{
+  const auth=await rpc('renju_member_auth',{p_client:client,p_action:'session',p_token:savedToken},22000);
+  if((localStorage.getItem(STORAGE)||'')!==savedToken){planRaceAuthRetry(500);return;}
+  if(!auth.profile)throw new Error('로그인 세션의 회원 정보가 없습니다.');
+  $('my-name').textContent=auth.profile.nickname||'회원';points=auth.profile.points??points;racePointsRevision++;$('wallet').textContent=fmt(points);
+  raceAuthFailures=0;raceInitComplete=true;
+  if(raceAuthRetryTimer!==null){clearTimeout(raceAuthRetryTimer);raceAuthRetryTimer=null;}
+  // A successful auth boot is committed exactly once. Do NOT auto-repeat create
+  // or any paid action when its response is lost.
+  const qs=new URLSearchParams(location.search);
+  const deep=qs.get('room')||decodeURIComponent(location.hash.slice(1));
+  void refreshRaceSale();
+  if(/^rc-[0-9a-f]{12}$/.test(deep))await action('join',{},deep);
+  else if(qs.get('create')==='1')await action('create',{name:'레이스 경기장'},null);
+  else{await action('sync',{},null);await loadRooms();tab('race');}
+ }catch(e){
+  $('my-name').textContent='연결 재시도 중';
+  const retry=AUTH_TRANSIENT.test(String(e.message||''));
+  if(retry){raceAuthFailures=Math.min(6,raceAuthFailures+1);info('로그인 확인 지연 · 연결이 복구되면 자동으로 재확인합니다. ('+e.message+')',true);planRaceAuthRetry();}
+  else info('로그인 확인 오류: '+e.message+' · Sheet1에서 회원 로그인 상태를 확인해 주세요.',true);
+ }finally{raceInitBusy=false}
+}
+async function refreshRaceWallet(force=false){
+ if(!token||!raceFrameVisible()||raceWalletCheckBusy)return;
+ if(!force&&Date.now()-raceWalletCheckAt<12000)return;
+ raceWalletCheckBusy=true;raceWalletCheckAt=Date.now();
+ const initialPointsRevision=racePointsRevision,initialToken=token;
+ try{
+  const d=await rpc('renju_member_auth',{p_client:client,p_action:'session',p_token:initialToken},22000);
+  if(initialToken===token&&initialPointsRevision===racePointsRevision&&d.profile&&d.profile.points!==undefined){
+   // This is a display refresh, not a payout. The official SQL bet ledger
+   // controls whether a wager was credited.
+   points=d.profile.points;$('wallet').textContent=fmt(points);
+  }
+ }catch(_){/* Race sync and explicit retries remain authoritative. */}
+ finally{raceWalletCheckBusy=false;}
+}
+async function loadRooms(){try{const d=await raceGameRPC('list',{p_action:'list',p_client:client,p_token:token,p_room:null,p_payload:{}});rooms=d.rooms||[];points=d.points??points;$('wallet').textContent=fmt(points);renderRooms()}catch(e){info(e.message,true)}}
+function tab(n){
+ active=n;
+ document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===n));
+ document.querySelectorAll('.pane').forEach(p=>p.hidden=p.id!=='pane-'+n);
+ $('address').textContent={lobby:'A1',race:'B2',solo:'S1',garage:'C3',drivers:'D4',upgrades:'E5'}[n];
+ $('formula-text').textContent={lobby:'=COUNTIF(경기목록,"접수중")',race:'=RACE(출전자,배당률,주행)',solo:'=SOLO_RACE(내차,NPC×5,배당률)',garage:'=VLOOKUP(차량,내차고,전력)',drivers:'=DRIVER(실존선수,능력치)',upgrades:'=POWER(파츠,스킬)'}[n];
+ render();
+ if(n==='solo'){scheduleSoloSync(350);scheduleRaceSync();}
+ else if(n==='race'){scheduleRaceSync(350);scheduleSoloSync();}
+ else{scheduleSoloSync();scheduleRaceSync();}
+}
+function renderRooms(){$('room-list').innerHTML=rooms.length?rooms.map((r,i)=>`<tr><td>Race${i+1}</td><td>${text(r.name)}</td><td>${text(phaseName(r.phase))}</td><td>${r.entrants} / 6</td><td>${r.spectators}명</td><td><button data-join="${text(r.id)}">입장 · 관전</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">열려 있는 레이스방이 없어요. 첫 경기를 만들어 보세요.</td></tr>'}
+function phaseName(p){return({waiting:'출전 준비',betting:'베팅 접수',running:'경기 진행',finished:'정산 완료'})[p]||p}
+function sCar(id){return CAR_DATA[id]||CAR_DATA.gtr}function sDriver(id){return DRIVER_DATA[id]||DRIVER_DATA.newbie}
+function getPhoto(id){return IMG[id]?.url||''}
+function photoTag(id,kind='car'){const f=IMG[id];const fallback=kind==='car'?'🏎':'👤';if(f?.url)return `<img class="${kind==='driver'?'driver-photo':'car-photo'}" src="${text(f.url)}" alt="${text((kind==='car'?sCar(id):sDriver(id)).name)} 실제 사진" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.parentElement.classList.add('no-img');this.parentElement.textContent='${fallback}'">`;return `<div class="no-img">${fallback}</div>`}
+const photoLookup={};async function fetchPhoto(id){if(!PHOTO_TITLES[id]||IMG[id])return;try{const title=PHOTO_TITLES[id];const url='https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&titles='+encodeURIComponent(title)+'&pithumbsize=600&origin=*';const d=await fetch(url).then(r=>r.json());const page=Object.values(d.query?.pages||{})[0];IMG[id]={url:page?.thumbnail?.source||'',source:'https://en.wikipedia.org/wiki/'+encodeURIComponent(title)};}catch{IMG[id]={url:'',source:''}};if((active==='garage'||active==='drivers'||active==='solo'||(active==='race'&&room?.phase!=='running'))&&raceFrameVisible())render()}
+async function loadPhotos(){
+ // Do not launch 18 external image fetches and 18 full-page renders at once.
+ const remaining=[...CAR,...DRIVER].map(x=>x.id).filter(x=>x!=='newbie');
+ await Promise.allSettled(Array.from({length:3},async()=>{
+  while(remaining.length){const id=remaining.shift();if(id)await fetchPhoto(id)}
+ }));
+}
+function metric(stats){return stats.map((v,i)=>`<div class="metric"><span>${['속도','가속','코너','안정'][i]}</span><div class="meter"><i style="width:${v}%"></i></div><b>${v}</b></div>`).join('')}
+function renderShop(which){if(!profile)return;const isCar=which==='car',data=isCar?CAR:DRIVER,owned=isCar?profile.owned_cars:profile.owned_drivers,current=isCar?profile.selected_car:profile.selected_driver,element=$(isCar?'cars':'drivers');element.innerHTML=data.map(x=>{const got=owned?.includes(x.id),selected=current===x.id;const btn=selected?'출전 중':got?'출전 선택':'영입/구매';return `<article class="product ${isCar?'car-product':'driver-product'}"><div class="imagewrap">${photoTag(x.id,which)}</div><div class="prodtext"><h3>${text(x.name)}</h3><p>${text(x.desc)}</p>${metric(x.stats)}<div class="help">공개 능력치 평균 <b>${(x.stats.reduce((a,b)=>a+b,0)/4).toFixed(1)}</b> · 트랙별 전력 차등</div><footer><span class="meta">${got?'보유 · '+fmt(x.price):salePercent<100?`<span class="sale-price">${fmt(discountedPrice(x.price))}</span><span class="sale-original">${fmt(x.price)}</span>`:fmt(x.price)}</span><button ${selected?'disabled':''} data-purchase="${x.id}" data-kind="${which}" class="${got?'':'primary'}">${btn}</button></footer>${!got&&salePercent<100?`<div class="sale-shopline">🎁 ${100-salePercent}% 할인 적용 · 서버 결제 금액</div>`:''}${PHOTO_TITLES[x.id]?`<div class="photo-credit">사진: <a href="https://en.wikipedia.org/wiki/${encodeURIComponent(PHOTO_TITLES[x.id])}" target="_blank" rel="noopener">Wikipedia/Wikimedia Commons</a></div>`:''}</div></article>`}).join('')}
+function upgradeUsed(kind,id){
+ const keys=kind==='car'?PARTS:SKILLS,max=kind==='car'?4:3;
+ return keys.reduce((sum,item)=>sum+Math.max(0,Math.min(max,Math.floor(Number(profile?.upgrades?.[kind+'_'+id+'_'+item.key]||0)||0))),0);
+}
+function driverSkillTotal(id){return upgradeUsed('driver',id)}
+function upgradeHtml(kind,id,item){
+ const lv=Math.max(0,Math.floor(Number(profile.upgrades?.[kind+'_'+id+'_'+item.key]||0)||0));
+ const max=kind==='car'?4:3,spent=upgradeUsed(kind,id);
+ const soldOut=spent>=max||lv>=max;
+ const steps=kind==='car'?CAR_UPGRADE_COSTS:DRIVER_UPGRADE_COSTS;
+ const price=steps[Math.min(spent,steps.length-1)];
+ return `<article class="product"><div class="prodtext"><h3>${text(item.name)}</h3><p>${text(item.desc)}</p><strong>Lv.${lv} · ${kind==='car'?'차량 파츠':'드라이버 스킬'} ${Math.min(spent,max)}/${max}</strong><div class="help">강화 비용은 해당 차·드라이버의 누적 강화 횟수에 따라 증가합니다.</div><footer><span class="meta">${soldOut?'강화 한도':fmt(price)}</span><button data-upgrade="${kind}:${item.key}" ${soldOut?'disabled':''}>${soldOut?'한도 도달':'강화'}</button></footer></div></article>`;
+}
+function renderUpgrades(){
+ if(!profile)return;
+ const car=profile.selected_car,driver=profile.selected_driver;
+ const usedCar=upgradeUsed('car',car),usedDriver=driverSkillTotal(driver);
+ $('upgrades').innerHTML=`<div class="upgrade-summary" style="grid-column:1/-1">
+  <div class="sheethead">선택 차량: ${text(sCar(car).name)} · 파츠 강화 ${Math.min(usedCar,4)}/4</div>
+  <div class="resetrow"><span>엔진·타이어·에어로·브레이크 네 종류 통틀어 <b>총 4회</b>만 강화 가능. 강화 비용: 300만 → 400만 → 500만 → 700만 P</span><button data-reset="car" ${usedCar===0?'disabled':''}>차량 파츠 초기화 · ${fmt(RESET_COST)}</button></div>
+  <div class="sheethead">선택 드라이버: ${text(sDriver(driver).name)} · 스킬 강화 ${Math.min(usedDriver,3)}/3</div>
+  <div class="resetrow"><span>스타트·코너·스퍼트·멘탈 통틀어 <b>총 3회</b>만 강화 가능. 강화 비용: 300만 → 400만 → 600만 P</span><button data-reset="driver" ${usedDriver===0?'disabled':''}>드라이버 스킬 초기화 · ${fmt(RESET_COST)}</button></div>
+  <div class="help">초기화하면 선택된 차량 또는 드라이버의 해당 강화 기록만 0으로 변경됩니다. 기존 강화비는 환불되지 않습니다.</div>
+ </div>`+
+ [...PARTS.map(x=>upgradeHtml('car',car,x)),...SKILLS.map(x=>upgradeHtml('driver',driver,x))].join('');
+}
+function renderRaceSocial(){
+ if(!room||!currentId)return;
+ const online=raceSpectators.filter(x=>x.online).length;
+ $('social-online-count').textContent=online+'명 접속 중 / 명단 '+raceSpectators.length+'명';
+ $('race-spectators').innerHTML=raceSpectators.length?raceSpectators.map(x=>`<span class="spectator-chip ${x.online?'':'offline'}"><span class="presence-dot">●</span>${text(x.name)}${x.id===uid?' (나)':''}</span>`).join(''):'<span class="muted">아직 입장한 관전자가 없어요.</span>';
+ const el=$('race-chat-messages'),atBottom=el.scrollHeight-el.scrollTop-el.clientHeight<45;
+ el.innerHTML=raceSocialMessages.length?raceSocialMessages.map(x=>{
+   const d=new Date(x.at),stamp=Number.isFinite(d.getTime())?d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false}):'--:--';
+   return `<div class="chat-line"><span class="chat-time">${text(stamp)}</span><span class="chat-sender">${text(x.name)}${x.sender_id===uid?' ★':''}</span><span class="chat-body">${text(x.message)}</span></div>`;
+ }).join(''):'<div class="chat-empty">첫 메시지를 남겨보세요.</div>';
+ if(atBottom)el.scrollTop=el.scrollHeight;
+}
+async function loadRaceSocial(){
+ if(raceSocialBusy||!token||!currentId||!raceFrameVisible())return;
+ const rid=currentId;raceSocialBusy=true;
+ try{
+  const d=await rpc('renju_race_social_rpc',{p_client:client,p_token:token,p_room:rid,p_action:'sync',p_message:null},30000);
+  if(rid!==currentId)return;
+  raceSocialRoom=rid;raceSocialMessages=d.messages||[];raceSpectators=d.spectators||[];
+  if($('race-chat-feedback')?.textContent.startsWith('연결 지연:'))raceChatFeedback('');
+  renderRaceSocial();raceAdminGuide();
+ }catch(err){if(rid===currentId){raceChatFeedback('연결 지연: '+err.message+' (자동 재시도 중)',true);}}
+ finally{raceSocialBusy=false;}
+}
+
+// Illustrated racing layouts are game maps, not surveyed real-world circuits.
+const TRACK_SKETCH={
+ city:'M48 44 L94 44 L94 20 L245 20 Q270 20 270 44 L270 90 L226 90 L226 139 L163 139 L163 105 L92 105 Q45 104 48 75 Z',
+ coast:'M47 96 Q27 86 36 55 Q50 24 93 29 L240 29 Q273 31 274 60 Q270 84 237 91 L135 91 L117 137 L69 137 Q43 132 47 96 Z',
+ mountain:'M47 38 Q75 12 103 39 T166 39 Q196 7 234 37 T242 81 Q222 109 190 94 T139 117 Q113 141 90 113 T43 92 Q25 62 47 38 Z',
+ rain:'M53 34 Q75 17 100 35 L146 70 L186 34 Q213 18 240 40 Q257 55 232 78 L194 106 L238 127 Q257 141 218 144 L88 144 Q51 138 54 109 L94 80 Z',
+ desert:'M44 50 L101 50 L115 86 L246 86 Q272 86 266 112 Q261 136 239 136 L54 136 Q32 136 32 108 L32 67 Q32 50 44 50 Z',
+ oval:'M82 30 L218 30 C303 30 303 140 218 140 L82 140 C-3 140 -3 30 82 30 Z',
+ technical:'M51 29 L126 29 L126 78 L173 78 L173 33 L250 33 L250 126 L203 126 L203 99 L151 99 L151 139 L51 139 L51 98 L86 98 L86 68 L51 68 Z',
+ harbor:'M39 47 L133 47 L133 21 L255 21 L255 78 L205 78 L205 111 L253 111 L253 148 L92 148 L92 110 L39 110 Z',
+ alpine:'M47 24 L93 24 L93 52 L205 52 L205 24 L258 24 L258 82 L188 82 L188 111 L245 111 L245 148 L45 148 L45 111 L130 111 L130 83 L47 83 Z'
+};
+function renderTrackMini(key,pendingSave=false){
+ const track=TRACK_DATA[key]||TRACK_DATA.city;
+ const d=TRACK_SKETCH[key]||TRACK_SKETCH.city;
+ const oval=key==='oval';
+ const label=pendingSave?'선택한 코스 · 아직 적용 전':'현재 적용된 코스';
+ const markup=`<div class="track-mini-map"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 170" width="320" height="180" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${text(track.name)} 게임용 레이스 코스">
+  <defs><pattern id="racegrid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="#b9d0bf" stroke-width=".65"/></pattern></defs>
+  <rect x="0" y="0" width="300" height="170" fill="#dbeadc"/><rect width="300" height="170" fill="url(#racegrid)"/>
+  <path d="M0 148Q75 112 144 148T300 142L300 170H0Z" fill="#bad8c5" opacity=".68"/>
+  ${['coast','harbor'].includes(key)?'<path d="M0 0L36 0Q13 60 12 170H0Z" fill="#93c5dd"/>':''}
+  <path d="${d}" fill="none" stroke="#f6f7ef" stroke-linejoin="round" stroke-linecap="round" stroke-width="23"/>
+  <path d="${d}" fill="none" stroke="#4e6661" stroke-linejoin="round" stroke-linecap="round" stroke-width="17"/>
+  <path d="${d}" fill="none" stroke="#dde4d8" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 8" stroke-width="1.7"/>
+  <g transform="translate(${oval?82:50} ${oval?30:44})"><path d="M0 -11V12" stroke="#f7faf6" stroke-width="6"/><path d="M-5 -11H5V11H-5Z" fill="#fafafa" stroke="#555" stroke-width=".7"/><path d="M-5 -11h5v6h-5zm5 6h5v6h-5zm-5 6h5v6h-5zm5 6h5v5h-5z" fill="#353535"/></g>
+  </svg></div><div class="track-mini-detail"><b>${text(track.name)}</b><span>${text(track.type)} · ${text(track.weather)}</span><br><span>${text(track.desc)}</span><br><em>${label}</em><br><span>직선 ${Math.round((track.w[0]+track.w[1])*100)}% · 코너 ${Math.round(track.w[2]*100)}% · 안정성 ${Math.round(track.w[3]*100)}%</span></div>`;
+ // Keep both the selector preview and C-column preview visible. Works on mobile too.
+ for(const id of ['track-mini-preview','race-course-preview'])setHtmlIfChanged($(id),markup);
+}
+function renderTrackProfile(key){
+ const t=TRACK_DATA[key]||TRACK_DATA.city;
+ const labels=['최고속도','가속','코너링','안정성'];
+ setHtmlIfChanged($('track-profile'),'<div class="track-profile-title"><b>트랙 전략 / '+text(t.name)+'</b><span>'+text(t.type)+' · '+text(t.weather)+' · '+text(t.desc)+'</span></div><div class="track-weight-grid">'+t.w.map((w,i)=>'<div class="track-weight"><span>'+labels[i]+'</span><div class="track-weight-bar"><i style="width:'+(w*100).toFixed(0)+'%"></i></div><b>'+Math.round(w*100)+'%</b></div>').join('')+'</div><div class="track-public-note">배당: 차량·드라이버 공개 능력치 × 트랙 가중치 + 강화 점수만 사용 · 경기 결과에는 공개되지 않는 변수가 별도 반영됩니다.</div>');
+}
+function renderSixSlots(slots,editable){
+ const players=new Map(seats.filter(x=>x.role==='entrant'&&!x.bot).map(p=>[String(p.id),p]));
+ setHtmlIfChanged($('slot-editor'),Array.from({length:6},(_,i)=>{
+  const sl=slots.find(s=>Number(s.number)===i+1)||{number:i+1,mode:'closed',occupant:null};
+  const p=players.get(String(sl.occupant||''));
+  const label=sl.mode==='cpu'?'🤖 컴퓨터 출전':sl.mode==='user'?'👤 유저 참가':'✕ 닫기';
+  const status=sl.mode==='closed'?'출전하지 않음':sl.mode==='cpu'?'컴퓨터 자동 출전':p?text(p.name)+' · '+(p.ready?'READY':'준비 전'):'빈 유저 자리 · 참가 대기';
+  return `<div class="slot-card is-${text(sl.mode)}"><div class="slot-top"><b>${i+1}번 출전석</b><small>${text(label)}</small></div>${editable?`<select data-slot="${i+1}" aria-label="${i+1}번 출전석 방식"><option value="user" ${sl.mode==='user'?'selected':''}>유저 참가</option><option value="cpu" ${sl.mode==='cpu'?'selected':''}>컴퓨터</option><option value="closed" ${sl.mode==='closed'?'selected':''}>닫기</option></select>`:`<div class="pill">${text(label)}</div>`}<div class="slot-details ${p?.ready?'ready-yes':p?'ready-no':''}">${status}</div></div>`;
+ }).join(''));
+}
+
+function renderFinishedRace(entrants,host,mine){
+ const hero=$('race-finish-hero');
+ const finished=room?.phase==='finished';
+ hero.hidden=!finished;
+ if(!finished)return;
+ const sorted=[...entrants].sort((a,b)=>(Number(a.rank)||99)-(Number(b.rank)||99));
+ const winner=sorted.find(s=>Number(s.rank)===1&&Number(s.finish_ms)>0)||entrants.find(s=>String(s.id)===String(room.result?.winner)&&Number(s.finish_ms)>0);
+ const valid=!!winner;
+ const stake=Number(myBet?.stake||0),payout=Number(myBet?.payout||0);
+ const myRaceEntry=entrants.find(s=>String(s.id)===String(uid));
+ const waitingForPayout=!!myBet&&String(myBet.target_key)===String(room?.result?.winner)&&payout===0;
+ const betMsg=myBet?waitingForPayout?`<b>⚠️ 적중했으나 지급 기록 미확인</b> · 베팅 ${fmt(stake)} · <button type="button" id="recover-bet">서버 정산 재확인</button> <small>지급 완료 전에는 재경기를 진행하지 마세요.</small>`:`<b>내 베팅 정산:</b> ${text(entrants.find(s=>String(s.id)===String(myBet.target_key))?.name||'선택 팀')} · 베팅 ${fmt(stake)} · 지급 ${fmt(payout)} · ${payout-stake>=0?'순수익 +':'손익 '}${fmt(payout-stake)}`:'<b>내 베팅:</b> 이번 판은 베팅하지 않았습니다.';
+ const places=sorted.filter(s=>Number.isFinite(Number(s.rank))&&Number(s.rank)>0).map(s=>`<div class="finish-place"><b>${Number(s.rank)===1?'🏆':Number(s.rank)===2?'🥈':Number(s.rank)===3?'🥉':'🏁'} ${Number(s.rank)}위 · ${text(s.name)} ${s.bot?'🤖':String(s.id)===String(uid)?'★':''}</b><small>${text(sCar(s.car).name)} · ${s.finish_ms?((Number(s.finish_ms)/1000).toFixed(3)+'초'):'🚨 리타이어 (DNF)'}</small></div>`).join('');
+ // From v1.1.1 onward, an entrant's READY is the only rematch control.
+ setHtmlIfChanged(hero,`<div class="finish-eyebrow">${Number(room.race_no)||1}경주 · 공식 경기 결과</div>
+  <div class="finish-winner"><div class="finish-crown">🏆</div><div><h3>${valid?'우승 · '+text(winner.name):'경기 결과 확정 · 순위 확인 중'}</h3><p>${valid?text(sCar(winner.car).name)+' / '+text(sDriver(winner.driver).name)+(winner.finish_ms?' · '+(Number(winner.finish_ms)/1000).toFixed(3)+'초':''):'서버 순위가 표시될 때까지 잠시 뒤 새로고침해 주세요.'}</p></div></div>
+  <div class="finish-grid">${places||'<div class="finish-place">순위 기록을 불러오는 중입니다.</div>'}</div>
+  <div class="finish-my-bet">${betMsg}${myRaceEntry&&myRaceEntry.rank?' · 내 순위 '+Number(myRaceEntry.rank)+'위':''}</div>
+  <div class="finish-actions"><b>다음 경기를 하려면 위쪽 READY를 누르세요.</b><small>첫 READY 시 자동으로 다음 회차가 열립니다. 6개 출전석·컴퓨터·참가자·트랙은 그대로 유지되고, 다른 참가자는 READY만 다시 누르면 됩니다.</small></div>`);
+ $('result').classList.add('is-finished');
+ setHtmlIfChanged($('result'),`<b>🏆 ${valid?text(winner.name)+' 우승':'경기 종료'}</b> · ${sorted.map(s=>`${Number(s.rank)||'?'}위 ${text(s.name)}`).join(' / ')}<br><small>상세 순위와 내 베팅 정산은 화면 위쪽 '공식 경기 결과'에서 확인할 수 있습니다.</small>`);
+}
+function renderRace(){if(!room){raceEvents=[];raceEventsScope='';renderRaceIncidents(0,false,false);$('race-finish-hero').hidden=true;$('result').classList.remove('is-finished');renderedHtml.delete($('result'));$('result').textContent='경기 준비 중입니다.';$('race-road').innerHTML='';raceAnimationSignature='';$('race-clock').textContent='READY';$('race-leader').textContent='출발 대기';$('race-percent').textContent='0%';$('race-meter-fill').style.width='0%';$('race-announcer').textContent='🏁 Sheet1에서 레이스방을 생성하거나 입장하세요.';$('room-help').textContent='Sheet1에서 레이스방을 생성하거나 입장하세요. 방 목록과 새 방 만들기는 Sheet1에 있습니다.';$('mixed-settings').hidden=true;$('race-quickbar').hidden=true;renderTrackMini('city',false);['enter-race','spectate','ready','open-bets','start-race','bet-submit','share','leave'].forEach(id=>{const el=$(id);if(el)el.disabled=true});$('race-title').textContent='경기장 · 방 미입장';return;}['share','leave'].forEach(id=>$(id).disabled=false);const mine=seats.find(x=>x.id===uid);$('race-title').textContent=room.name+' · '+room.race_no+'경주';$('race-code').textContent='방 코드: '+room.id+' · 전원 READY 시 베팅 접수 자동 시작 · 방장이 출발';$('phase').textContent=phaseName(room.phase);$('entry-count').textContent=seats.filter(x=>x.role==='entrant'&&!x.bot).length+'명 + 컴 '+seats.filter(x=>x.bot).length+'대 / 6';$('spec-count').textContent=seats.filter(x=>x.role==='spectator').length+'명';$('track-name').textContent=TRACK_DATA[room.track]?.name||'도심 그랑프리';if($('race-duration-caption'))$('race-duration-caption').textContent=raceDuration()+'초 코스';renderTrackProfile(room.track);$('role-summary').innerHTML=mine?`<span class="pill">내 역할: ${mine.role==='entrant'?'출전자':'관전자'}</span> ${mine.role==='entrant'?`<span class="pill">${room.phase==='finished'?'다음 경기 READY 대기':mine.ready?'READY':'준비 전'}</span>`:''}`:'<span class="pill">참가 정보를 확인해 주세요.</span>';
+ const waiting=room.phase==='waiting',betting=room.phase==='betting',running=room.phase==='running',finished=room.phase==='finished';const host=room.host===uid;
+ $('mixed-settings').hidden=false;$('race-quickbar').hidden=false;
+ const previewKey=racePreviewSelection||room.track||'city';
+ if($('track-choice').value!==previewKey)$('track-choice').value=previewKey;
+ renderTrackMini(previewKey,previewKey!==(room.track||'city'));
+ renderSixSlots(room.slots||[],host&&waiting);
+ $('set-track').disabled=!host||!waiting;$('track-choice').disabled=!host||!waiting;
+ const humans=seats.filter(x=>x.role==='entrant'&&!x.bot),readyCount=humans.filter(x=>x.ready).length;
+ $('mixed-config-hint').textContent='유저 '+humans.length+'명(READY '+readyCount+'/'+humans.length+') + 컴 '+seats.filter(x=>x.bot).length+'대 · 2팀 이상이면 시작 가능 · 베팅은 선택사항';
+ $('enter-race').disabled=!waiting||mine?.role==='entrant'||!(room.slots||[]).some(s=>s.mode==='user'&&!s.occupant);
+ $('spectate').disabled=!waiting||mine?.role==='spectator';$('ready').disabled=!(waiting||finished)||mine?.role!=='entrant';$('ready').textContent=finished?'READY':mine?.ready?'✓ READY':'READY';$('ready').classList.toggle('is-confirmed',!finished&&!!mine?.ready);$('ready').classList.toggle('ready-rematch',finished&&mine?.role==='entrant');$('role-quick-note').textContent=waiting?'출발 전 자유롭게 유저 출전 ↔ 관전 전환 가능 · 출전자 전원 READY 후 베팅 접수 자동 시작':betting?'모두 READY! 베팅은 선택 사항 · 방장이 출발시키면 중계 화면으로 자동 이동':running?'경기 진행 중 · 새로운 입장자는 관전으로 참여 · 경기 종료 후 같은 출전석으로 재경기 가능':'경기 종료 · READY를 누르면 다음 경기로 넘어갑니다. 사람·컴퓨터·트랙 구성은 유지됩니다';
+ $('open-bets').hidden=true;$('start-race').hidden=!host||!betting;
+ $('start-race').disabled=!host||!betting;
+ $('bet-open-note').textContent=waiting?'현재 배당은 예상값이며 출전 구성에 따라 자동 변경됩니다. 전원 READY 후 배당이 확정됩니다.':betting?'확정 배당으로 베팅 접수 중 · 베팅하지 않아도 출전 가능 · 방장이 경기 시작을 누르면 마감됩니다.':running?'베팅 마감 · 경주 진행 중':'베팅 마감 · 경기 종료';
+ $('room-help').textContent=waiting?'출전석은 지난 경기를 유지합니다. 바꾸려면 방장이 개별 슬롯을 설정하고, 출전자는 READY를 눌러 주세요.':betting?'전원 READY! 출전자와 관전자 모두 베팅은 선택 사항입니다. 방장이 경기 시작을 누르면 출발합니다.':running?'경기 진행 중입니다. 결과는 서버에서 확정합니다.':'경기 정산 완료 · 위쪽 READY로 다음 경기를 시작할 수 있습니다. 출전석·컴퓨터 수·참가자와 트랙은 그대로 유지됩니다.';
+ const entrants=seats.filter(x=>x.role==='entrant').sort((a,b)=>(a.seat_no||9)-(b.seat_no||9));setHtmlIfChanged($('lineups'),entrants.length?entrants.map((s,i)=>`<div class="lineup ${finished&&Number(s.rank)===1?'is-winning':''}"><div class="picrow"><div class="photo-slot car-slot">${photoTag(s.car||'gtr','car')}</div><div class="photo-slot driver-slot">${photoTag(s.driver||'newbie','driver')}</div></div><div class="info"><b>#${i+1} ${text(s.name)} ${s.bot?'🤖 컴퓨터':s.id===uid?'★':''}</b><span class="driver-name">${text(sCar(s.car).name)} / ${text(sDriver(s.driver).name)}</span><div class="chips"><span>전력 ${s.power==null?'-':Number(s.power).toFixed(1)}</span><strong>${s.odds?Number(s.odds).toFixed(2)+'배':s.ready?'READY':'대기'}</strong></div></div></div>`).join(''):'<p class="muted">출전자가 없습니다. 차량을 선택하고 출전해 주세요.</p>');
+ setHtmlIfChanged($('odds-table'),entrants.map(s=>`<tr><td>${text(s.name)}</td><td class="num">${s.power==null?'-':Number(s.power).toFixed(1)}</td><td class="num">${s.odds?Number(s.odds).toFixed(2)+'배':'대기'}</td></tr>`).join(''));
+ const selected=$('bet-target').value;setHtmlIfChanged($('bet-target'),entrants.map(s=>`<option value="${s.id}">${text(s.name)} (${s.odds?Number(s.odds).toFixed(2):'-'}배)</option>`).join(''));if(entrants.some(s=>s.id===selected))$('bet-target').value=selected;
+ $('bet-submit').disabled=!betting||!mine||!!myBet;
+ $('bet-status').textContent=myBet?`베팅 완료: ${fmt(myBet.stake)} · 확정 배당 ${Number(myBet.odds).toFixed(2)}배${finished?' · 지급 '+fmt(myBet.payout):''}`:betting?'베팅 선택사항 · 참가/관전자 모두 가능 · 베팅하지 않아도 레이스 참가 가능':'1등 단승식 · 대기 중 배당은 예상값이며 아직 베팅할 수 없습니다.';
+ updateExpected();renderTrack(entrants);maybeFocusRace();if(finished){renderFinishedRace(entrants,host,mine)}else{$('race-finish-hero').hidden=true;$('result').classList.remove('is-finished');renderedHtml.delete($('result'));$('result').textContent=running?'🚦 경주가 진행 중입니다.':'경기 접수 상태. 출전 차량·드라이버·능력치를 확인하세요.';}
+}
+const RACE_INCIDENT_COPY={
+ surge:{icon:'🚀',short:'선두 질주',desc:'선두권 차량이 갑자기 치고 나갑니다! 마지막 구간까지 버틸 수 있을까요?'},
+ retire:{icon:'🚨',short:'리타이어 · DNF',desc:'대형 고장! 선두권 차량이 갑자기 멈췄습니다. 끝내 경기를 포기합니다!'},
+ collision:{icon:'💥',short:'충돌 사고',desc:'추월 도중 접촉! 차체 손상으로 속도가 떨어집니다.'},
+ puncture:{icon:'🛞',short:'타이어 펑크',desc:'타이어 손상! 급히 피트로 진입합니다.'},
+ engine:{icon:'⚠️',short:'엔진 트러블',desc:'엔진 출력이 떨어졌습니다! 긴급 수리 필요.'},
+ pit:{icon:'🔧',short:'타이어 교체',desc:'피트스톱! 새 타이어로 교체 후 코스에 복귀합니다.'},
+ repair:{icon:'🛠️',short:'긴급 수리 완료',desc:'정비팀이 손상 파츠를 교체했습니다. 다시 추격합니다!'}
+};
+function renderRaceIncidents(elapsed,running,finished){
+ const highlight=$('race-incident-highlight'),log=$('race-incident-log'),counter=$('race-incident-count');
+ if(!highlight||!log||!counter)return;
+ const events=(running||finished?raceEvents:[]).filter(e=>RACE_INCIDENT_COPY[e.kind]).sort((a,b)=>Number(a.second)-Number(b.second));
+ const mostRecent=events.at(-1);
+ const isLive=!!(running&&mostRecent&&elapsed-Number(mostRecent.second)<=3.4);
+ const inDanger=isLive&&['collision','puncture','engine','retire'].includes(mostRecent.kind);
+ const isRepair=isLive&&['pit','repair'].includes(mostRecent.kind);
+ highlight.classList.toggle('is-danger',inDanger);
+ highlight.classList.toggle('is-repair',isRepair);
+ if(finished){highlight.textContent=events.length?'🏁 경기 종료 · 사고/정비 기록 '+events.length+'건 · 최종 순위는 서버 공식 결과':'🏁 경기 종료 · 공식 순위를 확인하세요.';}
+ else if(isLive){const c=RACE_INCIDENT_COPY[mostRecent.kind];highlight.textContent=c.icon+' '+String(mostRecent.name||'출전자')+' · '+c.desc;}
+ else if(running){highlight.textContent=events.length?'🏎 정비 후 추격전! 다음 코너를 주목하세요.':'🟢 현재 코스 정상 주행 · 사고/피트 상황 감시 중';}
+ else{highlight.textContent='🟢 출전 차량 점검 중 · 사고와 피트스톱은 경기 중 자동 진행됩니다.';}
+ counter.textContent=running?('접수 '+events.length+'건 · 라이브'):finished?('기록 '+events.length+'건'):'출발 전';
+ const eventHtml=events.length?events.slice(-6).map(e=>{
+  const c=RACE_INCIDENT_COPY[e.kind];
+  return `<div class="race-incident-item"><time>${Number(e.second).toFixed(1)}s</time><span><b>${c.icon} ${text(e.name)}</b> · ${text(c.short)} — ${text(c.desc)}</span></div>`;
+ }).join(''):'<div class="race-incident-idle">경기 시작 후 사고·펑크·엔진 점검·피트스톱 기록이 표시됩니다.</div>';
+ setHtmlIfChanged(log,eventHtml);
+}
+function raceLaneAlert(id,elapsed){
+ const mine=raceEvents.filter(e=>String(e.team)===String(id)&&RACE_INCIDENT_COPY[e.kind]);
+ const latest=mine.length?mine[mine.length-1]:null;
+ if(!latest||elapsed-Number(latest.second)>2.9)return null;
+ return latest;
+}
+function renderTrack(list){
+ const board=$('race-road'),phase=room?.phase||'waiting';
+ const running=phase==='running',finished=phase==='finished';
+ const started=room?.started_at?new Date(room.started_at).getTime():NaN;
+ const duration=raceDuration();
+ const elapsed=running&&Number.isFinite(started)?Math.max(0,(Date.now()-started)/1000):finished?duration:0;
+ const fraction=finished?1:running?Math.max(0,Math.min(0.985,elapsed/duration)):0;
+ const colors=['#6ee7ac','#f3c774','#91b8fb','#fb93aa','#afed89','#daa6ff'];
+ const entries=list.filter(x=>x.role==='entrant'&&Number(x.seat_no)>=1).sort((a,b)=>Number(a.seat_no)-Number(b.seat_no));
+ const signature=(room?.id||'none')+'|'+(room?.race_no||0)+'|'+entries.map(e=>String(e.id)+':'+e.seat_no).join(',');
+ const rebuild=signature!==raceAnimationSignature||board.children.length!==entries.length;
+ if(rebuild){
+  raceAnimationSignature=signature;
+  board.innerHTML=entries.length?entries.map((e,i)=>`<div class="race-tv-lane ${e.id===uid?'is-me':''}" data-race-id="${text(e.id)}" style="--team-color:${colors[(Number(e.seat_no)-1)%6]}"><span class="race-lane-number">${Number(e.seat_no)}<i></i></span><div class="race-tarmac"><span class="race-line-title">${text(e.name)} ${e.bot?'🤖':'🏎'}</span><span class="race-timing">그리드 대기</span><span class="race-lane-alert" hidden></span><span class="race-progress-fill"></span><span class="race-progress-car">🏎️</span></div><span class="race-lane-rank">--</span></div>`).join(''):'<p class="muted">출전석 편성 후 레이스가 이곳에 표시됩니다.</p>';
+ }
+ const provisional=entries.map((e,i)=>{
+  let pos=0;
+  if(finished){const r=Number(e.rank)||i+1;pos=100-(r-1)*4.1;}
+  else if(running){
+   // Animated provisional positions. The authoritative server result is ONLY used when finished.
+   const strength=(Number(e.power)||87)-87;
+   const noise=Math.sin(elapsed*.74+i*1.71)*2.2+Math.sin(elapsed*1.43+i*2.83)*1.7;
+   // Position changes are dramatic visuals; actual race ranking is
+   // computed once on the server, including incident time penalties.
+   let incidentLag=0,leadBoost=0,retiredSecond=null;
+   for(const ev of raceEvents){
+    if(String(ev.team)!==String(e.id)||Number(ev.second)>elapsed)continue;
+    if(ev.kind==='surge'){leadBoost=12;}
+    else if(ev.kind==='retire'){retiredSecond=Number(ev.second);}
+    else if(['collision','puncture','engine'].includes(ev.kind)){
+     const repaired=raceEvents.some(v=>String(v.team)===String(e.id)&&v.kind==='repair'&&Number(v.second)>Number(ev.second)&&Number(v.second)<=elapsed);
+     incidentLag+=repaired?2.4:Math.min(12,7.5+(elapsed-Number(ev.second))*1.4);
+    }else if(ev.kind==='pit'){incidentLag+=elapsed-Number(ev.second)<2.5?5:1.5}
+   }
+   pos=retiredSecond!==null?
+     Math.max(10,Math.min(86,retiredSecond/duration*90+leadBoost)):
+     Math.max(0,Math.min(96.2,fraction*90+strength*.45*fraction+noise*Math.sin(Math.PI*fraction)+leadBoost-incidentLag));
+  }
+  return {e,i,pos};
+ });
+ const order=[...provisional].sort((a,b)=>finished?(Number(a.e.rank)||99)-(Number(b.e.rank)||99):b.pos-a.pos);
+ const rankMap=new Map(order.map((x,i)=>[String(x.e.id),i+1]));
+ [...board.querySelectorAll('.race-tv-lane')].forEach((node,i)=>{
+  const item=provisional[i];if(!item)return;
+  const rank=rankMap.get(String(item.e.id))||i+1;
+  node.classList.toggle('is-leader',(running||finished)&&rank===1);
+  const alert=running?raceLaneAlert(item.e.id,elapsed):null;
+  node.classList.toggle('is-incident',!!alert&&['collision','puncture','engine'].includes(alert.kind));
+  node.classList.toggle('is-repair',!!alert&&['pit','repair'].includes(alert.kind));
+  const dnf=(finished&&!item.e.finish_ms)||raceEvents.some(v=>String(v.team)===String(item.e.id)&&v.kind==='retire'&&(finished||Number(v.second)<=elapsed));
+  node.classList.toggle('is-retired',!!dnf);
+  const alertEl=node.querySelector('.race-lane-alert');
+  if(alertEl){alertEl.hidden=!alert;alertEl.textContent=alert?RACE_INCIDENT_COPY[alert.kind].icon+' '+RACE_INCIDENT_COPY[alert.kind].short:'';}
+  node.querySelector('.race-progress-car').style.left=`calc(${item.pos}% - ${(item.pos*.33).toFixed(1)}px)`;
+  node.querySelector('.race-progress-fill').style.width=item.pos+'%';
+  const label=node.querySelector('.race-lane-rank');
+  label.classList.toggle('leader',(running||finished)&&rank===1);
+  label.textContent=dnf?'DNF':finished?rank+'위':running?'#'+rank:'대기';
+  node.querySelector('.race-timing').textContent=dnf?'🚨 리타이어 · 완주 실패':finished?(item.e.finish_ms?(Number(item.e.finish_ms)/1000).toFixed(3)+'초':'기록 확인 중'):(running?(item.pos.toFixed(1)+'%'):'출발 전');
+ });
+ const clock=$('race-clock'),leader=$('race-leader'),stage=$('race-broadcast-stage'),percent=$('race-percent');
+ if(clock)clock.textContent=finished?'FINISH':running?(elapsed>=duration?'🏁 공식 결과 확인 중':Math.max(0,duration-elapsed).toFixed(1)+'s'):'READY';
+ if(leader)leader.textContent=(running||finished)&&order.length?order[0].e.name:'출발 대기';
+ if(stage)stage.textContent=finished?'🏆 공식 경기 종료':running?'● LIVE · 주행 연출':'그리드 편성 중';
+ if(percent)percent.textContent=Math.round(fraction*100)+'%';
+ if($('race-meter-fill'))$('race-meter-fill').style.width=(fraction*100).toFixed(1)+'%';
+ const tv=board.closest('.race-tv');if(tv)tv.classList.toggle('is-finished',finished);
+ const messages=running?[
+  '🚦 스타트! 출전팀이 첫 직선으로 진입합니다.',
+  '🏎 코너 진입! 차체 안정성과 드라이버 판단력이 중요합니다.',
+  '⚡ 중반 구간 · 근소한 격차로 선두가 바뀔 수 있습니다.',
+  '🔥 마지막 구간! 추월 경쟁이 치열합니다.',
+  '🏁 결승선을 향해 전력 질주! 공식 순위를 확인하세요.'
+ ]:[];
+ const latestRetire=raceEvents.filter(ev=>ev.kind==='retire'&&(finished||Number(ev.second)<=elapsed)).at(-1);
+ const comment=finished&&order.length?`🏆 공식 결과 · ${text(order[0].e.name)} 우승! 상단 결과표에서 전체 기록과 베팅 정산을 확인하세요.`:
+ running&&latestRetire&&elapsed-Number(latestRetire.second)<5.2?`🚨 대이변! ${text(latestRetire.name)} · 선두권에서 멈춰 선 차량! 리타이어로 전원 추월합니다!`:
+ running?messages[Math.min(4,Math.floor(fraction*5))]+' · 중간 순위는 연출, 최종 결과는 서버 판정입니다.':'🏎 출전석을 열고 참가자를 READY시킨 뒤 방장이 출발시킬 수 있습니다.';
+ if($('race-announcer'))$('race-announcer').textContent=comment.replace(/&amp;/g,'&');
+ renderRaceIncidents(elapsed,running,finished);
+}
+
+// Bet preview: exact integer arithmetic and a visible Korean-unit magnitude.
+// Only the existing stake RPC performs actual balance deductions and settlement.
+function updateRaceStakeCap(noteId, fieldId){
+ const note=$(noteId), input=$(fieldId);
+ if(!note||!input)return false;
+ const raw=String(input.value||'').trim();
+ const tooHigh=/^[1-9]\d*$/.test(raw) && BigInt(raw)>100000000n;
+ note.classList.toggle('over-limit',tooHigh);
+ note.textContent=tooHigh
+  ? '1억 P를 초과하여 베팅할 수 없습니다. 최대 1억 P까지 가능합니다.'
+  : '1회 최대 1억 P까지 베팅 가능합니다.';
+ return tooHigh;
+}
+function updateExpected(){
+ updateRaceStakeCap('bet-limit-note','bet-amount');
+ const target=seats.find(x=>x.id===$('bet-target').value);
+ const raw=String($('bet-amount').value||'').trim();
+ const el=$('expected');
+ if(!/^[1-9]\d*$/.test(raw)){
+  el.textContent='베팅 금액을 1P 이상의 정수로 입력하세요.';
+  return;
+ }
+ const stake=BigInt(raw);
+ const limit=100000000n; // Race bet limit: 100 million P per wager.
+ if(stake>limit){
+  el.textContent='입력 금액: '+fmt(stake)+' · 레이싱 베팅은 한 번에 최대 1억 P입니다.';
+  return;
+ }
+ const amountDisplay='입력 금액: '+fmt(stake);
+ const cents=Math.round(Number(target?.odds)*100);
+ if(!target || !Number.isSafeInteger(cents) || cents<=0){
+  el.textContent=amountDisplay+' · 배당 접수 후 예상 지급액이 표시됩니다.';
+  return;
+ }
+ const expected=(stake*BigInt(cents))/100n;
+ el.textContent=amountDisplay+' · 예상 적중 지급: '+fmt(expected)+' (원금 포함, 적중 시)';
+}
+
+function render(){
+ // Live sync must not recreate dozens of shop cards, photographs and upgrade controls.
+ if(active==='lobby')renderRooms();
+ if(active==='garage'&&profile)renderShop('car');
+ if(active==='drivers'&&profile)renderShop('driver');
+ if(active==='upgrades'&&profile)renderUpgrades();
+ if(active==='race')renderRace();
+ if(active==='solo')renderSolo();
+}
+
+/* Solo NPC race: everything authoritative, including deductions and outcome, stays on Supabase. */
+async function soloCall(cmd,more={},notify=true){
+ if(!token){if(notify)info('Sheet1에서 로그인해 주세요.',true);return null}
+ if(soloBusy)return null;
+ soloBusy=true;
+ try{
+  const d=await rpc('renju_race_solo_rpc',{
+   p_client:client,p_token:token,p_action:cmd,p_target:more.target||null,p_stake:more.stake??null
+  },30000);
+  soloData=d.solo;soloLoaded=true;
+  if(d.points!==undefined){points=d.points;$('wallet').textContent=fmt(points)}
+  if(notify)info(cmd==='new'?'솔로 출전명단과 배당이 확정됐습니다.':cmd==='bet'?'베팅이 완료됐습니다.':cmd==='cancel'?'베팅금이 반환됐습니다.':cmd==='start'?'솔로 경주가 시작됐습니다.':'');
+  if(active==='solo')renderSolo();
+  return d;
+ }catch(e){if(notify)info('솔로 레이스: '+e.message,true);return null}
+ finally{soloBusy=false;if(active==='solo')renderSolo();if(cmd!=='sync')scheduleSoloSync(cmd==='start'?900:null)}
+}
+async function loadSolo(){
+ if(active!=='solo'||!raceFrameVisible())return;
+ if(soloBusy||soloFetching||!token){scheduleSoloSync(600);return;}
+ soloFetching=true;
+ try{const d=await soloCall('sync',{},false);soloSyncFailures=d?0:Math.min(4,soloSyncFailures+1)}
+ finally{soloFetching=false;scheduleSoloSync()}
+}
+function soloSyncDelay(){
+ if(!raceFrameVisible())return 6000;
+ const running=soloData?.phase==='running';
+ const elapsed=(Date.now()-Date.parse(soloData?.started_at||''))/1000;
+ let ms=running?(Number.isFinite(elapsed)&&elapsed>=14?1000:2400):soloData?.phase==='betting'?3500:7000;
+ return Math.min(12000,ms*Math.pow(1.45,soloSyncFailures));
+}
+function scheduleSoloSync(ms=null){
+ if(soloSyncTimer!==null){clearTimeout(soloSyncTimer);soloSyncTimer=null;}
+ if(active!=='solo'||!token)return;
+ soloSyncTimer=setTimeout(()=>{soloSyncTimer=null;void loadSolo()},ms??soloSyncDelay());
+}
+function updateSoloLanes(){
+ if(soloData?.phase!=='running')return;
+ const entries=soloData.entries||[];
+ const start=Date.parse(soloData.started_at||'');
+ const progress=Number.isFinite(start)?Math.max(0,Math.min(100,(Date.now()-start)/17000*100)):0;
+ const cars=$('solo-lanes')?.querySelectorAll('.racecar')||[];
+ cars.forEach((car,i)=>{if(entries[i])car.style.left=`calc(${Math.min(94,progress*(.97+(Number(entries[i].power)-85)/800))}% - 20px)`});
+}
+function renderSolo(){
+ const sd=soloData;
+ const entries=Array.isArray(sd?.entries)?sd.entries:[];
+ const phase=sd?.phase||'idle';
+ const run=phase==='running',finished=phase==='finished',betting=phase==='betting';
+ $('solo-phase').textContent={idle:'대기',betting:'베팅 접수',running:'레이스 진행',finished:'정산 완료'}[phase]||phase;
+ $('solo-round').textContent=sd?.match_no?Number(sd.match_no).toLocaleString('ko-KR')+'회':'-';
+ $('solo-track').textContent=TRACK_DATA[sd?.track]?.name||'-';
+ $('solo-new').disabled=soloBusy||run||(betting&&Number(sd.bet_stake)>0);
+ $('solo-bet').disabled=!betting||Number(sd?.bet_stake)>0||soloBusy;
+ $('solo-cancel').disabled=!betting||Number(sd?.bet_stake)<=0||soloBusy;
+ $('solo-start').disabled=!betting||soloBusy;
+ $('solo-start').textContent=betting?'🏁 레이스 출발':run?'🚦 경주 진행 중':finished?'＋ 새 솔로 경기를 생성하세요':'경기 생성 후 출발';
+ if(!entries.length){$('solo-lineups').innerHTML='<p class="muted">＋ 새 솔로 경기를 눌러 내 차와 NPC 5팀의 배당을 확인하세요.</p>';
+  $('solo-odds').innerHTML='<tr><td colspan="3" class="empty">경기 생성 후 확정</td></tr>';
+  $('solo-target').innerHTML='';$('solo-lanes').innerHTML='';$('solo-result').textContent='경기를 생성하면 내 팀과 컴퓨터 팀이 배정됩니다.';
+  $('solo-track-profile').innerHTML='';$('solo-expected').textContent='경기 생성 후 배당이 표시됩니다.';
+  $('solo-bet-state').textContent='내 차·드라이버는 차고에서 설정해 주세요.';return;
+ }
+ const results=Array.isArray(sd.results)?sd.results:[];
+ const rankFor=id=>results.find(r=>r.id===id)?.rank;
+ const track=TRACK_DATA[sd.track];
+ if(track){const wLabels=['최고속도','가속','코너링','안정성'];$('solo-track-profile').innerHTML=`<div class="track-profile-title"><b>트랙 전략 / ${text(track.name)}</b><span>${text(track.type)} · ${text(track.weather)} · ${text(track.desc)}</span></div><div class="track-weight-grid">${track.w.map((w,i)=>`<div class="track-weight"><span>${wLabels[i]}</span><div class="track-weight-bar"><i style="width:${(w*100).toFixed(0)}%"></i></div><b>${Math.round(w*100)}%</b></div>`).join('')}</div><div class="track-public-note">배당률은 공개 전력만 사용하며, 이변 요인은 서버에서 비공개로 판정합니다.</div>`}
+ $('solo-lineups').innerHTML=entries.map((e,i)=>`<div class="lineup ${e.human?'me':''}"><div class="picrow"><div class="photo-slot car-slot">${photoTag(e.car,'car')}</div><div class="photo-slot driver-slot">${photoTag(e.driver,'driver')}</div></div><div class="info"><b>#${i+1} ${text(e.name)} ${e.human?'★ 내 팀':'🤖'}</b><span class="driver-name">${text(sCar(e.car).name)} / ${text(sDriver(e.driver).name)}</span><div class="chips"><span>전력 ${Number(e.power).toFixed(1)}</span><strong>${Number(e.odds).toFixed(2)}배 ${finished?('· '+rankFor(e.id)+'위'):''}</strong></div></div></div>`).join('');
+ $('solo-odds').innerHTML=entries.map(e=>`<tr class="${e.human?'me':''}"><td>${text(e.name)} ${e.human?'★':''}</td><td class="num">${Number(e.power).toFixed(1)}</td><td class="num"><b>${Number(e.odds).toFixed(2)}배</b></td></tr>`).join('');
+ const selected=$('solo-target').value;
+ const optionHtml=entries.map(e=>`<option value="${text(e.id)}">${text(e.name)} · ${Number(e.odds).toFixed(2)}배</option>`).join('');
+ if($('solo-target').innerHTML!==optionHtml){$('solo-target').innerHTML=optionHtml;if(entries.some(e=>e.id===selected))$('solo-target').value=selected;}
+ updateRaceStakeCap('solo-limit-note','solo-stake');
+ const stake=Number($('solo-stake').value),t=entries.find(e=>e.id===$('solo-target').value);
+ $('solo-expected').textContent=stake>100000000?'1억 P 초과 베팅은 불가능합니다.':t&&Number.isSafeInteger(stake)&&stake>0&&stake<=100000000?'적중 예상 지급: '+fmt(Math.floor(stake*Number(t.odds)))+' (원금 포함)':'베팅 대상과 포인트를 입력하세요.';
+ if(Number(sd.bet_stake)>0){
+  const b=entries.find(e=>e.id===sd.bet_target);
+  $('solo-bet-state').innerHTML=`<b>베팅 접수:</b> ${text(b?.name||sd.bet_target)} · ${fmt(sd.bet_stake)} · ${Number(sd.bet_odds).toFixed(2)}배`;
+ }else $('solo-bet-state').textContent='경기당 1회 베팅 · 출발 전에는 취소하여 원금 반환 가능';
+ const progress=run?Math.min(100,Math.max(0,(Date.now()-new Date(sd.started_at).getTime())/17000*100)):0;
+ $('solo-lanes').innerHTML=entries.map((e,i)=>`<div class="lane"><span>${text(e.name)}</span><div class="bar"><span class="racecar" style="left:calc(${finished?94:run?Math.min(94,progress*(.97+(Number(e.power)-85)/800)):0}% - 20px)">🏎️</span></div></div>`).join('');
+ if(finished){
+  const sorted=[...results].sort((a,b)=>a.rank-b.rank),winner=entries.find(e=>e.id===sd.winner),mine=rankFor('you');
+  $('solo-result').innerHTML=`<b>🏆 우승:</b> ${text(winner?.name||'-')} · <b>내 순위:</b> ${mine||'-'}위<div class="solo-score"><div><small>우승·입상수당</small><b>0P</b></div><div><small>베팅 원금</small><b>${fmt(sd.bet_stake)}</b></div><div><small>베팅 지급액</small><b>${fmt(sd.bet_payout)}</b></div></div><b>최종 순위:</b> ${sorted.map(r=>`${r.rank}위 ${text(entries.find(e=>e.id===r.id)?.name||r.id)}`).join(' / ')}<p class="help">다음 판은 ‘새 솔로 경기’를 누르면 됩니다. 별도 승리 포인트는 지급되지 않습니다.</p>`;
+ }else $('solo-result').textContent=run?'🚦 경기 진행 중입니다. 경기가 끝나면 서버가 결과와 베팅금을 정산합니다.':`배당 고정 · ${Number(sd.bet_stake)>0?'베팅 완료. ':'원하는 팀에 베팅하거나 바로 출발할 수 있습니다. '}출발 시 우승·입상수당은 없습니다.`;
+}
+$('solo-new').addEventListener('click',()=>soloCall('new'));
+$('solo-bet').addEventListener('click',()=>{const stake=Number($('solo-stake').value);if(!Number.isSafeInteger(stake)||stake<1||stake>100000000){updateRaceStakeCap('solo-limit-note','solo-stake');info('1억 P를 초과하여 베팅할 수 없습니다. 최대 1억 P까지 가능합니다.',true);return}void soloCall('bet',{target:$('solo-target').value,stake});});
+$('solo-cancel').addEventListener('click',()=>soloCall('cancel'));
+$('solo-start').addEventListener('click',()=>soloCall('start'));
+$('solo-target').addEventListener('change',renderSolo);
+$('solo-stake').addEventListener('input',()=>{updateRaceStakeCap('solo-limit-note','solo-stake');const sd=soloData;if(!sd)return;const e=sd.entries?.find(e=>e.id===$('solo-target').value),v=Number($('solo-stake').value);$('solo-expected').textContent=v>100000000?'1억 P 초과 베팅은 불가능합니다.':e&&Number.isSafeInteger(v)&&v>0&&v<=100000000?'적중 예상 지급: '+fmt(Math.floor(v*Number(e.odds)))+' (원금 포함)':'베팅 대상과 포인트를 입력하세요.'});
+
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b)tab(b.dataset.tab)});
+$('create').addEventListener('click',()=>action('create',{name:$('room-title').value},null));
+$('join-code').addEventListener('click',()=>{const id=$('room-code').value.trim();if(/^rc-[0-9a-f]{12}$/.test(id))action('join',{},id);else info('정확한 방 코드를 입력해 주세요.',true)});
+$('room-list').addEventListener('click',e=>{const b=e.target.closest('[data-join]');if(b)action('join',{},b.dataset.join)});
+$('refresh').addEventListener('click',loadRooms);
+$('leave').addEventListener('click',()=>action('leave'));
+$('enter-race').addEventListener('click',()=>action('role',{role:'entrant'}));$('spectate').addEventListener('click',()=>action('role',{role:'spectator'}));$('ready').addEventListener('click',()=>action('ready'));
+
+$('open-bets').addEventListener('click',()=>action('open_bets'));$('start-race').addEventListener('click',()=>action('start'));
+// Host controls: settings persist in Supabase, never only in the browser.
+$('track-choice').innerHTML=TRACK.map(t=>'<option value="'+text(t.key)+'">'+text(t.name)+' · '+text(t.type)+'</option>').join('');
+$('slot-editor').addEventListener('change',e=>{const sel=e.target.closest('[data-slot]');if(!sel)return;action('set_slot',{slot:Number(sel.dataset.slot),mode:sel.value});});
+$('track-choice').addEventListener('change',()=>{racePreviewSelection=$('track-choice').value;renderTrackMini(racePreviewSelection,!!room&&racePreviewSelection!==(room.track||'city'))});
+$('set-track').addEventListener('click',async()=>{const key=$('track-choice').value;const done=await action('set_track',{track:key});if(done){racePreviewSelection='';renderTrackMini(key,false);}});
+$('race-chat-form').addEventListener('submit',async e=>{
+ e.preventDefault();
+ if(raceChatBusy||!currentId||!token)return;
+ const el=$('race-chat-input'),msg=el.value.trim();
+ if(!msg)return;
+ if(msg.length>240){raceChatFeedback('채팅은 240자 이내로 입력해 주세요.',true);return;}
+ const rid=currentId;raceChatBusy=true;$('race-chat-send').disabled=true;
+ raceChatFeedback('전송 중...');
+ try{
+  if(/^\/(포인트|공지|강퇴|sale)(?:\s|$)/i.test(msg)){
+   const d=await processRaceOperatorCommand(msg,rid);
+   if(d.cancelled){raceChatFeedback('운영자 명령을 취소했습니다.');return;}
+   if(rid===currentId){
+    el.value='';
+    if(d.social){raceSocialMessages=d.social.messages||raceSocialMessages;raceSpectators=d.social.spectators||raceSpectators;renderRaceSocial()}
+    raceChatFeedback('✓ '+(d.message||'처리 완료'));
+    if(/^\/sale\s/i.test(msg)){void refreshRaceSale();void loadRaceSocial();}
+    if(msg.startsWith('/포인트')){try{const result=await rpc('renju_member_auth',{p_client:client,p_action:'session',p_token:token});points=result.profile?.points??points;$('wallet').textContent=fmt(points)}catch(_){}}
+   }
+  }else if(msg.startsWith('/')){
+   throw new Error('운영자 명령: /sale · /포인트 · /공지 · /강퇴');
+  }else{
+   const d=await rpc('renju_race_social_rpc',{p_client:client,p_token:token,p_room:rid,p_action:'send',p_message:msg},30000);
+   if(rid===currentId){el.value='';raceSocialMessages=d.messages||[];raceSpectators=d.spectators||[];renderRaceSocial();raceChatFeedback('전송 완료')}
+  }
+ }catch(err){raceChatFeedback('명령/채팅 실패: '+err.message+' · 입력 내용은 유지됩니다. 서버 설정 또는 운영자 인증을 확인해 주세요.',true)}
+ finally{raceChatBusy=false;$('race-chat-send').disabled=false}
+});
+$('bet-target').addEventListener('change',updateExpected);$('bet-amount').addEventListener('input',updateExpected);
+document.addEventListener('click',e=>{if(e.target?.id==='recover-bet'){if(pending||refreshing){info('이미 서버 정산을 확인하고 있습니다. 추가 요청을 보내지 않습니다.');return;}void action('sync');}});
+$('bet-submit').addEventListener('click',()=>{
+ const raw=String($('bet-amount').value||'').trim();
+ if(!/^[1-9]\d*$/.test(raw)){info('베팅 금액은 1P 이상의 정수여야 합니다.',true);return;}
+ const stake=BigInt(raw);
+ if(stake>100000000n){info('레이싱 베팅금액은 한 번에 최대 1억 P입니다.',true);return;}
+ action('bet',{target:$('bet-target').value,amount:Number(stake)});
+});
+$('cars').addEventListener('click',e=>{const b=e.target.closest('[data-purchase]');if(!b||!profile)return;const owned=profile.owned_cars?.includes(b.dataset.purchase);action(owned?'select':'buy_car',owned?{kind:'car',id:b.dataset.purchase}:{id:b.dataset.purchase});});
+$('drivers').addEventListener('click',e=>{const b=e.target.closest('[data-purchase]');if(!b||!profile)return;const owned=profile.owned_drivers?.includes(b.dataset.purchase);action(owned?'select':'buy_driver',owned?{kind:'driver',id:b.dataset.purchase}:{id:b.dataset.purchase});});
+$('upgrades').addEventListener('click',e=>{const reset=e.target.closest('[data-reset]');if(reset){const kind=reset.dataset.reset;const object=kind==='car'?sCar(profile.selected_car).name:sDriver(profile.selected_driver).name;if(confirm(object+'의 '+(kind==='car'?'차량 파츠':'드라이버 스킬')+'을 1,000,000P를 지불하고 초기화할까요?\n기존 강화 비용은 환불되지 않습니다.'))action('reset_upgrades',{kind});return;}const b=e.target.closest('[data-upgrade]');if(!b)return;const [kind,key]=b.dataset.upgrade.split(':');action('upgrade',{kind,key})});
+$('share').addEventListener('click',async()=>{
+ if(!/^rc-[0-9a-f]{12}$/i.test(currentId||'')){info('방 생성 또는 입장 후 초대 링크를 복사할 수 있습니다.',true);return;}
+ const url=new URL('./index.html?room='+encodeURIComponent(currentId),location.href);url.hash='';
+ const value=url.toString();let copied=false;
+ try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(value);copied=true;}}catch(_){}
+ if(!copied){const a=document.createElement('textarea');a.value=value;a.readOnly=true;a.style.cssText='position:fixed;top:4px;left:4px;opacity:.01;width:2px;height:2px';document.body.append(a);a.focus();a.select();try{copied=document.execCommand('copy');}catch(_){}a.remove();}
+ if(copied)info('레이스방 초대 주소가 복사됐습니다.');
+ else{info('초대 주소: '+value+' (길게 눌러 복사)',true);try{window.prompt('복사할 초대 주소',value)}catch(_){}}
+});
+$('race-reconnect').addEventListener('click',()=>{
+ if(!raceInitComplete){if(raceAuthRetryTimer!==null){clearTimeout(raceAuthRetryTimer);raceAuthRetryTimer=null;}void init();return;}
+ if(currentId){if(!refreshing&&!pending)void tick();void refreshRaceWallet(true);}
+ else{void loadRooms();void refreshRaceWallet(true);}
+});
+$('home').addEventListener('click',()=>{if(window.parent!==window)window.parent.postMessage({type:'RACE_CLOSE'},location.origin);else location.href='./index.html'});
+// Lightweight heartbeat: the legacy race `sync` action does not update last_seen.
+// This is needed to keep truly active entrants in the live lobby, even if chat fails.
+async function pingRacePresence(){
+ // Keep the real member's room alive while they view Sheet1. Only pause when the
+ // whole browser tab is backgrounded; expensive game syncs still pause when hidden.
+ if(racePresenceBusy||!token||!currentId||document.hidden)return;
+ try{if(window.parent!==window&&window.parent.document.hidden)return;}catch(_){}
+ racePresenceBusy=true;
+ try{await rpc('renju_race_presence_ping',{
+  p_client:client,p_token:token,p_room:currentId
+ },10000);}catch(_){/* Retry next tick; do not interrupt the current race. */}
+ finally{racePresenceBusy=false;}
+}
+// v1.1.6: One sync per player is a transactional, room-locking RPC, NOT a cheap
+// read-only GET. It can settle a race. Keep traffic low for multiplayer rooms
+// and spread recovery attempts after a PostgreSQL statement_timeout.
+function raceSyncDelay(){
+ if(!raceFrameVisible()||active!=='race')return 12000;
+ if(!currentId)return 12000;
+ let ms=8500;
+ if(room?.phase==='betting')ms=6500;
+ else if(room?.phase==='running'){
+  const end=Date.parse(room.ends_at||'');
+  const start=Date.parse(room.started_at||'');
+  const finish=Number.isFinite(end)?end:Number.isFinite(start)?start+raceDuration()*1000:NaN;
+  const left=Number.isFinite(finish)?finish-Date.now():999999;
+  // Before the authoritative finish, costly polling cannot produce a result.
+  // One player will settle the room after its end; all others observe it later.
+  ms=left<=0?4200:left<3500?4200:7500;
+ }else if(room?.phase==='finished'){
+  const pendingPayout=myBet&&String(myBet.target_key)===String(room?.result?.winner)&&Number(myBet.payout||0)===0;
+  ms=pendingPayout?6500:11000;
+ }
+ // Exponential load shedding. Do not hammer a congested DB every 1-2 sec.
+ return Math.min(28000,Math.round(ms*Math.pow(1.8,raceSyncFailures)));
+}
+function scheduleRaceSync(ms=null){
+ if(autoTimer!==null){clearTimeout(autoTimer);autoTimer=null;}
+ if(!token||!currentId)return;
+ const delay=Math.max(250,ms??raceSyncDelay());
+ // Distribute 4-6 players over 1.5s, avoiding a burst of row-lock waiters.
+ autoTimer=setTimeout(()=>{autoTimer=null;void tick()},delay+Math.round(Math.random()*1500));
+}
+async function tick(){
+ if(!token||!currentId)return;
+ if(!raceFrameVisible()||active!=='race'||refreshing||pending){scheduleRaceSync(refreshing||pending?600:6000);return;}
+ refreshing=true;
+ const rid=currentId,actionRevision=raceActionRevision;
+ try{
+  const d=await raceGameRPC('sync',{p_action:'sync',p_client:client,p_token:token,p_room:rid,p_payload:{}});
+  // Never overwrite a more recent user action, or state for a different room.
+  if(rid!==currentId||actionRevision!==raceActionRevision)return;
+  raceSyncFailures=0;
+  if(uid&&Array.isArray(d.seats)&&!d.seats.some(s=>s.id===uid)){
+   currentId='';room=null;seats=[];raceSocialMessages=[];raceSpectators=[];
+   history.replaceState(null,'',location.pathname);tab('race');
+   info('이 레이스방에서 나왔습니다. 운영자 강퇴 또는 접속 상태 변경일 수 있습니다.',true);
+   void loadRooms();return;
+  }
+  const previousPhase=room?.phase,previousRound=room?.race_no;
+  apply(d);render();
+  if(room?.phase==='finished'){
+   const wonPending=!!myBet&&String(myBet.target_key)===String(room?.result?.winner)&&Number(myBet.payout||0)===0;
+   if(wonPending){
+    if(!raceUnpaidSince)raceUnpaidSince=Date.now();
+    if(Date.now()-raceUnpaidSince>15000)info('⚠️ 적중 베팅의 지급 기록이 아직 확인되지 않습니다. 같은 베팅을 반복하지 말고 서버 정산 기록을 확인하세요.',true);
+    else info('🏁 공식 결과 확인 · 당첨 베팅의 정산을 서버에서 재확인 중입니다.');
+    void refreshRaceWallet();
+   }else{
+    raceUnpaidSince=0;
+    if(previousPhase!=='finished')info('🏁 공식 경기 결과·베팅 정산 정보가 도착했습니다.');
+    if(previousPhase!=='finished')void refreshRaceWallet();
+   }
+  }else if(room?.race_no!==previousRound&&room?.phase==='waiting')info('다음 경기가 준비됐습니다. READY를 눌러 주세요.');
+ }catch(e){
+  raceSyncFailures=Math.min(5,raceSyncFailures+1);
+  const timedOut=/statement timeout|canceling statement|서버 응답 지연|timeout/i.test(String(e.message||''));
+  info((timedOut?'⚠ 서버 SQL 실행시간 초과 · 경기 종료/정산을 재확인 중입니다. 베팅·출발을 반복 클릭하지 마세요.':'레이스 서버 연결 지연 · 자동으로 다시 확인합니다.')+' ('+e.message+')',true);
+ }finally{refreshing=false;scheduleRaceSync()}
+}
+let previousFrameVisible=false;
+init().then(()=>{
+ void loadPhotos();
+ scheduleRaceSync(700);
+ // Presence's live window is much longer than 30s; no need for 18s writes.
+ setInterval(pingRacePresence,30000);
+ // Discount is configuration. The periodic read need not compete with settlement.
+ setInterval(()=>{if(raceFrameVisible())void refreshRaceSale()},60000);
+ // Chat / spectator list is noncritical to official results.
+ setInterval(()=>{if(active==='race'&&!refreshing&&!pending)void loadRaceSocial()},16000);
+ setInterval(()=>{if(raceFrameVisible()&&active==='solo'&&soloData?.phase==='running')updateSoloLanes()},750);
+ setInterval(()=>{
+  const visible=raceFrameVisible();
+  if(visible&&!previousFrameVisible){if(!raceInitComplete&&!raceInitBusy)void init();if(active==='race')scheduleRaceSync(350);else if(active==='solo')scheduleSoloSync(350)}
+  previousFrameVisible=visible;
+  if(visible&&active==='race'&&room?.phase==='running')renderTrack(seats.filter(x=>x.role==='entrant'));
+ },500);
+ setInterval(()=>{if(!currentId&&token&&raceFrameVisible()&&active==='lobby')loadRooms()},18000);
+});
+</script></body></html>
