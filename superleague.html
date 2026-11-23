@@ -3848,8 +3848,15 @@ slV423ItemsPage=function(){
  const original=slV431OldItems();
  if(!slEmbedded||!sl.ready)return original;
  const cards=Number(sl.snapshot?.youthCards||0);
- return original+block('유망주 뽑기권 · 1억 P',
-  `<div class="note">보유 <b>${cards}장</b> · 아이템 상점에서는 뽑기권만 구매합니다. <b>뽑기와 발탁은 왼쪽 선수 영입 탭에서</b> 진행하세요.</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v431-buy" ${slV431ActionBusy?'disabled':''}>뽑기권 구매 · 1장 1억 P</button><div class="small muted" style="margin-top:10px">다시 뽑기는 추가 뽑기권 1장이 필요합니다. 무료 무한 재추첨은 불가능합니다.</div>`);
+ return original+block('유망주 뽑기권 · 1장 1억 P',
+  `<div class="note">보유 <b>${cards}장</b> · 아이템 상점에서는 뽑기권을 구매합니다. <b>추첨·발탁·포기는 선수 영입 탭</b>에서 진행하세요.</div>
+  <div class="spacer"></div>
+  <div class="line" style="align-items:center;gap:12px;flex-wrap:wrap">
+    <label for="sl-v433-buy-qty" class="small">구매 수량</label>
+    <input id="sl-v433-buy-qty" class="inp" type="number" inputmode="numeric" min="1" max="100" step="1" value="1" style="width:100px;max-width:100%;padding:8px">
+    <span class="small muted" id="sl-v433-buy-total">총 1억 P</span>
+    <button type="button" class="btn primary" data-action="sl-v431-buy" ${slV431ActionBusy?'disabled':''}>선택 수량 구매</button>
+  </div><div class="small muted" style="margin-top:10px">한 번에 1~100장까지 구매 가능 · 최대 보유 10,000장 · 재추첨 시 1장 소모</div>`);
 };
 // V4.32: the youth draft, appointment and academy are all managed in the recruitment tab.
 // Item tab is purchase-only; the backend owns fee calculation and ticket consumption.
@@ -3864,11 +3871,11 @@ marketPage=function(){
  const cards=Number(sl.snapshot?.youthCards||0);
  const free=Number(sl.snapshot?.youthAvailable||0);
  const price=y=>slV423Money(y.signingFee||0);
- const candidateHtml=candidate?`<div class="note"><b>추첨 결과 · ${esc(candidate.name)}</b><div>포지션 ${esc(candidate.pos)} · 나이 ${candidate.age}세 · OVR ${candidate.ovr} · 잠재력 ${candidate.potential}</div><div>발탁 시 최초 계약금 <b>${price(candidate)}</b></div></div><div class="spacer"></div><div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v431-appoint" data-id="${esc(candidate.id)}" ${academy.length>=2||slV431ActionBusy||BigInt(String(sl.snapshot?.wallet||0))<BigInt(String(candidate.signingFee||0))?'disabled':''}>이 선수 발탁 · ${price(candidate)}</button><button type="button" class="btn" data-action="sl-v431-reroll" data-id="${esc(candidate.id)}" ${cards<1||free<1||slV431ActionBusy?'disabled':''}>다시 뽑기 · 뽑기권 1장</button></div>`
- :`<div class="note">현재 발탁 대기 중인 선수가 없습니다. 뽑기권으로 유망주를 추첨하세요.</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v431-draw" ${cards<1||free<1||slV431ActionBusy||academy.length>=2?'disabled':''}>유망주 뽑기 · 뽑기권 1장</button>`;
+ const candidateHtml=candidate?`<div class="note"><b>추첨 결과 · ${esc(candidate.name)}</b><div>포지션 ${esc(candidate.pos)} · 나이 ${candidate.age}세 · OVR ${candidate.ovr} · 잠재력 ${candidate.potential}</div><div>발탁 시 최초 계약금 <b>${price(candidate)}</b></div></div><div class="spacer"></div><div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v431-appoint" data-id="${esc(candidate.id)}" ${academy.length>=2||slV431ActionBusy||BigInt(String(sl.snapshot?.wallet||0))<BigInt(String(candidate.signingFee||0))?'disabled':''}>이 선수 발탁 · ${price(candidate)}</button><button type="button" class="btn" data-action="sl-v431-reroll" data-id="${esc(candidate.id)}" ${cards<1||slV431ActionBusy?'disabled':''}>다시 뽑기 · 뽑기권 1장</button><button type="button" class="btn warn" data-action="sl-v431-decline" data-id="${esc(candidate.id)}" ${slV431ActionBusy?'disabled':''}>발탁 안 함 · 즉시 반환</button></div>`
+ :`<div class="note">발탁 대기 중인 선수가 없습니다. 뽑기권으로 유망주를 추첨하세요. 발탁하지 않은 선수는 다른 회원도 다시 뽑을 수 있습니다.</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v431-draw" ${cards<1||slV431ActionBusy||academy.length>=2?'disabled':''}>유망주 뽑기 · 뽑기권 1장</button>`;
  const youthRow=y=>`<tr><td class="strong">${esc(y.name)}</td><td>${esc(y.pos)}</td><td class="num">${y.age}세</td><td class="num">${y.ovr}</td><td class="num">${y.potential}</td><td>${slV431YouthStatus(y.status)}</td><td>${y.status==='pending'?`<button type="button" class="btn xs primary" data-action="sl-v431-register" data-id="${esc(y.id)}">1군 승격</button>`:y.status==='academy'?`<button type="button" class="btn xs warn" data-action="sl-v431-release" data-id="${esc(y.id)}">유망주 방출</button>`:''}</td></tr>`;
  return old+block('유망주 뽑기 · 17~19세',
- `<div class="line between"><span>보유 뽑기권 <b>${cards}장</b> · 추첨 가능 선수 ${free}명</span><button class="btn xs" type="button" data-action="tab" data-value="items">아이템 상점에서 뽑기권 구매</button></div><div class="spacer"></div>${candidateHtml}<div class="small muted" style="margin-top:10px">잠재력 80+ 최대 10% · 85+ 최대 5% · 90+ 최대 0.8% · 98+ 최대 0.01%. 발탁에 성공할 때만 최초 계약금이 차감됩니다. 다시 뽑으면 기존 후보는 후보 풀로 돌아갑니다.</div>`)
+ `<div class="line between"><span>보유 뽑기권 <b>${cards}장</b> · 추첨 가능 선수 ${free}명</span><button class="btn xs" type="button" data-action="tab" data-value="items">아이템 상점에서 뽑기권 구매</button></div><div class="spacer"></div>${candidateHtml}<div class="small muted" style="margin-top:10px">잠재력 80+ 최대 10% · 85+ 최대 5% · 90+ 최대 0.8% · 98+ 최대 0.01%. 발탁에 성공할 때만 최초 계약금이 차감됩니다. 발탁 안 함을 선택하면 기존 후보가 즉시 다른 회원에게도 다시 열립니다. 미선택 후보는 10분 후 다음 추첨 시 자동 반환됩니다.</div>`)
  +block('내 유망주 · 2명 제한',`<div class="note">유망주 등록 <b>${academy.length}/2명</b> · 20세 1군 승격 대기 ${pending.length}명 · 1군이 10명인 경우 선수 방출 후 승격할 수 있습니다.</div><div class="spacer"></div>${academy.length||pending.length?table(['선수','포지션','나이','OVR','잠재력','상태','관리'],[...academy,...pending].map(youthRow)):'<div class="empty">아직 발탁한 유망주가 없습니다.</div>'}`);
 };
 let slV431ActionBusy=false;
@@ -3889,13 +3896,31 @@ async function slV431Action(action,id=null){
   notice('유망주 처리 확인 필요: '+String(err?.message||err)+' · 동일 요청번호로 다시 시도할 수 있습니다.');
  }finally{slV431ActionBusy=false;}
 }
+document.addEventListener('input',e=>{
+ const input=e.target;
+ if(input?.id!=='sl-v433-buy-qty')return;
+ const raw=String(input.value).trim();const qty=Number(raw);
+ const ok=/^[0-9]{1,3}$/.test(raw)&&Number.isInteger(qty)&&qty>=1&&qty<=100;
+ const target=document.getElementById('sl-v433-buy-total');
+ if(target)target.textContent=ok?`총 ${slV423Money(qty*100000000)}`:'1~100장 정수 입력';
+ const button=document.querySelector('[data-action="sl-v431-buy"]');
+ if(button)button.disabled=!ok||slV431ActionBusy;
+});
 document.addEventListener('click',e=>{
  if(!slEmbedded)return;
  const btn=e.target.closest?.('[data-action^="sl-v431-"]');if(!btn)return;
  e.preventDefault();e.stopImmediatePropagation();
  const a=btn.dataset.action.replace('sl-v431-','');
- if(!['buy','draw','reroll','appoint','register','release'].includes(a))return;
- if(a==='buy'&&!confirm('회원 공용 포인트 1억 P로 유망주 뽑기권을 구매할까요?'))return;
+ if(!['buy','draw','reroll','decline','appoint','register','release'].includes(a))return;
+ if(a==='buy'){
+  const qtyEl=document.getElementById('sl-v433-buy-qty');
+  const qtyStr=String(qtyEl?.value??'1').trim();
+  const qty=Number(qtyStr);
+  if(!/^[0-9]{1,3}$/.test(qtyStr)||!Number.isInteger(qty)||qty<1||qty>100){notice('구매 수량은 1~100장 정수로 입력하세요.');return;}
+  if(!confirm(`유망주 뽑기권 ${qty}장 · 총 ${slV423Money(qty*100000000)}을 회원 공용 포인트로 구매할까요?`))return;
+  void slV431Action('buy',String(qty));return;
+ }
+ if(a==='decline'&&!confirm('이 유망주를 발탁하지 않고 즉시 공용 추첨 풀로 반환할까요?'))return;
  if(a==='reroll'&&!confirm('뽑기권 1장을 추가로 사용해 다른 유망주를 뽑을까요?'))return;
  if(a==='appoint'&&!confirm('유망주를 발탁하면 화면에 표시된 최초 계약금이 공용 포인트에서 차감됩니다. 계속할까요?'))return;
  if(a==='release'&&!confirm('발굴한 선수를 포기하면 되돌릴 수 없습니다. 진행할까요?'))return;
