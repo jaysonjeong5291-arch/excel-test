@@ -2467,7 +2467,7 @@ window.addEventListener('message',e=>{
  if(e.data?.type==='SL_RPC'&&activeSuperleague){
   const rid=String(e.data.requestId||'');
   const method=e.data.method;
-  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics','sl_v427_budget','sl_v427_budget_repay','sl_v427_friendly_play','sl_v427_admin_reset'].includes(method))return;
+  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics','sl_v427_budget','sl_v427_budget_repay','sl_v427_friendly_play','sl_v427_admin_reset','sl_v428_snapshot','sl_v428_facility_info','sl_v428_facility_upgrade'].includes(method))return;
   const args=e.data.args||{};
   if(method==='sl_command'&&!['claim','offer','respond','cancel','fa_sign','release','advance','post'].includes(args.p_action))return;
   (async()=>{
@@ -2497,6 +2497,14 @@ window.addEventListener('message',e=>{
       response=await callRpc('sl_v427_friendly_play',{
         p_token:tokenAtStart,p_target:args.p_target,p_request:args.p_request
       },false,12000);
+    }else if(method==='sl_v428_facility_info'){
+      response=await callRpc('sl_v428_facility_info',{p_token:tokenAtStart},false,11500);
+    }else if(method==='sl_v428_facility_upgrade'){
+      response=await callRpc('sl_v428_facility_upgrade',{
+        p_token:tokenAtStart,p_kind:args.p_kind,p_request:args.p_request
+      },false,15000);
+    }else if(method==='sl_v428_snapshot'){
+      response=await callRpc('sl_v428_snapshot',{p_token:tokenAtStart},false,11500);
     }else if(method==='sl_v424_save_tactics'){
       response=await callRpc('sl_v424_save_tactics',{
         p_token:tokenAtStart,p_payload:args.p_payload||{}
@@ -2507,7 +2515,7 @@ window.addEventListener('message',e=>{
     response=await callRpc(method,method==='sl_snapshot'?{p_token:tokenAtStart}:method==='sl_offer_submit'?{p_token:tokenAtStart,p_request:args.p_request,p_player:args.p_player,p_amount:args.p_amount}:method==='sl_offer_status'?{p_token:tokenAtStart,p_request:args.p_request||null}:{p_token:tokenAtStart,p_action:args.p_action,p_payload:args.p_payload||{}},false,11500);
     }
     if(memberToken!==tokenAtStart)throw new Error('로그인 계정이 변경되어 요청이 취소됐습니다.');
-    if(method==='sl_snapshot'&&$('superleague-frame')?.contentWindow){
+    if((method==='sl_snapshot'||method==='sl_v428_snapshot')&&$('superleague-frame')?.contentWindow){
       $('superleague-frame').contentWindow.postMessage({type:'EXCEL_SUPERLEAGUE_IDENTITY',
         nickname:memberProfile?.nickname||myNickname,online:true,
         adminResetAvailable:Boolean(adminToken&&memberProfile?.nickname==='운영자')},location.origin);

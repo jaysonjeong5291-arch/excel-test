@@ -191,6 +191,12 @@ html.excel-embedded .app{min-height:100vh}
 .v424-review details{margin:6px 0;border:1px solid #d6e1d8;background:#fff}
 .v424-review summary{cursor:pointer;padding:10px 12px;font-weight:700}
 .v424-review .v424-body{padding:9px 12px;border-top:1px solid #d6e1d8}
+
+.v428-save-line{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0 8px;padding:12px;background:#e8f5ed;border:1px solid #afd0b9;border-radius:5px}
+.v428-facility{padding:14px;border:1px solid #c8d9ce;background:#f8fcf9;border-radius:5px}
+.v428-bar{height:12px;background:#e0e8e0;border-radius:99px;overflow:hidden;margin:12px 0 6px}
+.v428-bar i{display:block;height:100%;background:#19844b;border-radius:99px}
+[hidden]{display:none!important}
 </style><style>
 .sl-user-compose{border:1px solid #c5dfce;background:#f4faf6;padding:11px 12px;margin:10px 0 13px}
 .sl-compose-row{display:flex;gap:8px;margin:9px 0;align-items:center}
@@ -198,7 +204,7 @@ html.excel-embedded .app{min-height:100vh}
 .sl-user-story{background:#fbfefc;border-left:3px solid #32915e}
 .sl-user-author{color:#217346;font-weight:800;margin:7px 0 3px}
 @media(max-width:550px){.sl-compose-row{flex-wrap:wrap}.sl-compose-row button{width:100%}}
-</style></head><body><div class="app"><div class="titlebar"><div class="left"><span class="filename">풋살매니저_V4.18.xlsx</span><span class="ver">— 자동 저장됨 · 데모</span></div><span id="title-meta" class="ver">관리본부 / 시뮬레이션</span></div><div class="ribbon"><div class="menus"><span class="menu-current">홈</span><span>삽입</span><span>데이터</span><span>검토</span><span>보기</span></div><div class="toolstrip"><div class="toolgroup"><span class="minor">구단</span><b id="r-club">미선택</b></div><div class="toolgroup"><span class="minor">시즌</span><b id="r-season">1</b><span class="minor">운영일</span><b id="r-day">토</b></div><div class="toolgroup"><span class="minor">보유 포인트</span><b id="r-points">12,500 P</b></div><div class="toolgroup"><button class="btn xs" id="excel-bridge-back" type="button" hidden>↩ Sheet1</button><button class="btn xs" data-action="next-day">1일 진행 · 즉시 / 휴식 해제</button><button class="btn xs" data-action="fast-forward" data-days="7">1주 진행</button><button class="btn xs" data-action="fast-forward" data-days="14">1시즌 진행</button><button class="btn xs" data-action="fast-forward" data-days="28">2시즌 진행</button><button class="btn xs" data-action="fast-forward" data-days="42">3시즌 진행</button></div><div class="toolgroup"><button class="btn xs gray" id="sl-offline-reset" data-action="reset">새 구단 선택 / 초기화</button><button class="btn xs" id="sl-season-reset-btn" type="button" hidden title="운영자 전용 · 공용 슈퍼리그를 시즌 1 첫날로 초기화">⟲ 시즌 1 초기화 (운영자)</button></div></div></div><div class="workspace"><aside class="side" aria-label="게임 메뉴"><div class="side-logo"><div><b>슈퍼리그</b><small>CLUB MANAGEMENT</small></div></div><nav class="side-links" id="side-navigation" aria-label="운영 메뉴"></nav><div class="side-bottom"><b>온라인 공용 리그</b><p>구단 소유·이적·뉴스는 서버 기준<br>중계 연습과 전술은 로컬입니다.</p></div></aside><div class="workarea"><div class="formula"><div class="celladdr" id="cell-address">A1</div><div class="fx">ƒx</div><div class="formulaText" id="formula-text">=SUPERLEAGUE(20개 구단, 선수 편성, 주간 일정)</div></div><div class="columns"><span></span><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span></div><main class="worksheet"><div class="sheet-content" id="screen"></div></main></div></div><div class="statusbar"><span>준비 · 브라우저에서 자동 저장 · 수동 날짜 진행</span><span>가상 슈퍼리그 / 데이터: 20개 구단 + 선수 200명</span></div><div id="chooser"></div><div id="toast" class="toast" role="status" aria-live="polite"></div></div>
+</style></head><body><div class="app"><div class="titlebar"><div class="left"><span class="filename">풋살매니저_V4.18.xlsx</span><span class="ver">— 자동 저장됨 · 데모</span></div><span id="title-meta" class="ver">관리본부 / 시뮬레이션</span></div><div class="ribbon"><div class="menus"><span class="menu-current">홈</span><span>삽입</span><span>데이터</span><span>검토</span><span>보기</span></div><div class="toolstrip"><div class="toolgroup"><span class="minor">구단</span><b id="r-club">미선택</b></div><div class="toolgroup"><span class="minor">시즌</span><b id="r-season">1</b><span class="minor">운영일</span><b id="r-day">토</b></div><div class="toolgroup"><span class="minor">보유 포인트</span><b id="r-points">12,500 P</b></div><div class="toolgroup"><button class="btn xs" id="excel-bridge-back" type="button" hidden>↩ Sheet1</button><button class="btn xs" data-action="next-day">1일 진행 · 즉시 / 휴식 해제</button><button class="btn xs" data-action="fast-forward" data-days="7">1주 진행</button><button class="btn xs" data-action="fast-forward" data-days="14">1시즌 진행</button><button class="btn xs" data-action="fast-forward" data-days="28">2시즌 진행</button><button class="btn xs" data-action="fast-forward" data-days="42">3시즌 진행</button></div><div class="toolgroup"><button class="btn xs gray" id="sl-offline-reset" data-action="reset">새 구단 선택 / 초기화</button><button class="btn xs" id="sl-season-reset-btn" type="button" hidden title="운영자 전용 · 공용 슈퍼리그를 시즌 1 첫날로 초기화">⟲ 시즌 1 초기화 (운영자)</button></div></div></div><div class="workspace"><aside class="side" aria-label="게임 메뉴"><div class="side-logo"><div><b>슈퍼리그</b><small>CLUB MANAGEMENT</small></div></div><nav class="side-links" id="side-navigation" aria-label="운영 메뉴"></nav><div class="side-bottom"><b>온라인 공용 리그</b><p>구단 소유·이적·뉴스는 서버 기준<br>전술·예산·친선은 서버에 저장됩니다.</p></div></aside><div class="workarea"><div class="formula"><div class="celladdr" id="cell-address">A1</div><div class="fx">ƒx</div><div class="formulaText" id="formula-text">=SUPERLEAGUE(20개 구단, 선수 편성, 주간 일정)</div></div><div class="columns"><span></span><span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span></div><main class="worksheet"><div class="sheet-content" id="screen"></div></main></div></div><div class="statusbar"><span>준비 · 브라우저에서 자동 저장 · 한국시간 매일 1일 자동 진행</span><span>가상 슈퍼리그 / 데이터: 20개 구단 + 선수 200명</span></div><div id="chooser"></div><div id="toast" class="toast" role="status" aria-live="polite"></div></div>
 <script>'use strict';
 const EXCEL_IDENTITY_KEY='excel-games-my-nickname-v1';
 function excelStoredNickname(){try{return String(localStorage.getItem(EXCEL_IDENTITY_KEY)||'').trim().slice(0,16)}catch(_){return ''}}
@@ -296,11 +302,13 @@ function resetGame(){if(!confirm('데모 구단·경기·영입 기록을 초기
 function page(title,sub,tag=''){return `<div class="pagehead"><div><div class="eyebrow">관리 현황 / 슈퍼리그 시뮬레이션</div><h1>${title}</h1><p>${sub}</p></div>${tag}</div>`}
 function block(title,content,right=''){return `<section class="block"><div class="blocktitle"><span>${title}</span>${right}</div><div class="blockcontent">${content}</div></section>`}
 function table(headers,rows,cls=''){return `<div class="scrolltable"><table class="excel ${cls}"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`}
-function dayLabel(){return `시즌 ${s.season} · ${DAYS[s.day]}요일`}
-function topRefresh(){$('r-club').textContent=hasSelected()?mine().name:'구단 선택';$('r-season').textContent=String(s.season);$('r-day').textContent=DAYS[s.day];$('r-points').textContent=`${fmt(s.points)} P`;}
+function slV428Weekday(){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',weekday:'short'}).format(new Date()).replace(/요일$/,'');}
+function slV428OperationalDay(){return `${s.day<7?'상반기':'하반기'} (${slV428Weekday()})`;}
+function dayLabel(){return `시즌 ${s.season} · ${slV428OperationalDay()}`;}
+function topRefresh(){$('r-club').textContent=hasSelected()?mine().name:'구단 선택';$('r-season').textContent=String(s.season);$('r-day').textContent=slV428OperationalDay();$('r-points').textContent=`${fmt(s.points)} P`;}
 const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['items','아이템'],['budget','예산'],['calendar','경기 일정'],['friendly','친선경기'],['league','순위'],['match','경기 기록']];
 function sheetNav(){$('side-navigation').innerHTML=TABS.map(([key,label])=>`<button class="side-btn ${s.tab===key?'active':''}" type="button" data-action="tab" data-value="${key}" ${s.tab===key?'aria-current="page"':''} title="${label}"><span class="navtxt">${label}</span></button>`).join('')}
-function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${DAYS[s.day]}요일)`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage,budget:slV427BudgetPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 온라인 테스트에서는 Supabase의 실제 회원 포인트와 공유 경기 데이터를 사용합니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
+function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${slV428OperationalDay()})`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage,budget:slV427BudgetPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 온라인 테스트에서는 Supabase의 실제 회원 포인트와 공유 경기 데이터를 사용합니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
 function unselected(){return page('슈퍼리그 운영 대시보드','참가 구단 20개 · 구단 선택 후 테스트 시작')+block('초기 설정','<div class="note">구단을 선택하면 소속 선수 8명(GK·DF·MF·FW 각 2명), 초기 데모 포인트 12,500P로 게임을 시작합니다. 구단별 선수는 중복되지 않으며, 전설 선수 40명은 FA로 별도 등록되어 있습니다.</div>')}
 function renderChooser(){return `<div class="overlay"><div class="choose"><div class="choosehead"><div class="eyebrow">슈퍼리그 개막 준비 / 구단 배정</div><h1>운영할 구단을 선택하세요</h1><div class="muted">총 20개 구단 중 원하는 구단을 선택하세요 · 시작 후 변경하려면 초기화가 필요합니다</div></div><div class="choosebody"><div class="choosegrid">${s.teams.map(t=>`<button class="chooseclub" data-action="choose" data-id="${t.id}"><span class="tag">${flagLeague(t.league)}</span><b>${esc(t.name)}</b><span class="overall">기본 전력 ${power(t.id)}</span><br><small>GK 2 · DF 2 · MF 2 · FW 2</small></button>`).join('')}</div><div class="note" style="margin-top:12px">모든 구단은 GK·DF·MF·FW 각 2명으로 시작합니다. 전체 20개 구단의 대표 선수 구성은 게임 플레이를 위한 가상 편성입니다.</div></div></div></div>`}
 function overviewCalendar(){let next=todaysOpponent();const f=selectedFriend();return `<div class="line between"><div><b>${dayLabel()}</b> <span class="tag ${s.day>4?'gold':''}">${seasonStatus()}</span></div><button class="btn xs" data-action="tab" data-value="calendar">전체 일정 열기</button></div><div class="spacer"></div>${s.day<=4?`<div class="note">리그 상대: <b>${next===null?'완료':esc(s.teams[next].name)}</b> · ${s.results[s.day]?'오늘 경기 완료':'1게임일 10경기 CPU 자동 진행'}</div>`:'<div class="note">주말 FA 이적시장 운영 중 · 월~금 5개 라운드가 진행됩니다.</div>'}<div class="spacer"></div><div class="small">친선경기: ${f?`${esc(s.teams[f.opponent].name)} / ${f.status==='finished'?'완료':'등록됨'}`:'미등록'} · 친선 상대 지정은 왼쪽 경기 일정 메뉴에서만 가능합니다.</div>`}
@@ -315,7 +323,7 @@ function squadPage(){
   const p=ply(id),opts=t.roster.filter(x=>ply(x).pos===ROLES[i]&&(!s.lineup.includes(x)||x===id));
   return `<tr><td><span class="tag">${ROLES[i]}</span></td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td><select class="field" data-change="lineup" data-slot="${i}" ${busy?'disabled':''}>${opts.map(x=>`<option value="${x}" ${x===id?'selected':''}>${esc(ply(x).name)}</option>`).join('')}</select></td></tr>`;
  });
- const lineupInfo=table(['자리','현재 선발','OVR','동일 포지션 후보'],lineupRows)+`<div class="separator"></div><div class="small fw">경기 사전 전술</div><div class="spacer"></div>${tacticControls(s.tactics,busy)}${busy?'<div class="note warn" style="margin-top:8px">현재 경기가 진행 중입니다. 전반과 후반의 선수/전술은 수정할 수 없고, 하프타임에서만 가능합니다.</div>':''}`;
+ const lineupInfo=table(['자리','현재 선발','OVR','동일 포지션 후보'],lineupRows)+`<div class="separator"></div><div class="small fw">경기 사전 전술</div><div class="spacer"></div>${tacticControls(s.tactics,busy)}${slV428SaveButton(busy)}${busy?'<div class="note warn" style="margin-top:8px">현재 경기가 진행 중입니다. 전반과 후반의 선수/전술은 수정할 수 없고, 하프타임에서만 가능합니다.</div>':''}`;
  const ownedRows=t.roster.map(ply).map(p=>`<tr><td>${p.pos}</td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td>${STYLES[p.style]}</td><td>${s.lineup.includes(p.id)?'<span class="tag">선발</span>':'<span class="tag gray">후보</span>'}</td><td>${marketOpen()&&!busy&&countsBy[p.pos]>(p.pos==='FW'?2:1)?`<button class="btn xs warn" data-action="release" data-id="${p.id}">방출 +${fmt(Math.floor(price(p)*.55))}P</button>`:'<span class="muted">유지</span>'}</td></tr>`);
  const ownedInfo=table(['포지션','선수명','능력치','역할','현재 상태','관리'],ownedRows)+`<div class="note" style="margin-top:10px">방출 뒤 GK·DF·MF 최소 1명씩, FW 최소 2명은 유지해야 합니다. 선발을 방출하면 가능한 선수로 자동 교체됩니다.</div>`;
  return page('선수단 및 전술 관리',`${esc(t.name)} · 기본 선수 8명 / 보유 최대 10명 · 전술은 경기 전 또는 하프타임만 변경 가능`,`<span class="tag ${busy?'gold':''}">${busy?'경기 진행 중 / 편집 잠금':'선발 설정 가능'}</span>`)
@@ -2937,7 +2945,7 @@ async function slLoad(quiet=false){
  if(!slEmbedded||sl.busy||document.hidden)return;
  sl.busy=true;
  try{
-  const data=await slRequest('sl_snapshot');
+  const data=await slRequest('sl_v428_snapshot');
   if(!data.ok)throw new Error(data.error||'서버가 요청을 거부했습니다.');
   slVerifySnapshot(data);
   sl.error='';sl.ready=true;sl.verified=true;sl.snapshot=data;
@@ -3088,7 +3096,7 @@ function slApply(data){
   for(const p of PLAYERS){if(!p.legend){p.age=p.ageBaseline;p.ovr=p.baseOvr;}}
   for(const row of data.players||[]){const p=ply(row.id);if(!p||!p.legend)continue;
    p.age=Number(row.age);p.ovr=Number(row.ovr);p.retired=Boolean(row.retired);
-   p.signingFee=Number(row.salary);p.retireAge=Number(row.retireAge);
+   p.signingFee=Number(row.salary);delete p.retireAge;
   }
   statsCache.clear();
  }
@@ -3341,7 +3349,7 @@ marketPage=function(){
  +block('레전드 선수 목록',`<div class="line"><div class="tabs">${[['ALL','전체'],['GK','GK'],['DF','DF'],['MF','MF'],['FW','FW']].map(([v,l])=>`<button class="btn xs ${pos===v?'active':''}" data-action="market-pos" data-value="${v}">${l}</button>`).join('')}</div><input class="field search" id="market-search" placeholder="선수 이름 검색" value="${esc(s.ui.marketSearch||'')}"></div><div class="spacer"></div>${table(['선수','나이','OVR','은퇴 시점','최초 계약금','상태 / FA 영입'],all.slice(start*12,start*12+12).map(v=>{
    const p=ply(v.id);const retired=!!v.retired;const can=!retired&&v.club===null&&s.day%7>=5&&mine().roster.length<10&&legendCount<2&&Number(sl.snapshot?.wallet)>=Number(v.salary)&&Number(v.age)>=16&&Number(mineClub?.morale)>=Math.min(98,50+Math.max(0,p.potential-80)*3);
    const label=retired?'은퇴':v.club!==null?'소속팀 있음':s.day%7<5?'주말 영입':mine().roster.length>=10?'10/10':legendCount>=2?'레전드 2명':'조건 미충족';
-   return `<tr><td class="strong">${esc(p.name)}</td><td class="num">${v.age}세</td><td class="num">${v.ovr}</td><td>${retired?'은퇴 완료':v.retireAge+'세 예정'}</td><td class="num">${slV423Money(v.salary)}</td><td>${can?`<button class="btn xs primary" data-action="recruit" data-id="${esc(v.id)}">영입</button>`:`<span class="small muted">${label}</span>`}</td></tr>`;
+   return `<tr><td class="strong">${esc(p.name)}</td><td class="num">${v.age}세</td><td class="num">${v.ovr}</td><td>${retired?'은퇴 완료':'비공개'}</td><td class="num">${slV423Money(v.salary)}</td><td>${can?`<button class="btn xs primary" data-action="recruit" data-id="${esc(v.id)}">영입</button>`:`<span class="small muted">${label}</span>`}</td></tr>`;
  }))}<div class="line between"><span class="small muted">${all.length}명 · ${start+1}/${Math.max(1,Math.ceil(all.length/12))}쪽</span><div><button class="btn xs" data-action="page-prev" ${start===0?'disabled':''}>이전</button> <button class="btn xs" data-action="page-next" ${(start+1)*12>=all.length?'disabled':''}>다음</button></div></div>`)
  +block('구단 간 레전드 이적',`<div class="note">기존 구단 간 이적 제안과 수락 기능은 유지합니다. 주말에 실제 이적이 확정됩니다.</div><button class="btn xs primary" data-action="tab" data-value="transfer">이적시장 열기</button>`);
 };
@@ -3454,7 +3462,7 @@ squadPage=function(){
  const tag=slV424Dirty?'<span class="tag gold">변경사항 저장 필요</span>':
     sl.snapshot?.savedTactic?'<span class="tag">서버에 저장됨</span>':'<span class="tag gray">기본 전술 · 미저장</span>';
  const tools=`<div class="v424-btnline"><button class="btn primary" type="button" data-action="sl-v424-save" ${slV424SaveBusy||active()?'disabled':''}>💾 전술 저장</button>${tag}</div><div class="small muted" style="margin:4px 0 10px">현재 포메이션·선발 5명·전술을 서버에 저장합니다. 친선과 리그에 공통 적용됩니다.</div>`;
- return prev.replace('<div class="small fw">경기 사전 전술</div>', '<div class="small fw">경기 사전 전술</div>'+tools);
+ return prev.includes('data-action="sl-v424-save"')?prev:prev.replace('<div class="small fw">경기 사전 전술</div>', '<div class="small fw">경기 사전 전술</div>'+tools);
 };
 function slV424AcceptSavedTactic(){
  const config=sl.snapshot?.savedTactic;
@@ -3676,5 +3684,70 @@ friendlyPage=function(){
  const receipt=last?.prize!==undefined?`<div class="note"><b>최근 도전자 수익: ${slV423Money(last.prize)}</b> · 수당은 서버에서 확정한 공격자에게만 지급됩니다.</div>`:'<div class="note">공격자만 승 5~10억 · 무 3~5억 · 패 1~3억P 수령 · 방어자는 수익 없음</div>';
  return html+block('친선 상금 · 서버 정산',receipt);
 };
+
+
+// --- Superleague V4.28: visibly place authoritative tactic save next to starting XI ---
+function slV428SaveButton(busy){
+ if(!slEmbedded)return '';
+ const status=slV424Dirty?'변경사항 저장 필요':sl.snapshot?.savedTactic?'저장 완료':'아직 저장하지 않음';
+ return `<div class="v428-save-line"><button class="btn primary" type="button" data-action="sl-v424-save" ${slV424SaveBusy||busy?'disabled':''}>💾 선발 5인 · 전술 저장</button><span class="tag">${status}</span></div><div class="small muted">저장한 포메이션·선발·전술은 서버에서 친선 및 정규리그 경기에 반영합니다.</div>`;
+}
+// Facility upgrades are server-authoritative. The client only renders values and requests upgrades.
+let slV428Facilities=null,slV428FacilityBusy=false;
+async function slV428GetFacilities(){
+ if(!slEmbedded||!sl.ready||!hasSelected()||slV428FacilityBusy)return;
+ slV428FacilityBusy=true;
+ try{const r=await slRequest('sl_v428_facility_info');
+  slV428Facilities=r?.ok?r:{ok:false,error:r?.error||'시설 자료 조회 실패'};
+ }catch(e){slV428Facilities={ok:false,error:String(e?.message||e)};}
+ finally{slV428FacilityBusy=false;if(s.tab==='budget')render();}
+}
+function slV428FacilitySection(){
+ const f=slV428Facilities;
+ if(!slEmbedded)return '';
+ if(!f)return block('경기장 · 훈련장',`<div class="note">시설 자료를 불러오는 중입니다.</div><button class="btn" data-action="sl-v428-facility-refresh">시설 조회</button>`);
+ if(!f.ok)return block('경기장 · 훈련장',`<div class="note warn">${esc(f.error||'시설 서버 오류')}</div><button class="btn" data-action="sl-v428-facility-refresh">재조회</button>`);
+ const sLevel=Number(f.stadium)||50,tLevel=Number(f.training)||50;
+ const line=(key,title,level,price,season)=>`<div class="v428-facility"><div class="line between"><b>${title}</b><b>${level}/100</b></div><div class="v428-bar"><i style="width:${Math.max(0,Math.min(100,level))}%"></i></div><div class="small muted">시즌당 1회 · +10점 · 최근 강화 시즌 ${season||'-'} · 다음 가격 ${slV423Money(price)}</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v428-upgrade" data-kind="${key}" ${slV428FacilityBusy||level>=100||Number(season)===s.season?'disabled':''}>${title} 업그레이드</button></div>`;
+ return block('구단 시설 · 시즌별 업그레이드',`<div class="grid2">${line('stadium','경기장',sLevel,f.stadiumPrice,f.stadiumLastSeason)}${line('training','훈련장',tLevel,f.trainingPrice,f.trainingLastSeason)}</div><div class="note" style="margin-top:12px"><b>다음 시즌 시설 유지비: ${slV423Money(f.maintenance)}</b> · 기본 운영비 및 선수 연봉 외에 추가로 부과됩니다. 업그레이드 시 사기 +2(경기장) / +3(훈련장), 시설 수준에 따른 시즌 종료 사기 보정이 적용됩니다.</div><button class="btn xs" data-action="sl-v428-facility-refresh">시설 새로고침</button>`);
+}
+const slV428OldBudget=slV427BudgetPage;
+slV427BudgetPage=function(){return slV428OldBudget()+slV428FacilitySection()};
+const slV428PreviousSwitch=switchTab;
+switchTab=function(tab){slV428PreviousSwitch(tab);if(tab==='budget')void slV428GetFacilities();};
+const slV428PreviousApply=slApply;
+slApply=function(data){const clubBefore=s.selected;slV428PreviousApply(data);if(s.selected!==clubBefore){slV428Facilities=null;}};
+// 1 civil day = 1 server game day. Remove acceleration controls in online mode.
+function slV428DisableSpeed(){
+ if(!slEmbedded)return;
+ document.querySelectorAll('[data-action="next-day"],[data-action="fast-forward"]').forEach(b=>b.hidden=true);
+}
+const slV428OldRender=render;
+render=function(){slV428OldRender();slV428DisableSpeed();};
+// Re-check initial DOM after setup, since render() was invoked before this wrapper.
+slV428DisableSpeed();
+document.addEventListener('click',e=>{
+ if(!slEmbedded)return;
+ const btn=e.target.closest?.('[data-action]');if(!btn)return;
+ if(btn.dataset.action==='sl-v428-facility-refresh'){
+   e.preventDefault();e.stopImmediatePropagation();void slV428GetFacilities();return;
+ }
+ if(btn.dataset.action==='sl-v428-upgrade'){
+   e.preventDefault();e.stopImmediatePropagation();
+   const kind=btn.dataset.kind;
+   if(!['stadium','training'].includes(kind)||slV428FacilityBusy)return;
+   const price=kind==='stadium'?slV428Facilities?.stadiumPrice:slV428Facilities?.trainingPrice;
+   if(!window.confirm(`${kind==='stadium'?'경기장':'훈련장'}을 10점 업그레이드하고 ${slV423Money(price)}를 공용 포인트에서 차감할까요?`))return;
+   slV428FacilityBusy=true;
+   void (async()=>{try{
+     const res=await slRequest('sl_v428_facility_upgrade',{p_kind:kind,p_request:slV423Uuid()});
+     if(!res?.ok)throw new Error(res?.error||'서버 업그레이드 실패');
+     notice(res.message||'시설 업그레이드 완료');slV427BudgetInfo=null;
+     window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
+   }catch(err){notice('시설 업그레이드 실패: '+String(err?.message||err));}
+   finally{slV428FacilityBusy=false;slV428Facilities=null;void slV428GetFacilities();void slV427FetchBudget();}
+   })();
+ }
+},true);
 
 </script></body></html>
