@@ -316,14 +316,9 @@ function topRefresh(){
   :slFormatMoneyUnits(s.points)+' P';
  const walletLabel=walletEl.previousElementSibling;
  if(walletLabel?.classList.contains('minor'))walletLabel.textContent=slEmbedded?'회원 포인트':'데모 포인트';
- const group=walletEl.parentElement;
- if(slEmbedded&&group&&!document.getElementById('sl-v429-club-balance')){
-  const label=document.createElement('span');label.className='minor';label.textContent='구단 예산';
-  const amount=document.createElement('b');amount.id='sl-v429-club-balance';
-  group.append(label,amount);
- }
+
  const budget=document.getElementById('sl-v429-club-balance');
- if(budget)budget.textContent=slFormatMoneyUnits(s.points)+' P';
+ if(budget)budget.parentElement?.removeChild(budget); 
 }
 const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['items','아이템'],['budget','예산'],['calendar','경기 일정'],['friendly','친선경기'],['league','순위'],['match','경기 기록']];
 function sheetNav(){$('side-navigation').innerHTML=TABS.map(([key,label])=>`<button class="side-btn ${s.tab===key?'active':''}" type="button" data-action="tab" data-value="${key}" ${s.tab===key?'aria-current="page"':''} title="${label}"><span class="navtxt">${label}</span></button>`).join('')}
@@ -342,7 +337,7 @@ function squadPage(){
   const p=ply(id),opts=t.roster.filter(x=>ply(x).pos===ROLES[i]&&(!s.lineup.includes(x)||x===id));
   return `<tr><td><span class="tag">${ROLES[i]}</span></td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td><select class="field" data-change="lineup" data-slot="${i}" ${busy?'disabled':''}>${opts.map(x=>`<option value="${x}" ${x===id?'selected':''}>${esc(ply(x).name)}</option>`).join('')}</select></td></tr>`;
  });
- const lineupInfo=table(['자리','현재 선발','OVR','동일 포지션 후보'],lineupRows)+`<div class="separator"></div><div class="small fw">경기 사전 전술</div><div class="spacer"></div>${tacticControls(s.tactics,busy)}${slV428SaveButton(busy)}${busy?'<div class="note warn" style="margin-top:8px">현재 경기가 진행 중입니다. 전반과 후반의 선수/전술은 수정할 수 없고, 하프타임에서만 가능합니다.</div>':''}`;
+ const lineupInfo=table(['자리','현재 선발','OVR','동일 포지션 후보'],lineupRows)+`<div class="separator"></div><div class="small fw">경기 사전 전술</div><div class="spacer"></div>${tacticControls(s.tactics,busy)}${busy?'<div class="note warn" style="margin-top:8px">현재 경기가 진행 중입니다. 전반과 후반의 선수/전술은 수정할 수 없고, 하프타임에서만 가능합니다.</div>':''}`;
  const ownedRows=t.roster.map(ply).map(p=>`<tr><td>${p.pos}</td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td>${STYLES[p.style]}</td><td>${s.lineup.includes(p.id)?'<span class="tag">선발</span>':'<span class="tag gray">후보</span>'}</td><td>${marketOpen()&&!busy&&countsBy[p.pos]>(p.pos==='FW'?2:1)?`<button class="btn xs warn" data-action="release" data-id="${p.id}">방출 +${fmt(Math.floor(price(p)*.55))}P</button>`:'<span class="muted">유지</span>'}</td></tr>`);
  const ownedInfo=table(['포지션','선수명','능력치','역할','현재 상태','관리'],ownedRows)+`<div class="note" style="margin-top:10px">방출 뒤 GK·DF·MF 최소 1명씩, FW 최소 2명은 유지해야 합니다. 선발을 방출하면 가능한 선수로 자동 교체됩니다.</div>`;
  return page('선수단 및 전술 관리',`${esc(t.name)} · 기본 선수 8명 / 보유 최대 10명 · 전술은 경기 전 또는 하프타임만 변경 가능`,`<span class="tag ${busy?'gold':''}">${busy?'경기 진행 중 / 편집 잠금':'선발 설정 가능'}</span>`)
@@ -1550,7 +1545,7 @@ squadPage=function(){
  const controls=`<div class="v48-formation-row"><label>포메이션 <select class="field" data-change="formation" ${busy?'disabled':''}>${v48FormOptions(s.formation)}</select></label><button class="btn" data-action="v48-auto-lineup" ${busy?'disabled':''}>최적 배치</button><span class="small muted">선발 5명 중 원래 포지션에 관계없이 자유 배치 · 선발끼리 선택하면 자동 자리 교환</span></div>`;
  const owned=team.roster.map(ply).filter(Boolean).map(p=>`<tr><td>${p.pos}</td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td>${STYLES[p.style]}</td><td>${s.lineup.includes(p.id)?'<span class="tag">선발</span>':'<span class="tag gray">후보</span>'}</td><td>${marketOpen()&&!busy?`<button class="btn xs warn" data-action="release" data-id="${p.id}">방출</button>`:'<span class="muted">주말 관리</span>'}</td></tr>`);
  return page('선수단 및 전술 관리',`${esc(team.name)} · 자유 포지션 배치 · 다양한 5인제 포메이션`,`<span class="tag ${busy?'gold':''}">${busy?'경기 진행 중 / 편집 잠금':'전술 및 포메이션 편집 가능'}</span>`)
- +controls+`<div class="grid2">${block('선발 포메이션 · '+s.formation,pitch(s.lineup))}${block('선발 5인 · 포지션 자유 배치',`<div class="v48-lineup">${lineup}</div><div class="v48-help">다른 포지션의 선수도 누구든 투입할 수 있습니다. 다른 선발을 선택하면 자리를 서로 바꿉니다. 포지션에 따른 패널티는 경기 시뮬레이션에 반영됩니다.</div><div class="separator"></div><b>전술 설정</b><div class="spacer"></div>${tacticControls(s.tactics,busy)}`)}</div>`
+ +controls+`<div class="grid2">${block('선발 포메이션 · '+s.formation,pitch(s.lineup))}${block('선발 5인 · 포지션 자유 배치',`<div class="v48-lineup">${lineup}</div><div class="v48-help">다른 포지션의 선수도 누구든 투입할 수 있습니다. 다른 선발을 선택하면 자리를 서로 바꿉니다. 포지션에 따른 패널티는 경기 시뮬레이션에 반영됩니다.</div><div class="separator"></div><b>전술 설정</b><div class="spacer"></div>${tacticControls(s.tactics,busy)}${slV428SaveButton(busy)}`)}</div>`
  +block('전체 보유 선수 · 방출 검토',table(['원래 포지션','선수명','능력치','역할','상태','관리'],owned)+`<div class="note" style="margin-top:10px">선수 출전 위치는 자유롭지만, 기존 선수단 보유 규정(GK 1·DF 1·MF 1·FW 2 최소 보유)은 유지됩니다.</div>`)
  +extras;
 };
@@ -2964,7 +2959,7 @@ async function slLoad(quiet=false){
  if(!slEmbedded||sl.busy||document.hidden)return;
  sl.busy=true;
  try{
-  const data=await slRequest('sl_v428_snapshot');
+  const data=await slRequest('sl_v430_snapshot');
   if(!data.ok)throw new Error(data.error||'서버가 요청을 거부했습니다.');
   slVerifySnapshot(data);
   sl.error='';sl.ready=true;sl.verified=true;sl.snapshot=data;
@@ -3104,7 +3099,7 @@ function slApply(data){
  s.selected=Number.isInteger(data.mine)?data.mine:null;
  s.managerNickname=window.__excelManagerNickname||s.managerNickname;
  if(hasSelected()){
-  s.points=Number(data.clubs?.[s.selected]?.balance||0);
+  s.points=Number(data.wallet??window.__slMemberPoints??0); // V4.30 one shared wallet
   if(s.selected!==prevMine||!validLineup(s.lineup))s.lineup=defaultLineup(mine());
   if(s.ui.rosterViewed===null||s.ui.rosterViewed===undefined)s.ui.rosterViewed=s.selected;
   if(s.ui.transferTeam===undefined)s.ui.transferTeam=(s.selected+1)%20;
@@ -3229,7 +3224,7 @@ render=function(){
  slRenderOffline();
  if(slEmbedded){
   const footer=document.querySelector('#screen .footer');
-  if(footer)footer.innerHTML='공용 온라인 리그 · 구단·선수·이적·리그 기록은 Supabase 서버 기준 · 친선 연습/경기 중계는 로컬 실행 · 회원 공용 포인트와 구단 예산은 서로 다른 잔액입니다.';
+  if(footer)footer.innerHTML='공용 온라인 리그 · 구단·선수·이적·리그 기록은 Supabase 서버 기준 · 친선 연습/경기 중계는 로컬 실행 · 회원 포인트가 구단 예산으로 공통 사용됩니다.';
  }
 };
 document.addEventListener('click',e=>{
@@ -3372,7 +3367,7 @@ marketPage=function(){
  const start=Math.max(0,Math.min(Math.ceil(all.length/12)-1,Number(s.ui.marketPage)||0));s.ui.marketPage=start;
  const mineClub=sl.snapshot?.clubs?.[s.selected];const legendCount=mine().roster.filter(id=>ply(id)?.legend).length;
  return page('레전드 FA 영입','30세 이하: 잠재력 40% + OVR 60% · 31세 이상: OVR 100% · FA 계약금 1회 차감',`<span class="tag">${s.day%7>=5?'주말 FA 진행':'평일: 영입권 사용 가능'}</span>`)
- +block('FA 계약금 및 영입 규정',`<div class="note">회원 공용 잔액: <b>${slV423Money(sl.snapshot?.wallet)}</b> · 구단 이적 예산과 별도 · 현역 계약금 0P · 주말 일반 FA 최대 레전드 2명 및 전체 10명 · 영입권은 아이템 탭에서 언제든 1명 즉시 영입</div><div class="spacer"></div><button class="btn xs" data-action="tab" data-value="items">아이템 상점 열기 →</button>`)
+ +block('FA 계약금 및 영입 규정',`<div class="note">회원 공용 잔액: <b>${slV423Money(sl.snapshot?.wallet)}</b> · 구단 예산과 동일 · 현역 계약금 0P · 주말 일반 FA 최대 레전드 2명 및 전체 10명 · 영입권은 아이템 탭에서 언제든 1명 즉시 영입</div><div class="spacer"></div><button class="btn xs" data-action="tab" data-value="items">아이템 상점 열기 →</button>`)
  +block('레전드 선수 목록',`<div class="line"><div class="tabs">${[['ALL','전체'],['GK','GK'],['DF','DF'],['MF','MF'],['FW','FW']].map(([v,l])=>`<button class="btn xs ${pos===v?'active':''}" data-action="market-pos" data-value="${v}">${l}</button>`).join('')}</div><input class="field search" id="market-search" placeholder="선수 이름 검색" value="${esc(s.ui.marketSearch||'')}"></div><div class="spacer"></div>${table(['선수','나이','OVR','은퇴 시점','최초 계약금','상태 / FA 영입'],all.slice(start*12,start*12+12).map(v=>{
    const p=ply(v.id);const retired=!!v.retired;const can=!retired&&v.club===null&&s.day%7>=5&&mine().roster.length<10&&legendCount<2&&Number(sl.snapshot?.wallet)>=Number(v.salary)&&Number(v.age)>=16&&Number(mineClub?.morale)>=Math.min(98,50+Math.max(0,p.potential-80)*3);
    const label=retired?'은퇴':v.club!==null?'소속팀 있음':s.day%7<5?'주말 영입':mine().roster.length>=10?'10/10':legendCount>=2?'레전드 2명':'조건 미충족';
@@ -3717,7 +3712,7 @@ friendlyPage=function(){
 function slV428SaveButton(busy){
  if(!slEmbedded)return '';
  const status=slV424Dirty?'변경사항 저장 필요':sl.snapshot?.savedTactic?'저장 완료':'아직 저장하지 않음';
- return `<div class="v428-save-line"><button class="btn primary" type="button" data-action="sl-v424-save" ${slV424SaveBusy||busy?'disabled':''}>💾 선발 5인 · 전술 저장</button><span class="tag">${status}</span></div><div class="small muted">저장한 포메이션·선발·전술은 서버에서 친선 및 정규리그 경기에 반영합니다.</div>`;
+ return `<div class="v428-save-line"><button class="btn primary" type="button" data-action="sl-v424-save" ${slV424SaveBusy||busy?'disabled':''}>💾 전술 저장</button><span class="tag">${status}</span></div><div class="small muted">저장한 포메이션·선발·전술은 서버에서 친선 및 정규리그 경기에 반영합니다.</div>`;
 }
 // Facility upgrades are server-authoritative. The client only renders values and requests upgrades.
 let slV428Facilities=null,slV428FacilityBusy=false;
@@ -3735,8 +3730,8 @@ function slV428FacilitySection(){
  if(!f)return block('경기장 · 훈련장',`<div class="note">시설 자료를 불러오는 중입니다.</div><button class="btn" data-action="sl-v428-facility-refresh">시설 조회</button>`);
  if(!f.ok)return block('경기장 · 훈련장',`<div class="note warn">${esc(f.error||'시설 서버 오류')}</div><button class="btn" data-action="sl-v428-facility-refresh">재조회</button>`);
  const sLevel=Number(f.stadium)||50,tLevel=Number(f.training)||50;
- const line=(key,title,level,price,season)=>`<div class="v428-facility"><div class="line between"><b>${title}</b><b>${level}/100</b></div><div class="v428-bar"><i style="width:${Math.max(0,Math.min(100,level))}%"></i></div><div class="small muted">시즌당 1회 · +10점 · 최근 강화 시즌 ${season||'-'} · 다음 가격 ${slV423Money(price)}</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v428-upgrade" data-kind="${key}" ${slV428FacilityBusy||level>=100||Number(season)===s.season?'disabled':''}>${title} 업그레이드</button></div>`;
- return block('구단 시설 · 시즌별 업그레이드',`<div class="grid2">${line('stadium','경기장',sLevel,f.stadiumPrice,f.stadiumLastSeason)}${line('training','훈련장',tLevel,f.trainingPrice,f.trainingLastSeason)}</div><div class="note" style="margin-top:12px"><b>다음 시즌 시설 유지비: ${slV423Money(f.maintenance)}</b> · 기본 운영비 및 선수 연봉 외에 추가로 부과됩니다. 업그레이드 시 사기 +2(경기장) / +3(훈련장), 시설 수준에 따른 시즌 종료 사기 보정이 적용됩니다.</div><button class="btn xs" data-action="sl-v428-facility-refresh">시설 새로고침</button>`);
+ const line=(key,title,level,price,season)=>`<div class="v428-facility"><div class="line between"><b>${title}</b><b>${level}/100</b></div><div class="v428-bar"><i style="width:${Math.max(0,Math.min(100,level))}%"></i></div><div class="small muted">한국시간 매주 1회 · +10점 · 이번 주 강화 ${f[key+'CanUpgrade']?'가능':'완료'} · 다음 가격 ${slV423Money(price)}</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v428-upgrade" data-kind="${key}" ${slV428FacilityBusy||level>=100||!f[key+'CanUpgrade']?'disabled':''}>${title} 업그레이드</button></div>`;
+ return block('구단 시설 · 주 1회 업그레이드',`<div class="grid2">${line('stadium','경기장',sLevel,f.stadiumPrice,f.stadiumLastSeason)}${line('training','훈련장',tLevel,f.trainingPrice,f.trainingLastSeason)}</div><div class="note" style="margin-top:12px"><b>시설 유지비: ${slV423Money(f.maintenance)} · 시즌 총 운영비: ${slV423Money(f.totalRunningCost)}</b> · 기본 운영비 및 선수 연봉 외에 추가로 부과됩니다. 업그레이드 시 사기 +2(경기장) / +3(훈련장), 경기장·훈련장 평균은 레전드 불만·파업 확률에 반영됩니다.</div><button class="btn xs" data-action="sl-v428-facility-refresh">시설 새로고침</button>`);
 }
 const slV428OldBudget=slV427BudgetPage;
 slV427BudgetPage=function(){return slV428OldBudget()+slV428FacilitySection()};
@@ -3774,7 +3769,7 @@ nextDay=function(...args){
   try{
    const r=await slRequest('sl_v429_test_advance');
    if(!r?.ok)throw new Error(r?.error||'서버에서 하루 진행을 거부했습니다.');
-   notice('하루 진행 완료 · 시즌 '+r.season+' / '+(Number(r.day)+1)+'일');
+   notice('서버 하루 진행 확인 · 시즌 '+r.season+' / '+(Number(r.day)+1)+'일');
    await slLoad(false);
   }catch(e){notice('하루 진행 실패: '+String(e?.message||e));}
   finally{window.__slV429AdvanceBusy=false;slV428DisableSpeed();}
@@ -3804,5 +3799,29 @@ document.addEventListener('click',e=>{
    })();
  }
 },true);
+
+
+// Use server-rolled morale state for all existing lineup/renewal UI checks.
+const slV430OldLegendMood=legendMood;
+legendMood=function(player,team){
+ if(!slEmbedded||!sl?.ready||!player?.legend)return slV430OldLegendMood(player,team);
+ const entry=(sl.snapshot?.players||[]).find(v=>v.id===player.id);
+ return entry?.moraleStatus==='strike'?'strike':entry?.moraleStatus==='unhappy'?'unhappy':'normal';
+};
+// V4.30: server-authoritative legend morale, not local deterministic thresholds.
+const slV430OriginalSquad=squadPage;
+squadPage=function(){
+ const previous=slV430OriginalSquad();
+ if(!slEmbedded||!sl.ready||!hasSelected())return previous;
+ const facilities=slV428Facilities?.ok?slV428Facilities:null;
+ const avg=facilities?(Number(facilities.stadium)+Number(facilities.training))/2:50;
+ const rows=(sl.snapshot?.players||[]).filter(v=>v.club===s.selected&&ply(v.id)?.legend).map(v=>{
+  const p=ply(v.id);
+  const chance=Number(v.moraleChance||0);
+  const status=v.moraleStatus==='strike'?'파업':v.moraleStatus==='unhappy'?'불만':'정상';
+  return `<tr><td>${esc(p.name)}</td><td>${status}</td><td class="num">${chance.toFixed(0)}%</td></tr>`;
+ });
+ return previous+block('레전드 불만·파업 판정',`<div class="note">시설 평균 ${avg.toFixed(0)}/100 · 선수 잠재력과 팀 사기의 차이가 10 이상이면 매 게임일 불만을 판정합니다. 불만 발생 후 동일 확률로 파업을 판정합니다. 파업 선수는 리그 전력 산정에서 제외됩니다.</div>${rows.length?table(['선수','현재 상태','불만·파업 판정 확률'],rows):'<div class="empty">보유 중인 레전드가 없습니다.</div>'}`);
+};
 
 </script></body></html>
