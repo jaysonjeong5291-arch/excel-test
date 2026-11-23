@@ -1,5 +1,5 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>슈퍼리그 V4.43 — 공용 온라인 리그</title><meta name="description" content="20개 유럽 명문 구단과 전설 FA 40명, 하프타임 전략 변경, 비실시간 친선경기, 팀 사기 기반 영입, 2주 자동 리그 운영 게임">
+<title>슈퍼리그 V4.47 — 공용 온라인 리그</title><meta name="description" content="20개 유럽 명문 구단과 전설 FA 40명, 하프타임 전략 변경, 비실시간 친선경기, 팀 사기 기반 영입, 2주 자동 리그 운영 게임">
 <style>
 #sl-season-reset-btn[hidden],#sl-offline-reset[hidden]{display:none!important}
 
@@ -1197,7 +1197,7 @@ function v47FriendlyRestriction(target){
  if(active())return '진행 중인 경기가 있습니다. 왼쪽 경기 기록 탭으로 이동해 진행 중인 경기를 확인하고 마쳐 주세요.';
  if((s.pvp.attacks[friendDailyKey()]||0)>=V47_FRIENDLY_DAILY_LIMIT)return '오늘 친선경기 3회를 모두 사용했습니다.';
  if(s.pvp.history.some(h=>h.attacker===s.selected&&h.target===target&&h.season===s.season&&h.day===s.day) || s.pvp.visited?.[`${friendDailyKey()}:${target}`])return '같은 구단은 게임일당 한 번만 도전할 수 있습니다.';
- if(Date.now()<Number(s.pvp.globalNextAt||0))return '친선경기 휴식시간이 남았습니다.';
+ // V4.47: no real-time friendly cooldown.
  if(!validLineup(s.lineup))return '출전 가능한 선발 5명을 구성해 주세요.';
  return '';
 }
@@ -1208,7 +1208,7 @@ function v47StartFriendly(target){
  if(error){notice(error);return;}
  s.pvp.attacks[friendDailyKey()]=(s.pvp.attacks[friendDailyKey()]||0)+1;
  s.pvp.visited??={};s.pvp.visited[`${friendDailyKey()}:${target}`]=true;
- s.pvp.globalNextAt=Date.now()+V47_FRIENDLY_COOLDOWN_MS;
+ s.pvp.globalNextAt=0; // V4.47 no real-time cooldown
  s.match={kind:'friendly-pvp',opponent:target,phase:'first',halfMin:0,hs:0,as:0,shotsHome:0,shotsAway:0,
   events:[],timeline:[],lineup:[...s.lineup],defendingLineup:v47BestLineup(target),tactics:{...s.tactics},
   changed:0,subs:[],season:s.season,day:s.day,segmentStart:Date.now(),lastFlash:''};
@@ -1781,10 +1781,7 @@ v47FriendlyRestriction=function(target){
  if(active())return '진행 중인 경기가 있습니다. 왼쪽 경기 기록 탭으로 이동해 진행 중인 경기를 확인하고 마쳐 주세요.';
  if(s.pvp.history.some(h=>h.attacker===s.selected&&h.target===target&&h.season===s.season&&h.day===s.day)
     ||s.pvp.visited?.[`${friendDailyKey()}:${target}`])return '이 구단은 게임 내 오늘 이미 상대했습니다. 내일 다시 도전할 수 있습니다.';
- const ownRest=Math.ceil((Number(s.pvp.teamRestUntil?.[s.selected]||0)-Date.now())/1000);
- if(ownRest>0)return `우리 구단의 경기 후 휴식 ${Math.ceil(ownRest/60)}분 남음`;
- const targetRest=Math.ceil((Number(s.pvp.teamRestUntil?.[target]||0)-Date.now())/1000);
- if(targetRest>0)return `상대 구단이 경기 후 휴식 중입니다 (${Math.ceil(targetRest/60)}분 남음)`;
+ // V4.47: being challenged by another club never blocks your own new attack.
  if(!validLineup(s.lineup))return '출전 가능한 선발 5명을 구성해 주세요.';
  return '';
 };
@@ -1865,10 +1862,8 @@ startSecond=function(){
 const v49PrevComplete=v47CompleteFriendly;
 v47CompleteFriendly=function(m){
  v49PrevComplete(m);
- const until=Date.now()+V49_REST_MS;
- s.pvp.teamRestUntil??={};
- s.pvp.teamRestUntil[s.selected]=Math.max(Number(s.pvp.teamRestUntil[s.selected]||0),until);
- s.pvp.teamRestUntil[m.opponent]=Math.max(Number(s.pvp.teamRestUntil[m.opponent]||0),until);
+ // V4.47: keep the historical result but impose no post-match club cooldown.
+ s.pvp.teamRestUntil={};s.pvp.globalNextAt=0;
 };
 const v49PrevTick=tick;
 tick=function(){
@@ -1966,14 +1961,13 @@ const v49PrevFriendlyPage=friendlyPage;
 friendlyPage=function(){
  const target=Number(s.ui.friendlyTarget),other=s.teams.filter(t=>t.id!==s.selected),used=s.pvp.attacks[friendDailyKey()]||0,last=s.pvp.history[0];
  const error=v47FriendlyRestriction(target);
- const ownLeft=Math.max(0,Math.ceil((Number(s.pvp.teamRestUntil?.[s.selected]||0)-Date.now())/60000));
- const targetLeft=Math.max(0,Math.ceil((Number(s.pvp.teamRestUntil?.[target]||0)-Date.now())/60000));
+ // V4.47: all clubs can immediately play after a finished match.
  return page('친선경기 · 전술 실황 중계','오프라인 구단 도전 · 전반 1분 / 하프타임 / 후반 1분',`<span class="tag">오늘 ${used}경기 · 총횟수 제한 없음</span>`)
- +block('양 팀 사기 및 경기 준비',`<div class="friend-status"><div>우리 구단 사기<strong>${teamMorale(s.selected)}</strong>${moraleMeter(s.selected)}</div><div>상대 구단 사기<strong>${teamMorale(target)}</strong>${moraleMeter(target)}</div><div>오늘 친선<strong>${used}경기</strong><span class="small muted">전체 횟수 무제한</span></div><div>경기 후 휴식<strong>${Math.max(ownLeft,targetLeft)?Math.max(ownLeft,targetLeft)+'분':'경기 가능'}</strong><span class="small muted">양 팀 종료 후 3분</span></div></div>`)
- +block('도전할 구단 선택',`<div class="challenge-pick"><select class="field" id="friendly-select">${other.map(t=>`<option value="${t.id}" ${t.id===target?'selected':''}>${esc(t.name)} (전력 ${Math.round(v47BestLineup(t.id).reduce((n,id)=>n+(ply(id)?.ovr||0),0)/5)} · 사기 ${teamMorale(t.id)})</option>`).join('')}</select><button class="btn primary" data-action="friendly-challenge" ${error?'disabled':''}>친선경기 시작 · 전후반 2분 중계</button></div><div class="spacer"></div><div class="note ${error?'warn':''}">${esc(error||'하루 상대 구단별 1회 · 하루 전체 도전 제한 없음 · 경기 후 양 팀 3분 휴식')}</div>`)
+ +block('양 팀 사기 및 경기 준비',`<div class="friend-status"><div>우리 구단 사기<strong>${teamMorale(s.selected)}</strong>${moraleMeter(s.selected)}</div><div>상대 구단 사기<strong>${teamMorale(target)}</strong>${moraleMeter(target)}</div><div>오늘 친선<strong>${used}경기</strong><span class="small muted">전체 횟수 무제한</span></div><div>경기 제한<strong>대기 없음</strong><span class="small muted">수비로 참여해도 직접 도전 가능</span></div></div>`)
+ +block('도전할 구단 선택',`<div class="challenge-pick"><select class="field" id="friendly-select">${other.map(t=>`<option value="${t.id}" ${t.id===target?'selected':''}>${esc(t.name)} (전력 ${Math.round(v47BestLineup(t.id).reduce((n,id)=>n+(ply(id)?.ovr||0),0)/5)} · 사기 ${teamMorale(t.id)})</option>`).join('')}</select><button class="btn primary" data-action="friendly-challenge" ${error?'disabled':''}>친선경기 시작 · 전후반 2분 중계</button></div><div class="spacer"></div><div class="note ${error?'warn':''}">${esc(error||'하루 상대 구단별 1회 · 하루 전체 도전 제한 없음 · 경기 후 대기시간 없음')}</div>`)
  +(last?block('최근 친선 결과',`<b>${esc(s.teams[last.attacker].name)} ${last.sa} : ${last.sb} ${esc(s.teams[last.target].name)}</b> · 우리 사기 ${last.ownBefore}→${last.ownAfter} / 상대 사기 ${last.foeBefore}→${last.foeAfter}`):'')
  +block('친선 경기 기록',s.pvp.history.length?table(['시즌/날짜','도전자','상대','결과','사기 변화'],s.pvp.history.slice(0,15).map(h=>`<tr><td>S${h.season}/${DAYS[h.day%7]}</td><td>${esc(s.teams[h.attacker].name)}</td><td>${esc(s.teams[h.target].name)}</td><td><b>${h.sa}:${h.sb}</b></td><td>${h.ownBefore}→${h.ownAfter}</td></tr>`)):'<div class="empty">경기 기록이 없습니다.</div>')
- +block('친선 운영 규칙',`<div class="note">동일 구단은 게임 내 하루 1회만 상대할 수 있습니다. <b>전체 도전 횟수 제한은 없습니다.</b> 두 구단 모두 경기가 끝난 순간부터 실제 시간 3분간 다른 친선을 진행할 수 없습니다. 사기 패널티는 기존 규칙(+6/-12/-2, 방어 일일 -12 상한)을 유지합니다.</div>`);
+ +block('친선 운영 규칙',`<div class="note">동일 구단은 게임 내 하루 1회만 상대할 수 있습니다. <b>전체 도전 횟수 제한은 없습니다.</b> 상대가 내 구단을 공격해도 내 친선 도전은 별도로 진행할 수 있으며, 경기 종료 후 대기시간은 없습니다. 사기 패널티는 기존 규칙(+6/-12/-2, 방어 일일 -12 상한)을 유지합니다.</div>`);
 };
 const v49PrevMatchPage=matchPage;
 matchPage=function(){
@@ -2592,7 +2586,7 @@ function v412DealTitle(d){
  return `${p?.name||'선수'} · ${d.kind==='loan'?'임대':'완전 이적'} / ${s.teams[seller]?.name} → ${s.teams[buyer]?.name}`;
 }
 function buySide(d){return d.mode==='buy';}
-function v412Status(d){return ({accepted:'수락 · 이적 처리 중',done:'이적 완료',loaned:'임대 진행 중',returned:'임대 종료 · 원소속팀 복귀',rejected:'상대 거절',cancelled:'제안 취소',failed:'거래 무산'})[d.status]||d.status;}
+function v412Status(d){return ({accepted:'수락 · 즉시 정산 확인 중',done:'이적 완료',loaned:'임대 진행 중',returned:'임대 종료 · 원소속팀 복귀',rejected:'상대 거절',cancelled:'제안 취소',failed:'거래 무산'})[d.status]||d.status;}
 function v412StatusClass(d){return d.status==='accepted'?'gold':d.status==='done'||d.status==='loaned'?'':'gray';}
 function v412Hint(p,mode,type,tid,swap){
  if(!p)return '거래할 레전드를 선택해 주세요.';
@@ -2604,6 +2598,7 @@ function v412Hint(p,mode,type,tid,swap){
 }
 function transferPage(){
  v412Initialize();
+ v412SettleAcceptedDeals(); // V4.48: settle legacy accepted trades regardless of weekday.
  const target=v412TradeTarget(),team=s.teams[target],buy=s.ui.transferMode!=='sell';
  const mode=s.ui.transferMode||'buy',type=s.ui.transferType||'permanent';
  const options=buy?v412AvailableTargetPlayers(target):v412AvailableOwnPlayers();
@@ -2672,14 +2667,15 @@ function v412TradeOffer(){
  const deal={id:String(++s.dealSerial),season:s.season,day:s.day,at:Date.now(),mode,kind:type,other:tid,player:p.id,swap:swap?.id||null,cash,status:accept?'accepted':'rejected',reason:accept?'':'상대 구단이 제안 금액과 전력을 검토한 뒤 거절했어요.'};
  s.deals??=[];s.deals.push(deal);if(s.deals.length>120)s.deals=s.deals.slice(-120);
  if(!accept){save();render();notice('상대 구단이 제안을 거절했어요. 조건을 바꿔 다시 제안할 수 있어요.');return;}
- if(buy){s.points-=cash;deal.escrow=cash;} // reserve transfer/loan fee to prevent a double-spend before Saturday
+ if(buy){s.points-=cash;deal.escrow=cash;} // reserve transfer/loan fee until immediate settlement
  if(type==='loan')v412ExecuteLoan(deal);
- else if(marketOpen())v412ExecuteDeal(deal);
+ else v412ExecuteDeal(deal); // V4.48: an accepted deal completes immediately, even on weekdays.
+ if(deal.status==='failed'){save();render();notice('이적 무산 · '+(deal.reason||'서버 조건 불일치')+' · 예약금은 환불됐습니다.');return;}
  addContractNews(`${p.name} ${type==='loan'?'임대':'이적'} 제안 · ${s.teams[tid].name} 수락`);
- save();render();notice(type==='loan'?'상대 수락 · 임대 선수가 즉시 반영됐어요.':marketOpen()?'상대 수락 · 즉시 이적 완료!':'상대 수락 · 즉시 이적 완료!');
+ save();render();notice(type==='loan'?'상대 수락 · 임대 선수가 즉시 반영됐어요.':'상대 수락 · 즉시 이적 완료!');
 }
 function v412ReleaseEscrow(d){if(d.escrow){s.points+=d.escrow;d.escrow=0;}}
-function v412Cancel(id){const d=s.deals?.find(d=>d.id===String(id));if(!d||d.status!=='accepted')return;d.status='cancelled';d.reason='주말 실행 전 거래 철회';v412ReleaseEscrow(d);save();render();notice('예약된 거래를 취소했습니다. 예치한 포인트는 반환됐어요.');}
+function v412Cancel(id){const d=s.deals?.find(d=>d.id===String(id));if(!d||d.status!=='accepted')return;d.status='cancelled';d.reason='확정 전 거래 철회';v412ReleaseEscrow(d);save();render();notice('예약된 거래를 취소했습니다. 예치한 포인트는 반환됐어요.');}
 function v412Move(id,from,to,temporary=false){
  const player=ply(id),a=s.teams[from],b=s.teams[to];if(!player||!a.roster.includes(id))return false;
  a.roster=a.roster.filter(v=>v!==id);b.roster.push(id);
@@ -2690,7 +2686,7 @@ function v412Move(id,from,to,temporary=false){
 function v412ExecuteDeal(d){
  if(d.status!=='accepted'||d.kind!=='permanent')return;
  const seller=buySide(d)?d.other:s.selected,buyer=buySide(d)?s.selected:d.other,p=ply(d.player);
- const valid=marketOpen()&&!active()&&p&&s.teams[seller].roster.includes(d.player)&&!v412Loaned(d.player)
+ const valid=!active()&&p&&s.teams[seller].roster.includes(d.player)&&!v412Loaned(d.player)
   &&(!d.swap||s.teams[s.selected].roster.includes(d.swap))
   &&v412Capacity(buyer)-(d.swap&&buySide(d)?1:0)<10
   &&(!d.swap||v412Capacity(seller)-1<10)
@@ -2734,7 +2730,12 @@ function v412ReturnLoans(){
   if(l.parent===s.selected||l.to===s.selected)syncV45Lineup();
  }
 }
-function v412SettleWeekend(){if(!marketOpen())return;for(const d of s.deals||[])if(d.status==='accepted'&&d.kind==='permanent')v412ExecuteDeal(d);}
+function v412SettleAcceptedDeals(){
+ if(active())return;
+ let changed=false;
+ for(const d of s.deals||[])if(d.status==='accepted'&&d.kind==='permanent'){v412ExecuteDeal(d);changed=true;}
+ if(changed)save();
+}
 const v412NextDay=nextDay;
 nextDay=function(fromAuto=false){
  if(!hasSelected()||active())return v412NextDay(fromAuto);
@@ -2743,7 +2744,7 @@ nextDay=function(fromAuto=false){
  s.v412Tick++;v412ReturnLoans();
  v412NextDay(fromAuto);
  if(beforeSeason===s.season&&beforeDay===s.day){s.v412Tick--;return;}
- v412SettleWeekend();save();render();
+ v412SettleAcceptedDeals();save();render();
 };
 const v412Choose=chooseClub;
 chooseClub=function(id){v412Choose(id);if(hasSelected())v412Initialize();};
@@ -2984,7 +2985,7 @@ function superleagueLegacyImportPrompt(){
   catch(e){alert('저장 데이터 이전 실패: '+e.message)}
  });panel.append(btn);document.body.prepend(panel);
 }
-initializeV3();initializeV4();initializeV44();initializeV45();v47Init();v49Init();syncV45Lineup();v412Initialize();v413MigrateRest();render();if(s.match&&['first','second'].includes(s.match.phase))runTimer();startAutoLeagueClock();
+initializeV3();initializeV4();initializeV44();initializeV45();v47Init();v49Init();syncV45Lineup();v412Initialize();v413MigrateRest();if(s.pvp){s.pvp.teamRestUntil={};s.pvp.globalNextAt=0;}render();if(s.match&&['first','second'].includes(s.match.phase))runTimer();startAutoLeagueClock();
 if(window.__excelManagerNickname&&s.managerNickname!==window.__excelManagerNickname){s.managerNickname=window.__excelManagerNickname;save();render();}
 superleagueLegacyImportPrompt();
 
@@ -3154,6 +3155,12 @@ async function slCommand(action,payload={}){
    ? await slRequest('sl_v446_legend_decide',{p_offer:payload.id,p_action:action==='cancel'?'cancel':payload.decision})
    : await slRequest('sl_command',{p_action:action,p_payload:payload});
   if(!response?.ok)throw new Error(response?.error||'서버가 요청을 거부했습니다.');
+  // V4.48: do not acknowledge a consented trade while it is still 'accepted'.
+  if(action==='respond'&&payload.decision==='accept'&&response.status!=='completed'){
+   const final=await slRequest('sl_v448_finalize_transfer',{p_offer:payload.id,p_kind:'legend'});
+   if(!final?.ok||final.status!=='completed')throw new Error(final?.error||'수락은 기록됐지만 선수 이적이 완료되지 않았습니다. V4.48 서버 SQL 설치를 확인하세요.');
+   response=final;
+  }
   if(action==='claim'){
    const expectedId=Number(payload.club);
    if(response.club!==expectedId||response.claimedBy!==sl.snapshot?.viewer?.id)
@@ -3271,7 +3278,7 @@ transferPage=function(){
  const options=current.map(p=>`<option value="${esc(p.id)}" ${p.id===item?.id?'selected':''}>${esc(ply(p.id)?.name)} · ${esc(s.teams[p.club]?.name)}${p.transferEligible===false?' (사기 부족)':''}${!sl.snapshot.clubs[p.club].manager?' (CPU)':''}</option>`).join('');
  const mineOffers=offerList.filter(o=>o.buyer===s.selected||o.createdBy===sl.snapshot?.viewer?.id);
  const incoming=offerList.filter(o=>o.seller===s.selected&&o.status==='proposed');
- const statusName={proposed:'감독 응답 대기',accepted:'수락 · 이적 처리 중',rejected:'거절',cancelled:'철회',completed:'이적 오피셜',failed:'무산 · 환불'};
+ const statusName={proposed:'감독 응답 대기',accepted:'수락 · 즉시 정산 확인 중',rejected:'거절',cancelled:'철회',completed:'이적 오피셜',failed:'무산 · 환불'};
  return page('실시간 구단 간 이적시장',`온라인 레전드 이적 · 모든 제안과 수락은 Supabase에 반영 · 현재 구단 예산 ${fmt(s.points)}P`)
  +block('레전드 이적 제안',`${sl.offerFeedback?`<div class="note ${sl.offerFeedback.type==='error'?'warn':''}" id="sl-offer-feedback" role="status"><b>최근 제안 상태:</b> ${esc(sl.offerFeedback.message)}</div><div class="spacer"></div>`:''}${sl.offerAttempt?`<button class="btn xs" type="button" data-action="sl-offer-check">거래 상태 재확인</button><div class="spacer"></div>`:''}<div class="note">선수 계약 제안은 언제든 가능하며, <b>수락 즉시 완전 이적</b>됩니다. CPU는 잔여 계약 1시즌 이하이거나 사기가 50 미만일 때 판매합니다.</div><div class="spacer"></div>
  <div class="v412-form-grid"><label><span>영입할 선수</span><select id="sl-transfer-player" class="field" data-change="sl-player">${options||'<option value="">현재 협상할 수 있는 레전드 없음</option>'}</select></label>
@@ -4233,11 +4240,13 @@ function slV436DailyPage(){
    ||Number(a.club||0)-Number(b.club||0));
   const clubs=rows.map((r,index)=>{
   const active=Number(r.games)>0,own=Number(r.club)===Number(s.selected);
-  return `<tr ${own?'class="mine"':''}><td class="num strong">${index+1}</td><td class="strong">${esc(r.name||s.teams[Number(r.club)]?.name||'구단')} ${own?'<span class="tag">내 구단</span>':''}</td><td class="num">${r.games||0}</td><td class="num">${r.win||0}</td><td class="num">${r.draw||0}</td><td class="num">${r.loss||0}</td><td class="num">${r.gf||0}</td><td class="num">${r.ga||0}</td><td class="num">${Number(r.gd)>0?'+':''}${r.gd||0}</td><td class="num strong">${r.pts||0}</td><td class="num">${active&&String(r.prize)!=='0'?slV423Money(r.prize):'-'}</td></tr>`;
+  const points=Number(r.pts||0),rank=rows.findIndex(t=>Number(t.pts||0)===points)+1;
+  const joint=rows.filter(t=>Number(t.pts||0)===points).length>1;
+  return `<tr ${own?'class="mine"':''}><td class="num strong">${joint?'공동 ':''}${rank}</td><td class="strong">${esc(r.name||s.teams[Number(r.club)]?.name||'구단')} ${own?'<span class="tag">내 구단</span>':''}</td><td class="num">${r.games||0}</td><td class="num">${r.win||0}</td><td class="num">${r.draw||0}</td><td class="num">${r.loss||0}</td><td class="num">${r.gf||0}</td><td class="num">${r.ga||0}</td><td class="num">${Number(r.gd)>0?'+':''}${r.gd||0}</td><td class="num strong">${r.pts||0}</td><td class="num">${active&&String(r.prize)!=='0'?slV423Money(r.prize):'-'}</td></tr>`;
  });
  const yesterday=slV436Daily.yesterdaySettled?(slV436Daily.yesterdayAwards||[]).map(a=>`<tr><td class="num">${a.rank}위</td><td>${esc(s.teams[Number(a.club)]?.name||'구단')}</td><td class="num">${slV423Money(a.prize)}</td><td class="num">${String(a.paid)==='0'?'미지급 · 감독 없음':slV423Money(a.paid)}</td></tr>`).join(''):'';
  return intro
-  +block('금일 20개 구단 친선 순위',refresh+`<div class="spacer"></div>${table(['순위','클럽','경기','승','무','패','득','실','골득실','승점','현재 예상 상금'],clubs)}<div class="note" style="margin-top:10px">도전자와 수비자 양쪽에 경기 결과가 반영됩니다. 경기하지 않은 구단은 0점이며 보상 대상에서 제외됩니다. 승점→골득실→다득점 순으로 집계하고, 미참가 구단은 동률 시 뒤에 표시됩니다.</div>`)
+  +block('금일 20개 구단 친선 순위',refresh+`<div class="spacer"></div>${table(['순위','클럽','경기','승','무','패','득','실','골득실','승점','현재 예상 상금'],clubs)}<div class="note" style="margin-top:10px">도전자와 수비자 양쪽에 경기 결과가 반영됩니다. 경기하지 않은 구단은 0점이며 보상 대상에서 제외됩니다. 승점이 같은 구단은 골득실과 관계없이 공동순위로 표시합니다(1, 1, 3위 방식). 동점 내 표시 순서와 기존 상금 정산 기준은 변경하지 않습니다.</div>`)
   +block('매일 상금',table(['1위','2위','3위','4위','5위'],['<tr><td>100억 P</td><td>50억 P</td><td>25억 P</td><td>10억 P</td><td>5억 P</td></tr>'])+`<div class="note">당일 최종 순위 확정 후 회원 공용 포인트에 지급됩니다. 구단 사기에는 영향을 주지 않습니다. 누적 수령액: <b>${slV423Money(prize)}</b></div>`)
   +block('어제 정산 내역',slV436Daily.yesterdaySettled?(yesterday?table(['순위','클럽','상금','실제 지급'],yesterday):'<div class="empty">어제 완료한 친선경기가 없어 지급 내역이 없습니다.</div>'):'<div class="note">어제 경기 정산은 자정 이후 완료됩니다. 서버에서 진행 중인 경기가 끝날 때까지 지급이 지연될 수 있습니다.</div>');
 }
@@ -4293,11 +4302,18 @@ instantFriendly=function(target){
    const m=s.match;
    if(!m||m.kind!=='friendly-pvp'||m.opponent!==target)throw new Error('서버 접수는 됐지만 경기 화면 생성에 실패했습니다. 새로고침 후 다시 확인하세요.');
    m.v436MatchId=res.matchId;m.v436FirstA=Number(res.firstA);m.v436FirstB=Number(res.firstB);
-   m.formation=v48Form(s.formation);m.defendingFormation=v48AiFormation(target);
+   m.formation=v48Form(s.formation);
+   // V4.47: the defender's server-saved starting five is authoritative, even
+   // when that owner is not online. Never use the attacker browser's lineup.
+   const defenderXI=Array.isArray(res.defenderLineup)?res.defenderLineup.map(String):null;
+   if(defenderXI?.length===5&&new Set(defenderXI).size===5&&defenderXI.every(id=>!!ply(id)))
+     m.defendingLineup=defenderXI;
+   m.defendingFormation=v48Form(res.defenderFormation||v48AiFormation(target));
+   if(res.defenderTactics&&typeof res.defenderTactics==='object')m.defendingTactics={...res.defenderTactics};
    m.timeline=slV436Timeline(m,1,res.firstA,res.firstB);
    slV436UpdateScenes(m);save();render();
    try{sessionStorage.removeItem(key);}catch(_){}
-   notice('전반전 서버 확정 · 하프타임에 전술을 바꿔 후반을 진행할 수 있습니다.');
+   notice('전반전 서버 확정 · 상대 구단의 서버 저장 선발/전술 반영 · 하프타임에 전술 변경 가능');
   }catch(err){notice('친선 시작 실패: '+String(err?.message||err));}
   finally{slV436KickoffBusy=false;}
  })();
@@ -4364,7 +4380,7 @@ marketPage=function(){
   content+=`<div class="note">선택 <b>${slV437Selected.size}명</b> · 최초 계약금 합계 <b>${slV423Money(slV437SelectionFee().toString())}</b></div><div class="spacer"></div>
    <div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v437-appoint" ${busy||slV437Selected.size<1||slV437Selected.size>limit?'disabled':''}>선택 선수 ${slV437Selected.size}명 발탁</button>
    <button type="button" class="btn" data-action="sl-v437-reroll" ${busy||cards<Number(batch.count)?'disabled':''}>전체 다시 뽑기 · ${batch.count}장</button>
-   <button type="button" class="btn xs" data-action="sl-v437-decline" ${busy?'disabled':''}>전체 발탁 안 함 · 무료 반환</button></div>`;
+   <button type="button" class="btn xs" data-action="sl-v437-decline" ${busy?'disabled':''}>전체 발탁 안 함 · 반환</button></div>`;
  }
  return old+block('유망주 뽑기 · 1명 / 10명',content);
 };
@@ -4637,7 +4653,7 @@ transferPage=function(){
  const opts=avail.map(y=>`<option value="${esc(y.id)}" ${chosen===y.id?'selected':''}>${y.moraleEligible===false?'[사기 부족] ':''}${esc(y.name)} · ${esc(s.teams[y.club]?.name||'구단')} · ${y.age}세 · ${esc(y.pos)} · OVR ${Number(y.ovr)||0}</option>`).join('');
  const names=new Map([...avail,...(sl.snapshot?.youth||[])].map(y=>[String(y.id),String(y.name)]));
  const title=(id,fallback)=>esc(names.get(String(id))||fallback||String(id));
- const status={proposed:'상대 감독 응답 대기',accepted:'수락 · 이적 처리 중',rejected:'자동·수동 거절 / 환불',cancelled:'철회 / 환불',completed:'이적 완료',failed:'이적 무산 / 환불'};
+ const status={proposed:'상대 감독 응답 대기',accepted:'수락 · 즉시 정산 확인 중',rejected:'자동·수동 거절 / 환불',cancelled:'철회 / 환불',completed:'이적 완료',failed:'이적 무산 / 환불'};
  const renderOffer=(o,incoming)=>`<div class="v412-deal"><b>${title(o.player,o.playerName)} · ${slV423Money(o.amount)}</b> <span class="tag">${status[o.status]||esc(o.status)}</span><div class="small muted">${esc(s.teams[o.seller]?.name||'판매팀')} → ${esc(s.teams[o.buyer]?.name||'영입팀')}</div>${incoming?`${o.moraleEligible===false?'<span class="note warn">영입 구단 사기 부족 · 거래 불가</span>':`<button class="btn xs primary" data-action="sl-v442-accept" data-id="${esc(o.id)}">수락 · 즉시 이적</button>`} <button class="btn xs" data-action="sl-v442-reject" data-id="${esc(o.id)}">거절</button>`:o.status==='proposed'?`<button class="btn xs" data-action="sl-v442-cancel" data-id="${esc(o.id)}">철회</button>`:''}</div>`;
  const filled=slV434Academy().length>=2;
  const chosenYouth=avail.find(y=>y.id===chosen);
@@ -4673,6 +4689,11 @@ document.addEventListener('click',e=>{
    p_request:action==='sl-v442-propose'?request:null
   });
   if(!r?.ok)throw new Error(r?.error||'이적 제안 처리 실패');
+  if(action==='sl-v442-accept'&&r.status!=='completed'){
+   const final=await slRequest('sl_v448_finalize_transfer',{p_offer:btn.dataset.id,p_kind:'youth'});
+   if(!final?.ok||final.status!=='completed')throw new Error(final?.error||'수락은 기록됐지만 유망주 이적이 완료되지 않았습니다. V4.48 서버 SQL 설치를 확인하세요.');
+   r.message=final.message||'수락 즉시 유망주 완전 이적 완료';
+  }
   if(action==='sl-v442-propose')sessionStorage.removeItem(requestKey);
   await slLoad(false);window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
   notice(r.message||'유망주 이적 요청 완료');
@@ -4819,7 +4840,7 @@ function slV443YouthPanel(){
   content+=`<div class="note">선택 <b>${slV437Selected.size}명</b> · 최초 계약금 합계 <b>${slV423Money(slV437SelectionFee().toString())}</b></div><div class="spacer"></div>
    <div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v437-appoint" ${busy||slV437Selected.size<1||slV437Selected.size>limit?'disabled':''}>선택 선수 ${slV437Selected.size}명 발탁</button>
    <button type="button" class="btn" data-action="sl-v437-reroll" ${busy||cards<Number(batch.count)?'disabled':''}>전체 다시 뽑기 · ${batch.count}장</button>
-   <button type="button" class="btn xs" data-action="sl-v437-decline" ${busy?'disabled':''}>전체 발탁 안 함 · 무료 반환</button></div>`;
+   <button type="button" class="btn xs" data-action="sl-v437-decline" ${busy?'disabled':''}>전체 발탁 안 함 · 반환</button></div>`;
  }
  return block('유망주 뽑기 · 1명 / 10명',content);
 };
