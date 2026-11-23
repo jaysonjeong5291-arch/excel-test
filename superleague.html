@@ -1,5 +1,5 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>슈퍼리그 V4.21 — 공용 온라인 리그</title><meta name="description" content="20개 유럽 명문 구단과 전설 FA 40명, 하프타임 전략 변경, 비실시간 친선경기, 팀 사기 기반 영입, 2주 자동 리그 운영 게임">
+<title>슈퍼리그 V4.35 — 공용 온라인 리그</title><meta name="description" content="20개 유럽 명문 구단과 전설 FA 40명, 하프타임 전략 변경, 비실시간 친선경기, 팀 사기 기반 영입, 2주 자동 리그 운영 게임">
 <style>
 #sl-season-reset-btn[hidden],#sl-offline-reset[hidden]{display:none!important}
 
@@ -756,7 +756,7 @@ dash=function(){
  return html+block('2주 시즌 / 선수 성장',`<div class="note"><b>${v4WeekName()}</b> · ${DAYS[s.day%7]}요일 · 시즌 ${s.season}. 1주차 월~금 상반기(10R), 2주차 월~금 하반기(9R). 레전드 나이는 2005년 기준, 현역 나이는 2026년 기준. 레전드 유망주는 시즌 종료 시 능력치가 올라갑니다.</div>`);
 };
 const v4OldTop=topRefresh;
-topRefresh=function(){v4OldTop();if(hasSelected())$('r-day').textContent=`${s.day<7?'상':'하'}-${DAYS[s.day%7]}`;};
+topRefresh=function(){v4OldTop();$('r-day').textContent=slV428OperationalDay();};
 const v4OldChoose=chooseClub;
 chooseClub=function(id){v4OldChoose(id);if(hasSelected()){s.day=0;s.auto.nextAt=Date.now()+V3_AUTO_MS;save();render();}};
 const v4OldReset=resetGame;
@@ -1039,8 +1039,15 @@ squadPage=function(){
   const renewReason=gap>=10?'사기 불만으로 불가':!marketOpen()?'주말에 가능':active()?'경기 중':s.points<fee?'포인트 부족':'재계약 가능';
   return `<tr><td class="strong">${esc(p.name)}</td><td>${moodBadge(p,s.selected)}</td><td class="num">${left}시즌</td><td>${c?`시즌 ${c.endSeason} 종료까지`:'미등록 계약'}</td><td class="num">${fmt(fee)}P</td><td><button class="btn xs ${canRenew?'primary':''}" data-action="legend-renew" data-id="${p.id}" ${canRenew?'':'disabled'} title="${renewReason}">재계약 +${V45_RENEW_SEASONS}시즌</button></td></tr>`;
  });
+ if(slEmbedded&&window.__slOnline?.ready){
+   for(const y of slV434Academy()){
+     const left=Math.max(0,Number(y.contractEnd??s.season+2)-s.season+1);
+     const can=left>0&&left<3;
+     rows.push(`<tr><td class="strong">${esc(y.name)} <span class="tag">유망주</span></td><td>유망주 계약</td><td class="num">${left}시즌</td><td>시즌 ${y.contractEnd??(s.season+2)} 종료</td><td class="num">${slV423Money(y.annualWage||0)}</td><td><button class="btn xs ${can?'primary':''}" data-action="sl-v434-renew" data-id="${esc(y.id)}" ${can?'':'disabled'}>+1시즌 연장</button></td></tr>`);
+   }
+ }
  return v45Squad()
- +block('레전드 계약 · 사기 관리',`<div class="note">잠재력은 비공개. 사기가 해당 선수의 비공개 기준보다 <b>10 이상 낮으면 불만</b>으로 재계약 불가, <b>20 이상 낮으면 파업</b>으로 경기 출전 불가. 파업이 계속되면 <b>주말 하루당 25%</b> 확률로 계약을 파기하고 조건이 맞는 다른 팀으로 이적하거나 FA로 복귀합니다. 계약이 남았다면 지금 재계약할 의무는 없습니다. 재계약은 주말에만 가능하고, 계약 종료 시에도 연장하지 않으면 FA로 복귀합니다.</div><div class="spacer"></div>${rows.length?table(['레전드 선수','상태','잔여 계약','종료일','재계약 비용','계약 관리'],rows):'<div class="empty">현재 보유한 레전드 선수가 없습니다.</div>'}`)
+ +block('레전드·유망주 계약 · 사기 관리',`<div class="note">잠재력은 비공개. 사기가 해당 선수의 비공개 기준보다 <b>10 이상 낮으면 불만</b>으로 재계약 불가, <b>20 이상 낮으면 파업</b>으로 경기 출전 불가. 파업이 계속되면 <b>주말 하루당 25%</b> 확률로 계약을 파기하고 조건이 맞는 다른 팀으로 이적하거나 FA로 복귀합니다. 계약이 남았다면 지금 재계약할 의무는 없습니다. 재계약은 주말에만 가능하고, 계약 종료 시에도 연장하지 않으면 FA로 복귀합니다.</div><div class="spacer"></div>${rows.length?table(['선수','상태','잔여 계약','종료일','재계약 비용','계약 관리'],rows):'<div class="empty">현재 보유한 레전드 선수가 없습니다.</div>'}`)
  +block('계약·이적 소식',s.contractNews?.length?s.contractNews.slice(0,8).map(x=>`<div class="contract-news"><span class="small muted">시즌 ${x.season} ${DAYS[x.day%7]}요일</span> · ${esc(x.message)}</div>`).join(''):'<div class="small muted">계약 또는 이적 소식이 아직 없습니다.</div>');
 };
 const v45Dash=dash;
@@ -1944,7 +1951,7 @@ v47PaintPitch=v49Draw;
 // Show injury status and condition without prohibiting injured starters.
 const v49PrevSquadPage=squadPage;
 squadPage=function(){
- const html=v49PrevSquadPage(),players=mine().roster.map(ply).filter(Boolean);
+ const html=v49PrevSquadPage(),players=[...new Set([...mine().roster,...(slEmbedded&&window.__slOnline?.ready?slV434AcademyIds():[])])].map(ply).filter(Boolean);
  return html+block('부상 및 선수 컨디션 · 부상 중에도 출전 가능',`<div class="note">부상자는 출전할 수 있지만 경상은 경기력 약 14% 감소, 중상은 약 27% 감소합니다. 게임 내 하루가 지날 때마다 회복합니다.</div><div class="spacer"></div><div class="v49-injury-table">${table(['선수','포지션','컨디션','부상 상태','출전'],players.map(p=>`<tr><td class="strong">${esc(p.name)}</td><td>${p.pos}</td><td class="num ${v49Condition(p.id)===100?'v49-health-good':s.injuries[p.id]?.grade==='major'?'v49-health-major':'v49-health-minor'}">${v49Condition(p.id)} / 100</td><td>${v49InjuryText(p.id)}</td><td>${s.lineup.includes(p.id)?'선발':'후보'}</td></tr>`))}</div>`);
 };
 const v49PrevDash=dash;
@@ -2959,7 +2966,7 @@ async function slLoad(quiet=false){
  if(!slEmbedded||sl.busy||document.hidden)return;
  sl.busy=true;
  try{
-  const data=await slRequest('sl_v434_snapshot');
+  const data=await slRequest('sl_v435_snapshot');
   if(!data.ok)throw new Error(data.error||'서버가 요청을 거부했습니다.');
   slVerifySnapshot(data);
   sl.error='';sl.ready=true;sl.verified=true;sl.snapshot=data;
@@ -3127,7 +3134,7 @@ renderChooser=function(){
  if(!slEmbedded)return `<div class="overlay"><div class="choose"><div class="choosehead"><h1>엑셀 게임에서 실행하세요</h1><p>온라인 공용 구단을 선택하려면 엑셀 게임에 로그인하고 아래 ⚽ 슈퍼리그 탭으로 접속해야 합니다.</p></div></div></div>`;
  if(!sl.ready)return `<div class="overlay"><div class="choose"><div class="choosehead"><h1>온라인 슈퍼리그 연결</h1><div class="note">${esc(sl.error||'공용 20구단·순위·뉴스를 불러오는 중입니다...')}</div><p class="small">Supabase SQL을 아직 실행하지 않았다면, V4.18 파일의 superleague_v418_owner_verify.sql을 먼저 실행하세요.</p><button class="btn primary" data-action="sl-retry">연결 다시 시도</button></div></div></div>`;
  return `<div class="overlay"><div class="choose"><div class="choosehead"><div class="eyebrow">공용 온라인 슈퍼리그 · 시즌 ${s.season} · 서버 검증 V4.18</div><h1>운영할 구단을 선택하세요</h1><div class="muted">전체 20개 구단은 서버에서 공동 관리되며, 한 회원은 한 구단만 맡을 수 있습니다. 중복 배정은 불가능합니다.</div><div class="note">서버 로그인: <b>${esc(sl.snapshot?.viewer?.nickname||'미확인')}</b> · 계정 구분 ID: <b>${esc(String(sl.snapshot?.viewer?.id||'').slice(0,8))}</b> · 다른 계정으로 시험하려면 시크릿 창이나 별도 브라우저를 사용하세요.</div></div>
- <div class="choosebody"><div class="choosegrid">${s.teams.map(t=>{const manager=sl.snapshot.clubs[t.id].manager;return `<button class="chooseclub" data-action="choose" data-id="${t.id}" ${manager?'disabled':''}><span class="tag">${flagLeague(t.league)}</span><b>${esc(t.name)}</b><span class="overall">${manager?`감독 ${esc(manager)} · 선택 불가`:'선택 가능'}</span><br><small>등록 ${t.roster.length}/10 · 전력 ${power(t.id)}</small></button>`;}).join('')}</div><div class="note" style="margin-top:10px">선택은 서버에서 확정됩니다. 다른 플레이어가 먼저 선택한 구단은 자동으로 잠깁니다.</div></div></div></div>`;
+ <div class="choosebody"><div class="choosegrid">${s.teams.map(t=>{const manager=sl.snapshot.clubs[t.id].manager;const fired=(sl.snapshot?.dismissedClubs||[]).includes(t.id);return `<button class="chooseclub" data-action="choose" data-id="${t.id}" ${manager||fired?'disabled':''}><span class="tag">${flagLeague(t.league)}</span><b>${esc(t.name)}</b><span class="overall">${manager?`감독 ${esc(manager)} · 선택 불가`:fired?'이 구단 경질 이력 · 선택 불가':'선택 가능'}</span><br><small>등록 ${t.roster.length}/10 · 전력 ${power(t.id)}</small></button>`;}).join('')}</div><div class="note" style="margin-top:10px">선택은 서버에서 확정됩니다. 다른 플레이어가 먼저 선택한 구단은 자동으로 잠깁니다.</div></div></div></div>`;
 };
 const slChooseOffline=chooseClub;
 chooseClub=async function(id){
@@ -3143,6 +3150,7 @@ chooseClub=async function(id){
   const club=sl.snapshot.clubs.find(c=>c.id===target);
   if(!club){notice('구단 정보를 확인할 수 없습니다.');return;}
   if(club.manager){notice(club.name+' 구단은 '+club.manager+' 감독이 이미 선택했습니다.');return;}
+  if((sl.snapshot?.dismissedClubs||[]).includes(target)){notice('이 구단에서 경질된 기록이 있습니다. 다른 빈 구단을 선택하세요.');return;}
   await slCommand('claim',{club:String(target)});
  }finally{sl.claimPending=false;}
 };
@@ -3382,7 +3390,7 @@ const slV423PrevSquad=squadPage;
 squadPage=function(){
  const old=slV423PrevSquad();
  if(!slEmbedded)return old;
- const payRows=mine().roster.map(ply).filter(Boolean).map(p=>{const info=(sl.snapshot?.players||[]).find(x=>x.id===p.id);return `<tr><td class="strong">${esc(p.name)}</td><td>${p.legend?'레전드':'현역'}</td><td class="num">${slV423Money(p.legend?info?.salary:0)}</td><td class="num">${p.age}세</td><td class="num">${p.ovr}</td></tr>`});
+ const payRows=[...new Set([...mine().roster,...(window.__slOnline?.ready?slV434AcademyIds():[])])].map(ply).filter(Boolean).map(p=>{const info=(sl.snapshot?.players||[]).find(x=>x.id===p.id);const academy=(sl.snapshot?.youth||[]).find(y=>y.id===p.id);return `<tr><td class="strong">${esc(p.name)}</td><td>${p.youth?'유망주':p.legend?'레전드':'현역'}</td><td class="num">${slV423Money(p.youth?academy?.annualWage:p.legend?info?.salary:0)}</td><td class="num">${p.age}세</td><td class="num">${p.ovr}</td></tr>`});
  return old+block('선수별 연봉 기준 · 최초 계약금',table(['이름','구분','연봉 기준 계약금','나이','OVR'],payRows)+`<div class="note">30세 이하: OVR 60% + 잠재력 40% / 31세부터 첫 계약은 OVR만 반영하고 기존 연봉은 시즌마다 10% 감액. FA 영입 시 최초 계약금 1회 차감 · 현역 0P. 현역은 시즌이 지나도 나이/능력치가 고정됩니다. 레전드는 시즌 전환 때 나이/OVR이 바뀌고 37~42세에 계약과 무관하게 은퇴합니다.</div>`);
 };
 let slV423ActionBusy=false;
@@ -3542,7 +3550,7 @@ async function slV427FetchBudget(){
  if(!slEmbedded||!sl.ready||!hasSelected()||slV427BudgetBusy)return;
  slV427BudgetBusy=true;
  try{
-  const result=await slRequest('sl_v431_budget');
+  const result=await slRequest('sl_v435_budget');
   if(!result?.ok)throw new Error(result?.error||'예산 조회에 실패했습니다.');
   slV427BudgetInfo=result;
  }catch(e){slV427BudgetInfo={ok:false,error:String(e?.message||e)};}
@@ -3550,7 +3558,7 @@ async function slV427FetchBudget(){
 }
 function slV427BudgetPage(){
  const data=slV427BudgetInfo;
- const intro=page('구단 예산 · 시즌 결산', '시즌 종료 시 회원 공용 포인트에서 레전드 연봉과 구단 운영비를 차감합니다.',
+ const intro=page('구단 예산 · 시즌 결산', '시즌 종료 시 회원 공용 포인트에서 레전드·유망주 연봉과 시설 운영비를 차감합니다.',
   `<span class="tag">시즌 ${s.season}</span>`);
  if(!slEmbedded||!hasSelected())return intro+block('안내','회원 로그인 후 구단을 선택하세요.');
  if(!data)return intro+block('예산 불러오기',`<div class="note">예산 자료를 서버에서 불러오고 있습니다.</div><button class="btn" data-action="sl-v427-budget-refresh">새로고침</button>`);
@@ -3560,11 +3568,11 @@ function slV427BudgetPage(){
  const debt=toBig(data.debt),wallet=toBig(data.wallet);
  const blocked=!!data.recruitBlocked;
  const show=x=>slV423Money(x);
- const rows=(data.players||[]).map(p=>`<tr><td>${esc(p.name)}</td><td class="num">${esc(p.age)}</td><td class="num">${esc(p.overall)}</td><td class="num">${show(p.salary)}</td></tr>`);
+ const rows=(data.players||[]).map(p=>`<tr><td>${esc(p.name)} ${p.type==='youth'?'<span class="tag">유망주</span>':''}</td><td class="num">${esc(p.age)}</td><td class="num">${esc(p.overall)}</td><td class="num">${show(p.salary)}</td></tr>`);
  const old=data.previous;const prevSplit=data.previousSplit;
  return intro
   +block('이번 시즌 예상 유지비',`<div class="grid2"><div class="note"><b>보유 공용 포인트</b><div class="strong">${show(wallet)}</div></div><div class="note"><b>예상 시즌 유지비</b><div class="strong">${show(cost)}</div></div></div><div class="spacer"></div>${table(['비용','금액'],[
-      `<tr><td>레전드 선수 연봉 합계</td><td class="num strong">${show(payroll)}</td></tr>`,
+      `<tr><td>레전드 + 유망주 연봉 합계</td><td class="num strong">${show(payroll)}</td></tr>`,
       `<tr><td>경기장 운영비 (기본비 배분 포함)</td><td class="num strong">${show(stadiumCost)}</td></tr>`,
       `<tr><td>훈련장 운영비 (기본비 배분 포함)</td><td class="num strong">${show(trainingCost)}</td></tr>`,
       `<tr><td><b>시즌 종료 시 총 정산 예정</b></td><td class="num strong">${show(cost)}</td></tr>`
@@ -3872,11 +3880,11 @@ marketPage=function(){
  const cards=Number(sl.snapshot?.youthCards||0);
  const free=Number(sl.snapshot?.youthAvailable||0);
  const price=y=>slV423Money(y.signingFee||0);
- const candidateHtml=candidate?`<div class="note"><b>추첨 결과 · ${esc(candidate.name)}</b><div>포지션 ${esc(candidate.pos)} · 나이 ${candidate.age}세 · OVR ${candidate.ovr}</div><div>발탁 시 최초 계약금 <b>${price(candidate)}</b></div></div><div class="spacer"></div><div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v431-appoint" data-id="${esc(candidate.id)}" ${academy.length>=2||slV431ActionBusy||BigInt(String(sl.snapshot?.wallet||0))<BigInt(String(candidate.signingFee||0))?'disabled':''}>이 선수 발탁 · ${price(candidate)}</button><button type="button" class="btn" data-action="sl-v431-reroll" data-id="${esc(candidate.id)}" ${slV431ActionBusy?'disabled':''}>다시 뽑기 · 발탁 안 함</button></div>`
+ const candidateHtml=candidate?`<div class="note"><b>추첨 결과 · ${esc(candidate.name)}</b><div>포지션 ${esc(candidate.pos)} · 나이 ${candidate.age}세 · OVR ${candidate.ovr}</div><div>발탁 시 최초 계약금 <b>${price(candidate)}</b></div></div><div class="spacer"></div><div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v431-appoint" data-id="${esc(candidate.id)}" ${academy.length>=2||slV431ActionBusy||BigInt(String(sl.snapshot?.wallet||0))<BigInt(String(candidate.signingFee||0))?'disabled':''}>이 선수 발탁 · ${price(candidate)}</button><button type="button" class="btn" data-action="sl-v431-reroll" data-id="${esc(candidate.id)}" ${slV431ActionBusy?'disabled':''}>다시 뽑기 · 1장 사용</button></div>`
  :`<div class="note">발탁 대기 중인 선수가 없습니다. 뽑기권으로 유망주를 추첨하세요. 발탁하지 않은 선수는 다른 회원도 다시 뽑을 수 있습니다.</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v431-draw" ${cards<1||slV431ActionBusy||academy.length>=2?'disabled':''}>유망주 뽑기 · 뽑기권 1장</button>`;
  
  return old+block('유망주 뽑기 · 17~19세',
- `<div class="line between"><span>보유 뽑기권 <b>${cards}장</b> · 추첨 가능 선수 ${free}명</span><button class="btn xs" type="button" data-action="tab" data-value="items">아이템 상점에서 뽑기권 구매</button></div><div class="spacer"></div>${candidateHtml}<div class="small muted" style="margin-top:10px">잠재력 80+ 최대 10% · 85+ 최대 5% · 90+ 최대 0.8% · 98+ 최대 0.01%. 발탁에 성공할 때만 최초 계약금이 차감됩니다. 발탁 안 함을 선택하면 기존 후보가 즉시 다른 회원에게도 다시 열립니다. 미선택 후보는 10분 후 다음 추첨 시 자동 반환됩니다.</div>`);
+ `<div class="line between"><span>보유 뽑기권 <b>${cards}장</b> · 추첨 가능 선수 ${free}명</span><button class="btn xs" type="button" data-action="tab" data-value="items">아이템 상점에서 뽑기권 구매</button></div><div class="spacer"></div>${candidateHtml}<div class="small muted" style="margin-top:10px">잠재력 80+ 최대 10% · 85+ 최대 5% · 90+ 최대 0.8% · 98+ 최대 0.01%. 발탁에 성공할 때만 최초 계약금이 차감됩니다. 다시 뽑기는 기존 후보를 즉시 공용 풀에 반환하고 뽑기권 1장으로 다른 후보를 바로 보여줍니다. 미선택 후보는 10분 후 다음 추첨 시 자동 반환됩니다.</div>`);
 };
 let slV431ActionBusy=false;
 async function slV431Action(action,id=null){
@@ -3921,7 +3929,7 @@ document.addEventListener('click',e=>{
   void slV431Action('buy',String(qty));return;
  }
  if(a==='decline'&&!confirm('이 유망주를 발탁하지 않고 즉시 공용 추첨 풀로 반환할까요?'))return;
- if(a==='reroll'&&!confirm('이번 후보를 발탁하지 않고 공용 추첨 풀로 돌려보낼까요? 새 뽑기는 다음에 뽑기권 1장을 사용합니다.'))return;
+ if(a==='reroll'){if(!confirm('지금 후보를 포기하고 즉시 다른 유망주를 추첨할까요? 뽑기권 1장을 사용하며 새 후보를 바로 표시합니다.'))return;void slV435InstantReroll(btn.dataset.id||null);return;}
  if(a==='appoint'&&!confirm('유망주를 발탁하면 화면에 표시된 최초 계약금이 공용 포인트에서 차감됩니다. 계속할까요?'))return;
  if(a==='release'&&!confirm('발굴한 선수를 포기하면 되돌릴 수 없습니다. 진행할까요?'))return;
  void slV431Action(a,btn.dataset.id||null);
@@ -4028,5 +4036,32 @@ squadPage=function(){
   return page('선수단 및 전술 관리','전술 화면 오류 보호 모드')
    +block('선수단 데이터 재동기화',`<div class="note error">선수단 화면 렌더링 중 오류가 발생해 다른 탭에 영향이 없도록 차단했습니다. 새로고침 후 다시 시도해 주세요.</div><div class="spacer"></div><button class="btn primary" data-action="sl-retry">서버 데이터 다시 불러오기</button><div class="small muted" style="margin-top:10px">오류: ${esc(String(error?.message||error))}</div>`);
  }
+};
+
+// V4.35 · 한 번에 기존 후보 반환 + 다른 후보 즉시 재추첨 (단일 서버 트랜잭션).
+async function slV435InstantReroll(youthId){
+ if(!slEmbedded||!sl.ready||!sl.verified||slV431ActionBusy||!youthId)return;
+ const key=`sl_v435_reroll_${sl.snapshot?.viewer?.id||'guest'}_${youthId}`;
+ let req;
+ try{req=sessionStorage.getItem(key)||slV423Uuid();sessionStorage.setItem(key,req);}catch(err){return notice(String(err?.message||err));}
+ slV431ActionBusy=true;
+ try{
+  const result=await slRequest('sl_v435_youth_reroll',{p_youth:youthId,p_request:req});
+  if(!result?.ok)throw new Error(result?.error||'재추첨 실패');
+  sessionStorage.removeItem(key);
+  const loaded=await slLoad(false);
+  if(!loaded)throw new Error('뽑기는 완료됐으나 신규 후보를 불러오지 못했습니다. 새로고침해 주세요.');
+  notice(`새 후보: ${result.name||'추첨 완료'} · 뽑기권 ${result.cards??'?'}장 남음`);
+ }catch(err){notice('재추첨 확인 필요: '+String(err?.message||err)+' · 중복 차감 방지를 위해 같은 요청번호로 재확인합니다.');}
+ finally{slV431ActionBusy=false;render();}
+}
+// 경질된 감독이 선수단 없는 페이지에 진입한 경우, 직전 경질 사유를 구단 선택 화면에 표시.
+const slV435OldChooser=renderChooser;
+renderChooser=function(){
+ const html=slV435OldChooser();
+ if(!slEmbedded||!sl?.ready||sl.snapshot?.mine!=null||!sl.snapshot?.lastDismissal)return html;
+ const r=sl.snapshot.lastDismissal;
+ const reason=r.reason==='unpaid_bankruptcy'?'파산 상태 미해소':'사기 50 이하가 2시즌 연속';
+ return html.replace('운영할 구단을 선택하세요',`다른 구단을 선택하세요 · 이전 감독 경질 (${reason})`);
 };
 </script></body></html>
