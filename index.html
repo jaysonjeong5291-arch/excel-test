@@ -1394,7 +1394,8 @@ async function callRpc(fn,params,keepalive=false,timeoutMs=11000){
    // Preserve Supabase/PostgREST's actual error instead of treating every 404 as a missing SQL migration.
    const code=typeof data?.code==='string' ? data.code : '';
    const msg=typeof data?.message==='string' ? data.message : (typeof data?.hint==='string'?data.hint:'서버 요청 실패');
-   throw new Error('서버 오류 '+response.status+(code?' ['+code+']':'')+': '+msg);
+   const extra=[data?.details,data?.hint].filter(x=>typeof x==='string'&&x&&!msg.includes(x)).join(' / ');
+   throw new Error('서버 오류 '+response.status+(code?' ['+code+']':'')+': '+msg+(extra?' ('+extra+')':''));
   }
  if(!data || data.ok===false)throw new Error(data?.error||'서버 요청 오류');
  return data;
@@ -2466,7 +2467,7 @@ window.addEventListener('message',e=>{
  if(e.data?.type==='SL_RPC'&&activeSuperleague){
   const rid=String(e.data.requestId||'');
   const method=e.data.method;
-  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_admin_reset','sl_v423_item_action','sl_v424_save_tactics'].includes(method))return;
+  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics'].includes(method))return;
   const args=e.data.args||{};
   if(method==='sl_command'&&!['claim','offer','respond','cancel','fa_sign','release','advance','post'].includes(args.p_action))return;
   (async()=>{
@@ -2474,9 +2475,9 @@ window.addEventListener('message',e=>{
    try{
     if(!memberToken||!memberProfile)throw new Error('로그인이 만료되었습니다. Sheet1에서 다시 로그인하세요.');
     const tokenAtStart=memberToken;
-    if(method==='sl_admin_reset'){
+    if(method==='sl_v425_admin_reset'){
      if(!adminToken||myNickname!=='운영자')throw new Error('운영자 인증 후에만 시즌 리셋을 사용할 수 있습니다.');
-     response=await callRpc('sl_admin_reset',{
+     response=await callRpc('sl_v425_admin_reset',{
       p_token:tokenAtStart,p_client:CLIENT_ID,p_admin_token:adminToken,
       p_confirm:args.p_confirm
      },false,30000);
