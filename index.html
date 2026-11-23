@@ -2490,7 +2490,7 @@ window.addEventListener('message',e=>{
       response=await callRpc(method,{
         p_token:tokenAtStart,p_client:CLIENT_ID,p_admin_token:adminToken,
         p_confirm:args.p_confirm
-      },false,30000);
+      },false,55000);
     }else if(method==='sl_v429_test_advance'){
       if(!adminToken||myNickname!=='운영자')throw new Error('관리자 비밀번호 인증 후에만 하루 진행이 가능합니다.');
       response=await callRpc('sl_v429_test_advance',{
