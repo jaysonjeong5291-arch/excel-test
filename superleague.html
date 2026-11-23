@@ -301,7 +301,7 @@ function switchTab(tab){if(!['dashboard','squad','market','calendar','friendly',
 function resetGame(){if(!confirm('데모 구단·경기·영입 기록을 초기화하고 다른 구단을 선택할까요? 실제 포인트에는 영향이 없습니다.'))return;halt();s=initial();save();render()}
 function page(title,sub,tag=''){return `<div class="pagehead"><div><div class="eyebrow">관리 현황 / 슈퍼리그 시뮬레이션</div><h1>${title}</h1><p>${sub}</p></div>${tag}</div>`}
 function block(title,content,right=''){return `<section class="block"><div class="blocktitle"><span>${title}</span>${right}</div><div class="blockcontent">${content}</div></section>`}
-function table(headers,rows,cls=''){return `<div class="scrolltable"><table class="excel ${cls}"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`}
+function table(headers,rows,cls=''){const body=Array.isArray(rows)?rows.join(''):typeof rows==='string'?rows:'';return `<div class="scrolltable"><table class="excel ${cls}"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table></div>`}
 function slV428Weekday(){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',weekday:'short'}).format(new Date()).replace(/요일$/,'');}
 function slV428OperationalDay(){return `${s.day<7?'상반기':'하반기'} (${slV428Weekday()})`;}
 function dayLabel(){return `시즌 ${s.season} · ${slV428OperationalDay()}`;}
@@ -3949,7 +3949,7 @@ squadPage=function(){
  const first=Array.isArray(sl.snapshot?.contractInfo)?sl.snapshot.contractInfo:[];
  const contracts=[...first.map(c=>({id:c.id,name:ply(c.id)?.name||c.id,end:Number(c.endSeason),wage:c.annualWage,type:c.type})),...youth.filter(y=>y.status==='academy').map(y=>({id:y.id,name:y.name,end:Number(y.contractEnd??s.season+2),wage:y.annualWage||y.signingFee||'0',type:'youth'}))];
  const contractRows=contracts.map(c=>{const left=Math.max(0,c.end-s.season+1),can=left>0&&left<3;
-  return `<tr><td class="strong">${esc(c.name)} ${c.type==='youth'?'<span class="tag">유망주</span>':''}</td><td class="num">${left}시즌</td><td class="num">${slV423Money(c.wage)}</td><td><button class="btn xs ${can?'primary':''}" type="button" data-action="sl-v434-renew" data-id="${esc(c.id)}" ${!can||slV434RenewBusy?'disabled':''}>+1시즌 연장</button></td></tr>`}).join('');
+  return `<tr><td class="strong">${esc(c.name)} ${c.type==='youth'?'<span class="tag">유망주</span>':''}</td><td class="num">${left}시즌</td><td class="num">${slV423Money(c.wage)}</td><td><button class="btn xs ${can?'primary':''}" type="button" data-action="sl-v434-renew" data-id="${esc(c.id)}" ${!can||slV434RenewBusy?'disabled':''}>+1시즌 연장</button></td></tr>`});
  return original+youthPanel+block('선수 계약 관리 · 최대 3시즌',`<div class="note">선수 유형과 관계없이 1시즌씩 연장합니다. 최대 계약 잔여 기간은 3시즌이며, 연장할 때 1년치 연봉을 계약금으로 지급합니다. 일반 현역 연봉은 0P입니다.</div><div class="spacer"></div>${contracts.length?table(['선수','잔여 계약','1년 연봉(연장금)','계약 연장'],contractRows):'<div class="empty">등록된 선수가 없습니다.</div>'}`);
 };
 let slV434RenewBusy=false;
