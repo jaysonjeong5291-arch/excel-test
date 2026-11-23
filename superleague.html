@@ -320,9 +320,9 @@ function topRefresh(){
  const budget=document.getElementById('sl-v429-club-balance');
  if(budget)budget.parentElement?.removeChild(budget); 
 }
-const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['youth','유망주 선수단'],['market','선수 영입'],['items','아이템'],['budget','예산'],['calendar','경기 일정'],['friendly','친선경기'],['league','순위'],['match','경기 기록']];
+const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','선수 영입'],['items','아이템'],['budget','예산'],['calendar','경기 일정'],['friendly','친선경기'],['league','순위'],['match','경기 기록']];
 function sheetNav(){$('side-navigation').innerHTML=TABS.map(([key,label])=>`<button class="side-btn ${s.tab===key?'active':''}" type="button" data-action="tab" data-value="${key}" ${s.tab===key?'aria-current="page"':''} title="${label}"><span class="navtxt">${label}</span></button>`).join('')}
-function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${slV428OperationalDay()})`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,youth:slV431YouthPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage,budget:slV427BudgetPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 온라인 테스트에서는 Supabase의 실제 회원 포인트와 공유 경기 데이터를 사용합니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
+function render(){if(s.tab==='youth')s.tab='market';topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${slV428OperationalDay()})`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage,budget:slV427BudgetPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 온라인 테스트에서는 Supabase의 실제 회원 포인트와 공유 경기 데이터를 사용합니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
 function unselected(){return page('슈퍼리그 운영 대시보드','참가 구단 20개 · 구단 선택 후 테스트 시작')+block('초기 설정','<div class="note">구단을 선택하면 소속 선수 8명(GK·DF·MF·FW 각 2명), 초기 데모 포인트 12,500P로 게임을 시작합니다. 구단별 선수는 중복되지 않으며, 전설 선수 40명은 FA로 별도 등록되어 있습니다.</div>')}
 function renderChooser(){return `<div class="overlay"><div class="choose"><div class="choosehead"><div class="eyebrow">슈퍼리그 개막 준비 / 구단 배정</div><h1>운영할 구단을 선택하세요</h1><div class="muted">총 20개 구단 중 원하는 구단을 선택하세요 · 시작 후 변경하려면 초기화가 필요합니다</div></div><div class="choosebody"><div class="choosegrid">${s.teams.map(t=>`<button class="chooseclub" data-action="choose" data-id="${t.id}"><span class="tag">${flagLeague(t.league)}</span><b>${esc(t.name)}</b><span class="overall">기본 전력 ${power(t.id)}</span><br><small>GK 2 · DF 2 · MF 2 · FW 2</small></button>`).join('')}</div><div class="note" style="margin-top:12px">모든 구단은 GK·DF·MF·FW 각 2명으로 시작합니다. 전체 20개 구단의 대표 선수 구성은 게임 플레이를 위한 가상 편성입니다.</div></div></div></div>`}
 function overviewCalendar(){let next=todaysOpponent();const f=selectedFriend();return `<div class="line between"><div><b>${dayLabel()}</b> <span class="tag ${s.day>4?'gold':''}">${seasonStatus()}</span></div><button class="btn xs" data-action="tab" data-value="calendar">전체 일정 열기</button></div><div class="spacer"></div>${s.day<=4?`<div class="note">리그 상대: <b>${next===null?'완료':esc(s.teams[next].name)}</b> · ${s.results[s.day]?'오늘 경기 완료':'1게임일 10경기 CPU 자동 진행'}</div>`:'<div class="note">주말 FA 이적시장 운영 중 · 월~금 5개 라운드가 진행됩니다.</div>'}<div class="spacer"></div><div class="small">친선경기: ${f?`${esc(s.teams[f.opponent].name)} / ${f.status==='finished'?'완료':'등록됨'}`:'미등록'} · 친선 상대 지정은 왼쪽 경기 일정 메뉴에서만 가능합니다.</div>`}
@@ -2959,7 +2959,7 @@ async function slLoad(quiet=false){
  if(!slEmbedded||sl.busy||document.hidden)return;
  sl.busy=true;
  try{
-  const data=await slRequest('sl_v431_snapshot');
+  const data=await slRequest('sl_v432_snapshot');
   if(!data.ok)throw new Error(data.error||'서버가 요청을 거부했습니다.');
   slVerifySnapshot(data);
   sl.error='';sl.ready=true;sl.verified=true;sl.snapshot=data;
@@ -3367,7 +3367,7 @@ marketPage=function(){
   .sort((a,b)=>Number(a.retired)-Number(b.retired)||Number(a.club!==null)-Number(b.club!==null)||Number(b.ovr)-Number(a.ovr));
  const start=Math.max(0,Math.min(Math.ceil(all.length/12)-1,Number(s.ui.marketPage)||0));s.ui.marketPage=start;
  const mineClub=sl.snapshot?.clubs?.[s.selected];const legendCount=mine().roster.filter(id=>ply(id)?.legend).length;
- return page('선수 영입','30세 이하: 잠재력 40% + OVR 60% · 31세 이상: OVR 100% · FA 계약금 1회 차감',`<span class="tag">${s.day%7>=5?'주말 FA 진행':'평일: 영입권 사용 가능'}</span>`)
+ return page('선수 영입','최초 계약금: 30세 이하 OVR 60% + 잠재력 40% · 31세 이상 OVR 100% · 31세부터 매 시즌 연봉 10% 감액',`<span class="tag">${s.day%7>=5?'주말 FA 진행':'평일: 영입권 사용 가능'}</span>`)
  +block('FA 계약금 및 영입 규정',`<div class="note">회원 공용 잔액: <b>${slV423Money(sl.snapshot?.wallet)}</b> · 구단 예산과 동일 · 현역 계약금 0P · 주말 일반 FA 최대 레전드 2명 및 전체 10명 · 영입권은 아이템 탭에서 언제든 1명 즉시 영입</div><div class="spacer"></div><button class="btn xs" data-action="tab" data-value="items">아이템 상점 열기 →</button>`)
  +block('레전드 선수 목록',`<div class="line"><div class="tabs">${[['ALL','전체'],['GK','GK'],['DF','DF'],['MF','MF'],['FW','FW']].map(([v,l])=>`<button class="btn xs ${pos===v?'active':''}" data-action="market-pos" data-value="${v}">${l}</button>`).join('')}</div><input class="field search" id="market-search" placeholder="선수 이름 검색" value="${esc(s.ui.marketSearch||'')}"></div><div class="spacer"></div>${table(['선수','나이','OVR','은퇴 시점','최초 계약금','상태 / FA 영입'],all.slice(start*12,start*12+12).map(v=>{
    const p=ply(v.id);const retired=!!v.retired;const can=!retired&&v.club===null&&s.day%7>=5&&mine().roster.length<10&&legendCount<2&&Number(sl.snapshot?.wallet)>=Number(v.salary)&&Number(v.age)>=20&&Number(mineClub?.morale)>=Math.min(98,50+Math.max(0,p.potential-80)*3);
@@ -3381,7 +3381,7 @@ squadPage=function(){
  const old=slV423PrevSquad();
  if(!slEmbedded)return old;
  const payRows=mine().roster.map(ply).filter(Boolean).map(p=>{const info=(sl.snapshot?.players||[]).find(x=>x.id===p.id);return `<tr><td class="strong">${esc(p.name)}</td><td>${p.legend?'레전드':'현역'}</td><td class="num">${slV423Money(p.legend?info?.salary:0)}</td><td class="num">${p.age}세</td><td class="num">${p.ovr}</td></tr>`});
- return old+block('선수별 연봉 기준 · 최초 계약금',table(['이름','구분','연봉 기준 계약금','나이','OVR'],payRows)+`<div class="note">30세 이하: 잠재력 40% + 현재 OVR 60% / 31세부터 OVR만 반영 · 나이가 들어 OVR이 내려가면 계약금도 낮아집니다. FA 영입 시 1회 차감 · 현역 0P. 현역은 시즌이 지나도 나이/능력치가 고정됩니다. 레전드는 시즌 전환 때 나이/OVR이 바뀌고 37~42세에 계약과 무관하게 은퇴합니다.</div>`);
+ return old+block('선수별 연봉 기준 · 최초 계약금',table(['이름','구분','연봉 기준 계약금','나이','OVR'],payRows)+`<div class="note">30세 이하: OVR 60% + 잠재력 40% / 31세부터 첫 계약은 OVR만 반영하고 기존 연봉은 시즌마다 10% 감액. FA 영입 시 최초 계약금 1회 차감 · 현역 0P. 현역은 시즌이 지나도 나이/능력치가 고정됩니다. 레전드는 시즌 전환 때 나이/OVR이 바뀌고 37~42세에 계약과 무관하게 은퇴합니다.</div>`);
 };
 let slV423ActionBusy=false;
 async function slV423Action(action,player){
@@ -3843,22 +3843,33 @@ function slV431ImportLegends(rows){
 }
 const SL_V431_YOUTH_PRICE=100000000;
 function slV431YouthStatus(status){return {scouted:'발굴 완료 · 발탁 대기',academy:'유망주 선수단 등록',pending:'20세 · 1군 승격 대기',fa:'레전드 FA',signed:'1군 선수단'}[status]||status;}
-function slV431YouthPage(){
- const pool=Array.isArray(sl.snapshot?.youth)?sl.snapshot.youth:[];
- const season=Number(sl.snapshot?.season||1),card=Number(sl.snapshot?.youthCards||0),left=Number(sl.snapshot?.youthAvailable||0);
- const academy=pool.filter(y=>y.status==='academy').length;
- const row=(y)=>`<tr><td class="strong">${esc(y.name)}</td><td>${esc(y.pos)}</td><td class="num">${y.age}세</td><td class="num">${y.ovr}</td><td class="num">${y.potential}</td><td>${slV431YouthStatus(y.status)}</td><td>${y.status==='scouted'?`<button class="btn xs primary" data-action="sl-v431-appoint" data-id="${esc(y.id)}" ${academy>=2?'disabled':''}>유망주 발탁</button>`:y.status==='pending'?`<button class="btn xs primary" data-action="sl-v431-register" data-id="${esc(y.id)}">1군 승격</button>`:''}${y.status!=='pending'?`<button class="btn xs warn" data-action="sl-v431-release" data-id="${esc(y.id)}">포기</button>`:''}</td></tr>`;
- return page('유망주 선수단',`2005년 청소년 선수 풀 · 시즌 ${season} · 구단당 최대 2명 · 정식 1군 10명과 별도`)
- +block('유망주 발탁 현황',`<div class="grid3"><div class="note"><b>유망주 등록</b><div class="strong">${academy}/2명</div></div><div class="note"><b>뽑기권</b><div class="strong">${card}장</div></div><div class="note"><b>현재 추첨 대상</b><div class="strong">${left}명</div></div></div><div class="spacer"></div><div class="note">발굴한 선수 중 최대 2명을 발탁할 수 있습니다. 20세가 되면 레전드 1군으로 승격하며, 1군이 10명이라면 기존 선수를 방출할 때까지 승격 대기합니다. 미발탁 선수는 20세에 잠재력 80 이상이면 FA, 미만이면 소멸합니다.</div>`)
- +block('내 유망주',pool.length?table(['선수','위치','나이','OVR','잠재력','상태','관리'],pool.map(row)):'<div class="empty">발굴한 선수가 없습니다. 아이템 탭에서 유망주 뽑기권을 구매하고 뽑아 보세요.</div>')
- +block('유망주 영입권',`<div class="note">뽑기권 1장: <b>1억 P</b> · 17~19세 등장 · 잠재력 80 이상 약 10%, 85 이상 약 5%, 90 이상 약 0.8%, 98 이상 약 0.01% (누적 확률의 상한). 선수 풀이 소진되거나 이미 소속된 선수는 뽑히지 않습니다.</div><div class="spacer"></div><button class="btn primary" type="button" data-action="tab" data-value="items">아이템 상점에서 구매·뽑기</button>`);
-}
 const slV431OldItems=slV423ItemsPage;
 slV423ItemsPage=function(){
  const original=slV431OldItems();
  if(!slEmbedded||!sl.ready)return original;
- const cards=Number(sl.snapshot?.youthCards||0),left=Number(sl.snapshot?.youthAvailable||0);
- return original+block('유망주 뽑기권 · 1억 P',`<div class="note">보유 <b>${cards}장</b> · 현재 가능한 선수 <b>${left}명</b> · 2005년 기준 100명 실제 선수 풀 (1989년생은 만 17세가 되는 시즌부터 참가)</div><div class="spacer"></div><div class="line"><button type="button" class="btn primary" data-action="sl-v431-buy">뽑기권 1장 구매 · 1억 P</button><button type="button" class="btn primary" data-action="sl-v431-draw" ${cards<1||left<1?'disabled':''}>유망주 뽑기 · 1장 사용</button><button type="button" class="btn" data-action="tab" data-value="youth">유망주 선수단 보기</button></div><div class="small muted" style="margin-top:10px">잠재력 98+: 0.01% 이하 · 90+: 0.8% 이하 · 85+: 5% 이하 · 80+: 10% 이하. 같은 실존 선수는 두 구단에서 중복 발굴할 수 없습니다.</div>`);
+ const cards=Number(sl.snapshot?.youthCards||0);
+ return original+block('유망주 뽑기권 · 1억 P',
+  `<div class="note">보유 <b>${cards}장</b> · 아이템 상점에서는 뽑기권만 구매합니다. <b>뽑기와 발탁은 왼쪽 선수 영입 탭에서</b> 진행하세요.</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v431-buy" ${slV431ActionBusy?'disabled':''}>뽑기권 구매 · 1장 1억 P</button><div class="small muted" style="margin-top:10px">다시 뽑기는 추가 뽑기권 1장이 필요합니다. 무료 무한 재추첨은 불가능합니다.</div>`);
+};
+// V4.32: the youth draft, appointment and academy are all managed in the recruitment tab.
+// Item tab is purchase-only; the backend owns fee calculation and ticket consumption.
+const slV432PriorMarket=marketPage;
+marketPage=function(){
+ const old=slV432PriorMarket();
+ if(!slEmbedded||!sl.ready||!hasSelected())return old;
+ const youth=Array.isArray(sl.snapshot?.youth)?sl.snapshot.youth:[];
+ const candidate=youth.find(y=>y.status==='scouted');
+ const academy=youth.filter(y=>y.status==='academy');
+ const pending=youth.filter(y=>y.status==='pending');
+ const cards=Number(sl.snapshot?.youthCards||0);
+ const free=Number(sl.snapshot?.youthAvailable||0);
+ const price=y=>slV423Money(y.signingFee||0);
+ const candidateHtml=candidate?`<div class="note"><b>추첨 결과 · ${esc(candidate.name)}</b><div>포지션 ${esc(candidate.pos)} · 나이 ${candidate.age}세 · OVR ${candidate.ovr} · 잠재력 ${candidate.potential}</div><div>발탁 시 최초 계약금 <b>${price(candidate)}</b></div></div><div class="spacer"></div><div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v431-appoint" data-id="${esc(candidate.id)}" ${academy.length>=2||slV431ActionBusy||BigInt(String(sl.snapshot?.wallet||0))<BigInt(String(candidate.signingFee||0))?'disabled':''}>이 선수 발탁 · ${price(candidate)}</button><button type="button" class="btn" data-action="sl-v431-reroll" data-id="${esc(candidate.id)}" ${cards<1||free<1||slV431ActionBusy?'disabled':''}>다시 뽑기 · 뽑기권 1장</button></div>`
+ :`<div class="note">현재 발탁 대기 중인 선수가 없습니다. 뽑기권으로 유망주를 추첨하세요.</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v431-draw" ${cards<1||free<1||slV431ActionBusy||academy.length>=2?'disabled':''}>유망주 뽑기 · 뽑기권 1장</button>`;
+ const youthRow=y=>`<tr><td class="strong">${esc(y.name)}</td><td>${esc(y.pos)}</td><td class="num">${y.age}세</td><td class="num">${y.ovr}</td><td class="num">${y.potential}</td><td>${slV431YouthStatus(y.status)}</td><td>${y.status==='pending'?`<button type="button" class="btn xs primary" data-action="sl-v431-register" data-id="${esc(y.id)}">1군 승격</button>`:y.status==='academy'?`<button type="button" class="btn xs warn" data-action="sl-v431-release" data-id="${esc(y.id)}">유망주 방출</button>`:''}</td></tr>`;
+ return old+block('유망주 뽑기 · 17~19세',
+ `<div class="line between"><span>보유 뽑기권 <b>${cards}장</b> · 추첨 가능 선수 ${free}명</span><button class="btn xs" type="button" data-action="tab" data-value="items">아이템 상점에서 뽑기권 구매</button></div><div class="spacer"></div>${candidateHtml}<div class="small muted" style="margin-top:10px">잠재력 80+ 최대 10% · 85+ 최대 5% · 90+ 최대 0.8% · 98+ 최대 0.01%. 발탁에 성공할 때만 최초 계약금이 차감됩니다. 다시 뽑으면 기존 후보는 후보 풀로 돌아갑니다.</div>`)
+ +block('내 유망주 · 2명 제한',`<div class="note">유망주 등록 <b>${academy.length}/2명</b> · 20세 1군 승격 대기 ${pending.length}명 · 1군이 10명인 경우 선수 방출 후 승격할 수 있습니다.</div><div class="spacer"></div>${academy.length||pending.length?table(['선수','포지션','나이','OVR','잠재력','상태','관리'],[...academy,...pending].map(youthRow)):'<div class="empty">아직 발탁한 유망주가 없습니다.</div>'}`);
 };
 let slV431ActionBusy=false;
 async function slV431Action(action,id=null){
@@ -3883,8 +3894,10 @@ document.addEventListener('click',e=>{
  const btn=e.target.closest?.('[data-action^="sl-v431-"]');if(!btn)return;
  e.preventDefault();e.stopImmediatePropagation();
  const a=btn.dataset.action.replace('sl-v431-','');
- if(!['buy','draw','appoint','register','release'].includes(a))return;
+ if(!['buy','draw','reroll','appoint','register','release'].includes(a))return;
  if(a==='buy'&&!confirm('회원 공용 포인트 1억 P로 유망주 뽑기권을 구매할까요?'))return;
+ if(a==='reroll'&&!confirm('뽑기권 1장을 추가로 사용해 다른 유망주를 뽑을까요?'))return;
+ if(a==='appoint'&&!confirm('유망주를 발탁하면 화면에 표시된 최초 계약금이 공용 포인트에서 차감됩니다. 계속할까요?'))return;
  if(a==='release'&&!confirm('발굴한 선수를 포기하면 되돌릴 수 없습니다. 진행할까요?'))return;
  void slV431Action(a,btn.dataset.id||null);
 },true);
