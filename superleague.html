@@ -1472,10 +1472,10 @@ function v48Normalize(){
  s.rulesVersion='v4.8';save();
 }
 // Validity is about a distinct eligible 5-player roster, not their nominal positions.
-validLineup=function(ids){return !!hasSelected()&&Array.isArray(ids)&&ids.length===5&&new Set(ids).size===5&&ids.every(id=>mine().roster.includes(id)&&!!ply(id)&&legendMood(ply(id),s.selected)!=='strike');};
+validLineup=function(ids){return !!hasSelected()&&Array.isArray(ids)&&ids.length===5&&new Set(ids).size===5&&ids.every(id=>slV434CanPlay(id)&&!!ply(id)&&legendMood(ply(id),s.selected)!=='strike');};
 syncV45Lineup=function(){
  if(!hasSelected())return;
- const eligible=mine().roster.filter(id=>ply(id)&&legendMood(ply(id),s.selected)!=='strike');
+ const eligible=[...mine().roster,...slV434AcademyIds()].filter(id=>ply(id)&&legendMood(ply(id),s.selected)!=='strike');
  if(eligible.length<5)return;
  let used=new Set(),newLine=[];
  for(let i=0;i<5;i++){
@@ -1490,7 +1490,7 @@ v47BestLineup=function(tid,force=false){
  const team=s.teams[tid];if(!team)return [];
  if(tid===s.selected&&!force&&validLineup(s.lineup))return [...s.lineup];
  const form=tid===s.selected?s.formation:v48AiFormation(tid),roles=v48Roles(form);
- const eligible=team.roster.filter(id=>!!ply(id)&&legendMood(ply(id),tid)!=='strike');
+ const eligible=(tid===s.selected?[...team.roster,...slV434AcademyIds()]:team.roster).filter(id=>!!ply(id)&&legendMood(ply(id),tid)!=='strike');
  if(eligible.length<5)return defaultLineup(team);
  // Exact five-position assignment by lightweight bitmask DP (max ten roster members).
  const n=eligible.length,dp=new Map([[0,{score:0,path:[]}]]);
@@ -1510,7 +1510,7 @@ v47BestLineup=function(tid,force=false){
 // Role changes are allowed freely. Selecting an existing starter automatically swaps the two slots.
 changeLineup=function(slot,id){
  if(active()){notice('경기 진행 중에는 하프타임에서만 배치를 바꿀 수 있습니다.');return;}
- const i=Number(slot),p=ply(id);if(!Number.isInteger(i)||i<0||i>4||!p||!mine().roster.includes(id)||legendMood(p,s.selected)==='strike')return;
+ const i=Number(slot),p=ply(id);if(!Number.isInteger(i)||i<0||i>4||!p||!slV434CanPlay(id)||legendMood(p,s.selected)==='strike')return;
  syncV45Lineup();const j=s.lineup.indexOf(id);if(i===j)return;
  if(j>=0)s.lineup[j]=s.lineup[i];s.lineup[i]=id;
  if(s.match?.phase==='finished')s.match=null;
@@ -1538,7 +1538,7 @@ squadPage=function(){
  const extras=tailPos<0?'':old.slice(tailPos);
  const rows=s.lineup.map((id,i)=>{
   const p=ply(id),fit=v48Fit(p,roles[i]);
-  const options=team.roster.filter(x=>!!ply(x)&&legendMood(ply(x),s.selected)!=='strike');
+  const options=[...team.roster,...slV434AcademyIds()].filter(x=>!!ply(x)&&legendMood(ply(x),s.selected)!=='strike');
   return `<tr><td><b class="v48-slot">${roles[i]}</b></td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td><span class="v48-fit ${fit<.88?'off':''}">${Math.round(fit*100)}%</span></td><td><select class="field" data-change="lineup" data-slot="${i}" ${busy?'disabled':''}>${options.map(x=>`<option value="${x}" ${id===x?'selected':''}>${esc(ply(x).name)} (${ply(x).pos}, ${ply(x).ovr})</option>`).join('')}</select></td></tr>`;
  });
  const lineup=table(['배치','선발','OVR','적응도','선수 변경 · 자유 배치'],rows);
@@ -1608,7 +1608,7 @@ startSecond=function(){
 // All five bench / starting players are selectable at halftime, no positional locks.
 function v48HalfChange(slot,id){
  const m=s.match,i=Number(slot),p=ply(id);
- if(m?.phase!=='halftime'||!p||i<0||i>4||!mine().roster.includes(id)||legendMood(p,s.selected)==='strike')return;
+ if(m?.phase!=='halftime'||!p||i<0||i>4||!slV434CanPlay(id)||legendMood(p,s.selected)==='strike')return;
  const j=m.lineup.indexOf(id);if(j===i)return;
  if(j>=0)m.lineup[j]=m.lineup[i];
  else {m.changed++;m.subs.push({out:m.lineup[i],in:id});}
@@ -2959,13 +2959,15 @@ async function slLoad(quiet=false){
  if(!slEmbedded||sl.busy||document.hidden)return;
  sl.busy=true;
  try{
-  const data=await slRequest('sl_v432_snapshot');
+  const data=await slRequest('sl_v434_snapshot');
   if(!data.ok)throw new Error(data.error||'서버가 요청을 거부했습니다.');
   slVerifySnapshot(data);
   sl.error='';sl.ready=true;sl.verified=true;sl.snapshot=data;
   slRecoverAttempt();
   slV431ImportLegends(data.youthLegends||[]);
+  slV434ImportYouth(data.youth||[]);
   slApply(data);
+  slV434ImportYouth(data.youth||[]);
   // Keep open form fields intact when a passive sync arrives during editing.
   if(!quiet||!document.activeElement?.matches('input,select,textarea'))render();
   return true;
@@ -3490,7 +3492,7 @@ squadPage=function(){
 function slV424AcceptSavedTactic(){
  const config=sl.snapshot?.savedTactic;
  if(!slEmbedded||!config||!hasSelected()||slV424Dirty||active())return;
- if(!Array.isArray(config.lineup)||config.lineup.length!==5||new Set(config.lineup).size!==5||!config.lineup.every(x=>mine().roster.includes(x)))return;
+ if(!Array.isArray(config.lineup)||config.lineup.length!==5||new Set(config.lineup).size!==5||!config.lineup.every(x=>slV434CanPlay(x)))return;
  if(!V48_FORMATIONS[config.formation])return;
  if(!Object.keys(TACTICS).every(k=>config.tactics&&Object.hasOwn(TACTICS[k],config.tactics[k])))return;
  s.formation=config.formation;s.lineup=[...config.lineup];s.tactics={...config.tactics};
@@ -3856,7 +3858,7 @@ slV423ItemsPage=function(){
     <input id="sl-v433-buy-qty" class="inp" type="number" inputmode="numeric" min="1" max="100" step="1" value="1" style="width:100px;max-width:100%;padding:8px">
     <span class="small muted" id="sl-v433-buy-total">총 1억 P</span>
     <button type="button" class="btn primary" data-action="sl-v431-buy" ${slV431ActionBusy?'disabled':''}>선택 수량 구매</button>
-  </div><div class="small muted" style="margin-top:10px">한 번에 1~100장까지 구매 가능 · 최대 보유 10,000장 · 재추첨 시 1장 소모</div>`);
+  </div><div class="small muted" style="margin-top:10px">한 번에 1~100장까지 구매 가능 · 최대 보유 10,000장 · 새 뽑기 때마다 1장 소모</div>`);
 };
 // V4.32: the youth draft, appointment and academy are all managed in the recruitment tab.
 // Item tab is purchase-only; the backend owns fee calculation and ticket consumption.
@@ -3867,16 +3869,14 @@ marketPage=function(){
  const youth=Array.isArray(sl.snapshot?.youth)?sl.snapshot.youth:[];
  const candidate=youth.find(y=>y.status==='scouted');
  const academy=youth.filter(y=>y.status==='academy');
- const pending=youth.filter(y=>y.status==='pending');
  const cards=Number(sl.snapshot?.youthCards||0);
  const free=Number(sl.snapshot?.youthAvailable||0);
  const price=y=>slV423Money(y.signingFee||0);
- const candidateHtml=candidate?`<div class="note"><b>추첨 결과 · ${esc(candidate.name)}</b><div>포지션 ${esc(candidate.pos)} · 나이 ${candidate.age}세 · OVR ${candidate.ovr} · 잠재력 ${candidate.potential}</div><div>발탁 시 최초 계약금 <b>${price(candidate)}</b></div></div><div class="spacer"></div><div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v431-appoint" data-id="${esc(candidate.id)}" ${academy.length>=2||slV431ActionBusy||BigInt(String(sl.snapshot?.wallet||0))<BigInt(String(candidate.signingFee||0))?'disabled':''}>이 선수 발탁 · ${price(candidate)}</button><button type="button" class="btn" data-action="sl-v431-reroll" data-id="${esc(candidate.id)}" ${cards<1||slV431ActionBusy?'disabled':''}>다시 뽑기 · 뽑기권 1장</button><button type="button" class="btn warn" data-action="sl-v431-decline" data-id="${esc(candidate.id)}" ${slV431ActionBusy?'disabled':''}>발탁 안 함 · 즉시 반환</button></div>`
+ const candidateHtml=candidate?`<div class="note"><b>추첨 결과 · ${esc(candidate.name)}</b><div>포지션 ${esc(candidate.pos)} · 나이 ${candidate.age}세 · OVR ${candidate.ovr}</div><div>발탁 시 최초 계약금 <b>${price(candidate)}</b></div></div><div class="spacer"></div><div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v431-appoint" data-id="${esc(candidate.id)}" ${academy.length>=2||slV431ActionBusy||BigInt(String(sl.snapshot?.wallet||0))<BigInt(String(candidate.signingFee||0))?'disabled':''}>이 선수 발탁 · ${price(candidate)}</button><button type="button" class="btn" data-action="sl-v431-reroll" data-id="${esc(candidate.id)}" ${slV431ActionBusy?'disabled':''}>다시 뽑기 · 발탁 안 함</button></div>`
  :`<div class="note">발탁 대기 중인 선수가 없습니다. 뽑기권으로 유망주를 추첨하세요. 발탁하지 않은 선수는 다른 회원도 다시 뽑을 수 있습니다.</div><div class="spacer"></div><button type="button" class="btn primary" data-action="sl-v431-draw" ${cards<1||slV431ActionBusy||academy.length>=2?'disabled':''}>유망주 뽑기 · 뽑기권 1장</button>`;
- const youthRow=y=>`<tr><td class="strong">${esc(y.name)}</td><td>${esc(y.pos)}</td><td class="num">${y.age}세</td><td class="num">${y.ovr}</td><td class="num">${y.potential}</td><td>${slV431YouthStatus(y.status)}</td><td>${y.status==='pending'?`<button type="button" class="btn xs primary" data-action="sl-v431-register" data-id="${esc(y.id)}">1군 승격</button>`:y.status==='academy'?`<button type="button" class="btn xs warn" data-action="sl-v431-release" data-id="${esc(y.id)}">유망주 방출</button>`:''}</td></tr>`;
+ 
  return old+block('유망주 뽑기 · 17~19세',
- `<div class="line between"><span>보유 뽑기권 <b>${cards}장</b> · 추첨 가능 선수 ${free}명</span><button class="btn xs" type="button" data-action="tab" data-value="items">아이템 상점에서 뽑기권 구매</button></div><div class="spacer"></div>${candidateHtml}<div class="small muted" style="margin-top:10px">잠재력 80+ 최대 10% · 85+ 최대 5% · 90+ 최대 0.8% · 98+ 최대 0.01%. 발탁에 성공할 때만 최초 계약금이 차감됩니다. 발탁 안 함을 선택하면 기존 후보가 즉시 다른 회원에게도 다시 열립니다. 미선택 후보는 10분 후 다음 추첨 시 자동 반환됩니다.</div>`)
- +block('내 유망주 · 2명 제한',`<div class="note">유망주 등록 <b>${academy.length}/2명</b> · 20세 1군 승격 대기 ${pending.length}명 · 1군이 10명인 경우 선수 방출 후 승격할 수 있습니다.</div><div class="spacer"></div>${academy.length||pending.length?table(['선수','포지션','나이','OVR','잠재력','상태','관리'],[...academy,...pending].map(youthRow)):'<div class="empty">아직 발탁한 유망주가 없습니다.</div>'}`);
+ `<div class="line between"><span>보유 뽑기권 <b>${cards}장</b> · 추첨 가능 선수 ${free}명</span><button class="btn xs" type="button" data-action="tab" data-value="items">아이템 상점에서 뽑기권 구매</button></div><div class="spacer"></div>${candidateHtml}<div class="small muted" style="margin-top:10px">잠재력 80+ 최대 10% · 85+ 최대 5% · 90+ 최대 0.8% · 98+ 최대 0.01%. 발탁에 성공할 때만 최초 계약금이 차감됩니다. 발탁 안 함을 선택하면 기존 후보가 즉시 다른 회원에게도 다시 열립니다. 미선택 후보는 10분 후 다음 추첨 시 자동 반환됩니다.</div>`);
 };
 let slV431ActionBusy=false;
 async function slV431Action(action,id=null){
@@ -3921,9 +3921,58 @@ document.addEventListener('click',e=>{
   void slV431Action('buy',String(qty));return;
  }
  if(a==='decline'&&!confirm('이 유망주를 발탁하지 않고 즉시 공용 추첨 풀로 반환할까요?'))return;
- if(a==='reroll'&&!confirm('뽑기권 1장을 추가로 사용해 다른 유망주를 뽑을까요?'))return;
+ if(a==='reroll'&&!confirm('이번 후보를 발탁하지 않고 공용 추첨 풀로 돌려보낼까요? 새 뽑기는 다음에 뽑기권 1장을 사용합니다.'))return;
  if(a==='appoint'&&!confirm('유망주를 발탁하면 화면에 표시된 최초 계약금이 공용 포인트에서 차감됩니다. 계속할까요?'))return;
  if(a==='release'&&!confirm('발굴한 선수를 포기하면 되돌릴 수 없습니다. 진행할까요?'))return;
  void slV431Action(a,btn.dataset.id||null);
+},true);
+
+// V4.34: 10 first-team + 2 academy slots. Candidate potential is server-private.
+function slV434Academy(){return (sl.snapshot?.youth||[]).filter(y=>y.status==='academy'&&Number(y.age)<20);}
+function slV434AcademyIds(){return slV434Academy().map(y=>String(y.id));}
+function slV434CanPlay(id){return hasSelected()&&(mine().roster.includes(id)||slV434AcademyIds().includes(id));}
+function slV434ImportYouth(rows){
+ for(const r of rows){if(r.status!=='academy'||Number(r.age)>=20||!r.id)continue;
+  let p=BY_ID.get(r.id);
+  if(!p){p={id:r.id,name:r.name,pos:r.pos,legend:false,youth:true,style:r.pos==='GK'?'reflex':r.pos==='DF'?'stopper':r.pos==='MF'?'playmaker':'finisher',country:r.nation||'',ageBaseline:r.age,referenceYear:2005,baseOvr:Number(r.ovr)||55,sourceOvr:Number(r.ovr)||55,ovr:Number(r.ovr)||55,potential:Number(r.ovr)||55};BY_ID.set(r.id,p);PLAYERS.push(p);}
+  p.youth=true;p.name=r.name;p.pos=r.pos;p.age=Number(r.age);p.ovr=Number(r.ovr);p.baseOvr=Number(r.ovr);p.potential=Number(r.ovr);statsCache.delete(p.id);
+ }
+}
+const slV434PrevSquadPage=squadPage;
+squadPage=function(){
+ const original=slV434PrevSquadPage();
+ if(!slEmbedded||!sl.ready||!hasSelected())return original;
+ const youth=(sl.snapshot?.youth||[]).filter(y=>['academy','pending'].includes(y.status));
+ const row=y=>`<tr><td class="strong">${esc(y.name)} <span class="tag">${y.status==='academy'?'유망주':'승격대기'}</span></td><td>${esc(y.pos)}</td><td class="num">${y.age}세</td><td class="num">${y.ovr}</td><td>${y.status==='academy'?'선발 출전 가능':'20세 · 1군 승격 대기'}</td><td>${y.status==='pending'?`<button class="btn xs primary" data-action="sl-v431-register" data-id="${esc(y.id)}">1군 승격</button>`:`<button class="btn xs warn" data-action="sl-v431-release" data-id="${esc(y.id)}">방출</button>`}</td></tr>`;
+ const academy=slV434Academy();
+ const youthPanel=block('내 유망주 · 2명 전용 슬롯',`<div class="note">1군 ${mine().roster.length}/10명 + 유망주 ${academy.length}/2명 = 최대 12명 보유. 유망주는 선발 5인 전술에 출전할 수 있으며 20세에는 1군 승격이 필요합니다.</div><div class="spacer"></div>${youth.length?table(['선수','포지션','나이','OVR','출전 상태','관리'],youth.map(row)):'<div class="empty">등록된 유망주가 없습니다. 선수 영입 탭에서 유망주를 발탁하세요.</div>'}`);
+ const first=Array.isArray(sl.snapshot?.contractInfo)?sl.snapshot.contractInfo:[];
+ const contracts=[...first.map(c=>({id:c.id,name:ply(c.id)?.name||c.id,end:Number(c.endSeason),wage:c.annualWage,type:c.type})),...youth.filter(y=>y.status==='academy').map(y=>({id:y.id,name:y.name,end:Number(y.contractEnd??s.season+2),wage:y.annualWage||y.signingFee||'0',type:'youth'}))];
+ const contractRows=contracts.map(c=>{const left=Math.max(0,c.end-s.season+1),can=left>0&&left<3;
+  return `<tr><td class="strong">${esc(c.name)} ${c.type==='youth'?'<span class="tag">유망주</span>':''}</td><td class="num">${left}시즌</td><td class="num">${slV423Money(c.wage)}</td><td><button class="btn xs ${can?'primary':''}" type="button" data-action="sl-v434-renew" data-id="${esc(c.id)}" ${!can||slV434RenewBusy?'disabled':''}>+1시즌 연장</button></td></tr>`}).join('');
+ return original+youthPanel+block('선수 계약 관리 · 최대 3시즌',`<div class="note">선수 유형과 관계없이 1시즌씩 연장합니다. 최대 계약 잔여 기간은 3시즌이며, 연장할 때 1년치 연봉을 계약금으로 지급합니다. 일반 현역 연봉은 0P입니다.</div><div class="spacer"></div>${contracts.length?table(['선수','잔여 계약','1년 연봉(연장금)','계약 연장'],contractRows):'<div class="empty">등록된 선수가 없습니다.</div>'}`);
+};
+let slV434RenewBusy=false;
+document.addEventListener('click',e=>{
+ if(!slEmbedded)return;
+ const btn=e.target.closest?.('[data-action="sl-v434-renew"]');if(!btn)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ if(slV434RenewBusy||!sl.ready)return;
+ const id=btn.dataset.id;
+ const c=(sl.snapshot?.contractInfo||[]).find(x=>x.id===id)||(sl.snapshot?.youth||[]).find(x=>x.id===id);
+ if(!c)return notice('선수 계약 정보를 확인하지 못했습니다.');
+ const wage=String(c.annualWage||'0');
+ if(!confirm(`${ply(id)?.name||c.name} 계약을 1시즌 연장할까요? 1년치 연봉 ${slV423Money(wage)}이 회원 포인트에서 차감됩니다.`))return;
+ const key='sl_v434_renew_'+(sl.snapshot?.viewer?.id||'guest')+'_'+id;
+ let req;try{req=sessionStorage.getItem(key)||slV423Uuid();sessionStorage.setItem(key,req);}catch(err){return notice(String(err));}
+ slV434RenewBusy=true;
+ void(async()=>{try{
+  const res=await slRequest('sl_v434_renew_contract',{p_player:id,p_request:req});
+  if(!res?.ok)throw new Error(res?.error||'연장 실패');
+  sessionStorage.removeItem(key);await slLoad(false);
+  window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
+  notice(res.message||'1시즌 연장 완료');
+ }catch(err){notice('계약 연장 확인 필요: '+String(err?.message||err));}
+ finally{slV434RenewBusy=false;render();}})();
 },true);
 </script></body></html>
