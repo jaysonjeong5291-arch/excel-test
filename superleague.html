@@ -302,7 +302,7 @@ function resetGame(){if(!confirm('데모 구단·경기·영입 기록을 초기
 function page(title,sub,tag=''){return `<div class="pagehead"><div><div class="eyebrow">관리 현황 / 슈퍼리그 시뮬레이션</div><h1>${title}</h1><p>${sub}</p></div>${tag}</div>`}
 function block(title,content,right=''){return `<section class="block"><div class="blocktitle"><span>${title}</span>${right}</div><div class="blockcontent">${content}</div></section>`}
 function table(headers,rows,cls=''){const body=Array.isArray(rows)?rows.join(''):typeof rows==='string'?rows:'';return `<div class="scrolltable"><table class="excel ${cls}"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table></div>`}
-function slV428Weekday(){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',weekday:'short'}).format(new Date()).replace(/요일$/,'');}
+function slV428Weekday(){return DAYS[((Number(s.day)||0)%7+7)%7];}
 function slV428OperationalDay(){return `${s.day<7?'상반기':'하반기'} (${slV428Weekday()})`;}
 function dayLabel(){return `시즌 ${s.season} · ${slV428OperationalDay()}`;}
 function topRefresh(){
@@ -338,7 +338,7 @@ function squadPage(){
   return `<tr><td><span class="tag">${ROLES[i]}</span></td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td><select class="field" data-change="lineup" data-slot="${i}" ${busy?'disabled':''}>${opts.map(x=>`<option value="${x}" ${x===id?'selected':''}>${esc(ply(x).name)}</option>`).join('')}</select></td></tr>`;
  });
  const lineupInfo=table(['자리','현재 선발','OVR','동일 포지션 후보'],lineupRows)+`<div class="separator"></div><div class="small fw">경기 사전 전술</div><div class="spacer"></div>${tacticControls(s.tactics,busy)}${busy?'<div class="note warn" style="margin-top:8px">현재 경기가 진행 중입니다. 전반과 후반의 선수/전술은 수정할 수 없고, 하프타임에서만 가능합니다.</div>':''}`;
- const ownedRows=[...new Set([...t.roster,...(slEmbedded&&sl?.ready?slV434AcademyIds():[])])].map(ply).map(p=>`<tr><td>${p.pos}</td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td>${STYLES[p.style]} ${p.youth?'<span class="tag">유망주</span>':''}</td><td>${s.lineup.includes(p.id)?'<span class="tag">선발</span>':'<span class="tag gray">후보</span>'}</td><td>${!p.youth&&marketOpen()&&!busy&&countsBy[p.pos]>(p.pos==='FW'?2:1)?`<button class="btn xs warn" data-action="release" data-id="${p.id}">방출 +${fmt(Math.floor(price(p)*.55))}P</button>`:'<span class="muted">유지</span>'}</td></tr>`);
+ const ownedRows=[...new Set([...t.roster,...(slEmbedded&&sl?.ready?slV434AcademyIds():[])])].map(ply).map(p=>`<tr><td>${p.pos}</td><td class="strong">${esc(p.name)}</td><td class="num">${p.ovr}</td><td>${STYLES[p.style]} ${p.youth?'<span class="tag">유망주</span>':''}</td><td>${s.lineup.includes(p.id)?'<span class="tag">선발</span>':'<span class="tag gray">후보</span>'}</td><td>${!p.youth&&marketOpen()&&!busy&&countsBy[p.pos]>(p.pos==='FW'?2:1)?`<button class="btn xs warn" data-action="release" data-id="${p.id}">방출 · ${slV423Money(slV440ReleaseFee(p.id).toString())}</button>`:'<span class="muted">유지</span>'}</td></tr>`);
  const ownedInfo=table(['포지션','선수명','능력치','역할','현재 상태','관리'],ownedRows)+`<div class="note" style="margin-top:10px">방출 뒤 GK·DF·MF 최소 1명씩, FW 최소 2명은 유지해야 합니다. 선발을 방출하면 가능한 선수로 자동 교체됩니다.</div>`;
  return page('선수단 및 전술 관리',`${esc(t.name)} · 기본 선수 8명 / 보유 최대 10명 · 전술은 경기 전 또는 하프타임만 변경 가능`,`<span class="tag ${busy?'gold':''}">${busy?'경기 진행 중 / 편집 잠금':'선발 설정 가능'}</span>`)
   +`<div class="rosterstat">${['GK','DF','MF','FW'].map(pos=>`<span>${pos} ${countsBy[pos]}명 / 최소 ${pos==='FW'?2:1}</span>`).join('')}</div>`
@@ -1036,9 +1036,11 @@ const v45Squad=squadPage;
 squadPage=function(){
  const rows=mine().roster.map(ply).filter(p=>p?.legend).map(p=>{
   const c=s.contracts?.[p.id],left=contractSeasonsRemaining(p,s.selected),gap=moraleGap(p,s.selected);
-  const mood=legendMood(p,s.selected),fee=contractFee(p),canRenew=marketOpen()&&!active()&&gap<10&&s.points>=fee;
+  const liveContract=slEmbedded&&sl?.ready?(sl.snapshot?.contractInfo||[]).find(x=>x.id===p.id):null;
+  const fee=liveContract?BigInt(String(liveContract.annualWage||'0')):BigInt(String(Math.max(0,contractFee(p))));
+  const mood=legendMood(p,s.selected),canRenew=marketOpen()&&!active()&&gap<10&&BigInt(String(sl.snapshot?.wallet??s.points??0))>=fee;
   const renewReason=gap>=10?'사기 불만으로 불가':!marketOpen()?'주말에 가능':active()?'경기 중':s.points<fee?'포인트 부족':'재계약 가능';
-  return `<tr><td class="strong">${esc(p.name)}</td><td>${moodBadge(p,s.selected)}</td><td class="num">${left}시즌</td><td>${c?`시즌 ${c.endSeason} 종료까지`:'미등록 계약'}</td><td class="num">${fmt(fee)}P</td><td><button class="btn xs ${canRenew?'primary':''}" data-action="legend-renew" data-id="${p.id}" ${canRenew?'':'disabled'} title="${renewReason}">재계약 +${V45_RENEW_SEASONS}시즌</button></td></tr>`;
+  return `<tr><td class="strong">${esc(p.name)}</td><td>${moodBadge(p,s.selected)}</td><td class="num">${left}시즌</td><td>${c?`시즌 ${c.endSeason} 종료까지`:'미등록 계약'}</td><td class="num">${slV423Money(fee.toString())}</td><td><button class="btn xs ${canRenew?'primary':''}" data-action="${slEmbedded?'sl-v434-renew':'legend-renew'}" data-id="${p.id}" ${!slEmbedded&&!canRenew?'disabled':''} title="${renewReason}">재계약 +1시즌</button></td></tr>`;
  });
  if(slEmbedded&&window.__slOnline?.ready){
    for(const y of slV434Academy()){
@@ -1551,7 +1553,7 @@ squadPage=function(){
  });
  const lineup=table(['배치','선발','OVR','적응도','선수 변경 · 자유 배치'],rows);
  const controls=`<div class="v48-formation-row"><label>포메이션 <select class="field" data-change="formation" ${busy?'disabled':''}>${v48FormOptions(s.formation)}</select></label><button class="btn" data-action="v48-auto-lineup" ${busy?'disabled':''}>최적 배치</button><span class="small muted">선발 5명 중 원래 포지션에 관계없이 자유 배치 · 선발끼리 선택하면 자동 자리 교환</span></div>`;
- const owned=[...new Set([...team.roster,...(slEmbedded&&sl?.ready?slV434AcademyIds():[])])].map(ply).filter(Boolean).map(p=>`<tr><td>${p.pos}</td><td class="strong">${esc(p.name)} ${p.youth?'<span class="tag">유망주</span>':''}</td><td class="num">${p.ovr}</td><td>${p.youth?'유망주':(STYLES[p.style]||'선수')}</td><td>${s.lineup.includes(p.id)?'<span class="tag">선발</span>':'<span class="tag gray">후보</span>'}</td><td>${p.youth?'<span class="muted">유망주 2인 슬롯</span>':marketOpen()&&!busy?`<button class="btn xs warn" data-action="release" data-id="${p.id}">방출</button>`:'<span class="muted">주말 관리</span>'}</td></tr>`);
+ const owned=[...new Set([...team.roster,...(slEmbedded&&sl?.ready?slV434AcademyIds():[])])].map(ply).filter(Boolean).map(p=>`<tr><td>${p.pos}</td><td class="strong">${esc(p.name)} ${p.youth?'<span class="tag">유망주</span>':''}</td><td class="num">${p.ovr}</td><td>${p.youth?'유망주':(STYLES[p.style]||'선수')}</td><td>${s.lineup.includes(p.id)?'<span class="tag">선발</span>':'<span class="tag gray">후보</span>'}</td><td>${p.youth?'<span class="muted">유망주 2인 슬롯</span>':marketOpen()&&!busy?`<button class="btn xs warn" data-action="release" data-id="${p.id}">방출 · ${slV423Money(slV440ReleaseFee(p.id).toString())}</button>`:'<span class="muted">주말 관리</span>'}</td></tr>`);
  return page('선수단 및 전술 관리',`${esc(team.name)} · 1군 최대 10명 + 유망주 2명 · 자유 포지션 배치`,`<span class="tag ${busy?'gold':''}">${busy?'경기 진행 중 / 편집 잠금':'전술 및 포메이션 편집 가능'}</span>`)
  +controls+`<div class="grid2">${block('선발 포메이션 · '+s.formation,pitch(s.lineup))}${block('선발 5인 · 포지션 자유 배치',`<div class="v48-lineup">${lineup}</div><div class="v48-help">다른 포지션의 선수도 누구든 투입할 수 있습니다. 다른 선발을 선택하면 자리를 서로 바꿉니다. 포지션에 따른 패널티는 경기 시뮬레이션에 반영됩니다.</div><div class="separator"></div><b>전술 설정</b><div class="spacer"></div>${tacticControls(s.tactics,busy)}${slV428SaveButton(busy)}`)}</div>`
  +block('전체 보유 선수 · 방출 검토',table(['원래 포지션','선수명','능력치','역할','상태','관리'],owned)+`<div class="note" style="margin-top:10px">선수 출전 위치는 자유롭지만, 기존 선수단 보유 규정(GK 1·DF 1·MF 1·FW 2 최소 보유)은 유지됩니다.</div>`)
@@ -3023,13 +3025,14 @@ async function slLoad(quiet=false){
  if(!slEmbedded||sl.busy||document.hidden)return;
  sl.busy=true;
  try{
-  const data=await slRequest('sl_v437_snapshot');
+  const data=await slRequest('sl_v440_snapshot');
   if(!data.ok)throw new Error(data.error||'서버가 요청을 거부했습니다.');
   slVerifySnapshot(data);
   sl.error='';sl.ready=true;sl.verified=true;sl.snapshot=data;
   slRecoverAttempt();
   slV431ImportLegends(data.youthLegends||[]);
   slV434ImportYouth(data.youth||[]);
+  slV440ImportReserves(data.reservePlayers||[]);
   slApply(data);
   slV434ImportYouth(data.youth||[]);
   // Keep open form fields intact when a passive sync arrives during editing.
@@ -4362,6 +4365,60 @@ leaguePage=function(){
  const text=slV437PreviousLeaguePage();
  const amounts=[7000,5000,4000,3500,3000,2750,2500,2000,1500,1000,800,650,500,400,300,250,200,150,100,50];
  return text+block('정규리그 시즌별 순위 상금',table(['순위','상금 · 기본 시즌'],amounts.map((v,i)=>`<tr><td class="num">${i+1}위</td><td class="num strong">${v.toLocaleString('ko-KR')}억 P</td></tr>`))+'<div class="small muted">각 시즌에는 기존 규칙대로 1~2% 복리 상금 상승이 반영됩니다. 이미 정산된 시즌은 소급 지급하지 않습니다.</div>');
+};
+
+
+// V4.40: authoritative game-day label, secure release fees, automatic regular backup display.
+function slV440ImportReserves(rows){
+ for(const r of (Array.isArray(rows)?rows:[])){
+  const id=String(r?.id||'');if(!id.startsWith('v440-reserve-'))continue;
+  let p=BY_ID.get(id);
+  if(!p){p={id,name:String(r.name||'대체 현역'),pos:String(r.pos||'MF'),legend:false,
+     youth:false,style:'engine',country:'',ageBaseline:Number(r.age)||25,
+     referenceYear:2026,baseOvr:Number(r.ovr)||73,sourceOvr:Number(r.ovr)||73,
+     ovr:Number(r.ovr)||73,potential:Number(r.ovr)||73};
+     BY_ID.set(id,p);PLAYERS.push(p);}
+  p.name=String(r.name||p.name);p.pos=String(r.pos||p.pos);
+  p.baseOvr=Number(r.ovr)||73;p.ovr=Number(r.ovr)||73;
+ }
+}
+function slV440ReleaseFee(id){
+ const p=ply(id);if(!p)return 0n;
+ if(!p.legend)return 100000000n;
+ const c=(sl.snapshot?.contractInfo||[]).find(x=>String(x.id)===String(id));
+ const wage=BigInt(String(c?.annualWage??p.signingFee??0));
+ const last=Number(c?.endSeason??s.contracts?.[id]?.endSeason??s.season);
+ const years=Math.max(0,last-Number(s.season)+1);
+ return wage*BigInt(years);
+}
+let slV440Releasing=false;
+const slV440PreviousRelease=release;
+release=function(id){
+ if(!slEmbedded)return slV440PreviousRelease(id);
+ if(!sl?.ready||!sl?.verified)return notice('서버 연결을 먼저 확인하세요.');
+ if(slV440Releasing||sl.busy)return notice('이전 작업의 처리 결과를 확인 중입니다.');
+ const player=ply(id);if(!player)return notice('방출 대상을 찾지 못했습니다.');
+ if(s.match&&active())return notice('경기 중에는 방출할 수 없습니다.');
+ const fee=slV440ReleaseFee(id);
+ const desc=player.legend?`1년 연봉 × 남은 계약기간 = ${slV423Money(fee.toString())}`:
+   `현역 방출 비용 ${slV423Money(fee.toString())}`;
+ if(!confirm(`${player.name} 선수를 방출할까요?\n${desc}\n공용 회원 포인트에서 즉시 차감됩니다.`))return;
+ const storageKey='sl_v440_release_'+String(sl.snapshot?.viewer?.id||'guest')+'_'+id;
+ let request;
+ try{request=sessionStorage.getItem(storageKey)||slV423Uuid();sessionStorage.setItem(storageKey,request)}
+ catch(_){return notice('방출 요청번호를 저장하지 못했습니다.');}
+ slV440Releasing=true;
+ void(async()=>{
+  try{
+   const response=await slRequest('sl_v440_release',{p_player:id,p_request:request});
+   if(!response?.ok)throw new Error(response?.error||'방출 승인 실패');
+   sessionStorage.removeItem(storageKey);
+   await slLoad(false);
+   window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
+   notice(`${player.name} 방출 완료 · ${slV423Money(response.fee||fee.toString())} 차감`);
+  }catch(err){notice('방출 확인 필요: '+String(err?.message||err)+' · 재시도 시 같은 요청번호로 조회합니다.');}
+  finally{slV440Releasing=false;render();}
+ })();
 };
 
 render(); // Show the new daily-ranking navigation entry immediately.
