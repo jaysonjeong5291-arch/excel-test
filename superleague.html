@@ -4531,7 +4531,7 @@ recruit=function(id){
  if(!sl?.ready||!sl?.verified)return notice('서버 연결을 확인하세요.');
  if(Number(sl.snapshot?.seasonSigned??2)>=2)return notice('이번 시즌 일반 레전드 FA 영입은 2명까지입니다. 선수영입권 사용은 별도입니다.');
  const player=ply(id),row=(sl.snapshot.players||[]).find(x=>x.id===id);
- if(!player||!row||row.club!==null||row.retired||!slV445LegendVisible(row))return notice('21세 이상 FA 선수만 영입할 수 있습니다.');
+ if(!player||!row||row.club!==null||row.retired||!slV445LegendVisible(row))return notice('일반 레전드는 21세부터, 유망주 졸업 FA는 20세부터 영입할 수 있습니다.');
  if(!confirm(`${player.name} 선수를 이번 시즌 일반 FA로 영입할까요?\n회원 공용 포인트에서 최초 계약금 ${slV423Money(row.salary||0)}이 차감됩니다.`))return;
  let req=slV441SignRequestKeys.get(id);
  const key='sl_v441_sign_'+(sl.snapshot?.viewer?.id||'guest')+'_'+id;
@@ -4540,7 +4540,7 @@ recruit=function(id){
  void(async()=>{
   try{
    const result=await slRequest('sl_command',{p_action:'fa_sign',p_payload:{player:id,request:req}});
-   if(!result?.ok)throw new Error(result?.error||'서버가 영입을 거절했습니다.');
+   if(!result?.ok){notice('FA 영입 불가: '+String(result?.error||'서버에서 영입을 거절했습니다.'));return;}
    slV441SignRequestKeys.delete(id);sessionStorage.removeItem(key);
    await slLoad(false);
    window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
@@ -4560,7 +4560,7 @@ function slV445LegendVisible(row){
  const age=Number(row?.age??(Number(candidate.ageBaseline||0)+Number(s.season)-1));
  // V4.50: ordinary legends still first appear at 21, but an academy-pool
  // graduate is eligible for the adult FA list upon reaching 20.
- const isGraduate=(sl.snapshot?.youthLegends||[]).some(y=>String(y.id)===String(row?.id));
+ const isGraduate=(sl.snapshot?.youthLegends||[]).some(y=>String(y.id)===String(row?.id)&&Number(y.potential)>85);
  return Number.isFinite(age)&&(age>20||(age===20&&isGraduate));
 }
 marketPage=function(){
@@ -4839,7 +4839,7 @@ function slV443YouthPanel(){
  if(!batch){
   content+=`<div class="note">유망주 17~19세 · 뽑기권 1장당 10억 P. 10명 뽑기는 서로 다른 선수 10명을 뽑고 그중 1~2명을 발탁할 수 있습니다. 잠재력은 공개하지 않습니다.</div><div class="spacer"></div><div class="line" style="gap:8px;flex-wrap:wrap"><button class="btn primary" type="button" data-action="sl-v437-draw" data-count="1" ${busy||cards<1||limit<=0?'disabled':''}>1명 뽑기 · 1장</button><button class="btn primary" type="button" data-action="sl-v437-draw" data-count="10" ${busy||cards<10||limit<=0?'disabled':''}>10명 뽑기 · 10장</button></div>`;
  }else{
-  content+=`<div class="note">이번 추첨 <b>${batch.count}명</b> · 발탁 가능한 인원 ${Math.max(0,limit)}명. 선택한 선수만 최초 계약금(1년치 연봉)을 지급하고, 나머지는 공용 추첨 풀로 돌아갑니다.</div><div class="spacer"></div>`;
+  content+=`<div class="note">이번 추첨 <b>${batch.count}명</b> · 발탁 가능한 인원 ${Math.max(0,limit)}명. 선택한 선수만 최초 계약금(1년치 연봉)을 지급하고, 나머지는 공용 추첨 풀로 돌아갑니다. <b>다른 탭 이동 또는 3분 동안 미결정 시 자동 반환</b> · 남은 시간 <b id="sl-v451-countdown">계산 중</b></div><div class="spacer"></div>`;
   content+=`<div class="grid2" style="align-items:stretch">${candidates.map(y=>{
    const checked=slV437Selected.has(y.id),disabled=(!checked&&slV437Selected.size>=limit)||busy;
    return `<label style="display:block;border:2px solid ${checked?'#148a54':'var(--line,#c8d6ce)'};background:${checked?'rgba(26,153,90,.08)':'transparent'};border-radius:8px;padding:12px;cursor:pointer"><input type="checkbox" data-action="sl-v437-toggle" data-id="${esc(y.id)}" ${checked?'checked':''} ${disabled?'disabled':''} style="margin-right:8px"><b>${esc(y.name)}</b> <span class="tag">${esc(y.pos)}</span><div class="small muted">${y.age}세 · OVR ${y.ovr} · 최초 계약금 ${slV437Price(y)}</div></label>`;
@@ -4906,5 +4906,108 @@ document.addEventListener('click',async event=>{
  }catch(err){notice('시즌 초기화 실패: '+String(err?.message||err));}
  finally{button.disabled=false;}
 },true);
+
+
+
+// V4.51 — Youth draw: auto-decline on navigation or three-minute deadline.
+// The canonical Supabase decide RPC owns all state transitions and guarantees
+// that unappointed candidates go back to the shared pool without more ticket use.
+let slV451PendingBatch='',slV451TimerKey='',slV451Timer=null,slV451RetryAt=0;
+const slV451SettledBatches=new Set();
+const slV451AutoReturnRequests=new Map();
+function slV451RemainingMs(batch){
+ const deadline=Date.parse(String(batch?.expiresAt||''));
+ return Number.isFinite(deadline)?Math.max(0,deadline-Date.now()):180000;
+}
+function slV451UpdateClock(){
+ const label=document.getElementById('sl-v451-countdown');
+ if(!label)return;
+ const batch=slV437Batch();
+ if(!batch?.id){label.textContent='-';return;}
+ const seconds=Math.ceil(slV451RemainingMs(batch)/1000);
+ label.textContent=String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0');
+}
+async function slV451AutoReturn(reason){
+ if(!slEmbedded||!sl?.ready||!sl?.verified||slV437Busy||slV431ActionBusy)return false;
+ const batch=slV437Batch(),batchId=String(batch?.id||'');
+ if(!batchId||slV451SettledBatches.has(batchId)||slV451PendingBatch===batchId||Date.now()<slV451RetryAt)return false;
+ slV451PendingBatch=batchId;
+ let receipt;
+ try{
+  receipt=slV437UuidRequest('automatic_decline_'+batchId);
+  const result=await slRequest('sl_v437_youth_decide',{
+   p_batch:batchId,p_action:'decline',p_ids:[],p_request:receipt.request
+  });
+  // If the deadline passed first, this RPC still invokes server expiry cleanup.
+  if(!result?.ok && !/시간이 끝|이미 처리|만료|expired/i.test(String(result?.error||'')))
+   throw new Error(result?.error||'자동 반환 실패');
+  sessionStorage.removeItem(receipt.key);
+  slV451SettledBatches.add(batchId);
+  slV437Selected.clear();
+  await slLoad(false);
+  if(reason==='tab')notice('다른 메뉴로 이동하여 유망주 추첨 결과가 자동 반환됐습니다.');
+  else if(s.tab==='market')notice('3분이 경과해 미결정 유망주가 자동 반환됐습니다.');
+  slV451RetryAt=0;
+  return true;
+ }catch(err){
+  slV451RetryAt=Date.now()+15000;
+  console.warn('유망주 자동 반환 재시도 예정:',err);
+  if(s.tab==='market')notice('유망주 자동 반환 확인 중 · 네트워크 복구 시 재시도합니다.');
+  return false;
+ }finally{
+  slV451PendingBatch='';
+  slV451Schedule();
+ }
+}
+function slV451Schedule(){
+ const batch=slEmbedded&&sl?.ready?slV437Batch():null;
+ const key=batch?.id?String(batch.id)+'|'+String(batch.expiresAt||''):'';
+ if(key!==slV451TimerKey){
+  if(slV451Timer!==null)clearTimeout(slV451Timer);
+  slV451Timer=null;slV451TimerKey=key;
+ }
+ if(!key||slV451SettledBatches.has(String(batch.id))){slV451UpdateClock();return;}
+ // A batch that arrived while opening another menu must immediately return.
+ if(s.tab!=='market'&&!slV451PendingBatch&&!slV437Busy&&!slV431ActionBusy){
+  void slV451AutoReturn('tab');
+ }
+ if(slV451Timer===null){
+  const retryWait=Math.max(0,slV451RetryAt-Date.now());
+  const baseWait=s.tab==='market'?slV451RemainingMs(batch):0;
+  const delay=Math.min(2147483647,Math.max(250,baseWait,retryWait));
+  slV451Timer=setTimeout(()=>{
+   slV451Timer=null;
+   if(slV437Batch()?.id===batch.id){
+    void slV451AutoReturn('timeout');
+   }
+  },delay);
+ }
+ slV451UpdateClock();
+}
+const slV451PriorTab=switchTab;
+switchTab=function(tab){
+ if(tab!=='market'&&s.tab==='market'&&slV437Batch()?.id){
+  // Intentionally fire before rendering the destination tab; response is async.
+  void slV451AutoReturn('tab');
+ }
+ return slV451PriorTab(tab);
+};
+const slV451PriorLoad=slLoad;
+slLoad=async function(quiet=false){
+ const loaded=await slV451PriorLoad(quiet);
+ if(loaded)slV451Schedule();
+ return loaded;
+};
+const slV451PriorRender=render;
+render=function(){
+ slV451PriorRender();
+ slV451Schedule();
+};
+// Switching to Sheet1 is also a menu departure in the Excel-style host.
+document.getElementById('excel-bridge-back')?.addEventListener('click',()=>{
+ if(slV437Batch()?.id)void slV451AutoReturn('tab');
+},true);
+setInterval(slV451UpdateClock,1000);
+slV451Schedule();
 
 </script></body></html>
