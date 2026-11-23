@@ -2490,7 +2490,7 @@ window.addEventListener('message',e=>{
  if(e.data?.type==='SL_RPC'&&activeSuperleague){
   const rid=String(e.data.requestId||'');
   const method=e.data.method;
-  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics','sl_v427_budget','sl_v427_budget_repay','sl_v427_friendly_play','sl_v427_admin_reset','sl_v443_admin_reset','sl_v429_test_advance','sl_v428_snapshot','sl_v430_snapshot','sl_v428_facility_info','sl_v428_facility_upgrade','sl_v431_budget','sl_v431_snapshot','sl_v431_youth_action','sl_v432_snapshot','sl_v434_snapshot','sl_v435_snapshot','sl_v435_budget','sl_v435_youth_reroll','sl_v434_renew_contract','sl_v436_friendly_begin','sl_v436_friendly_end','sl_v436_daily_rankings','sl_v437_snapshot','sl_v437_youth_draw','sl_v437_youth_decide','sl_v437_youth_reroll','sl_v440_release','sl_v440_snapshot','sl_v441_snapshot','sl_v442_snapshot','sl_v442_youth_trade','sl_v446_snapshot','sl_v446_legend_offer','sl_v446_legend_decide'].includes(method))return;
+  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics','sl_v427_budget','sl_v427_budget_repay','sl_v427_friendly_play','sl_v427_admin_reset','sl_v443_admin_reset','sl_v429_test_advance','sl_v428_snapshot','sl_v430_snapshot','sl_v428_facility_info','sl_v428_facility_upgrade','sl_v431_budget','sl_v431_snapshot','sl_v431_youth_action','sl_v432_snapshot','sl_v434_snapshot','sl_v435_snapshot','sl_v435_budget','sl_v435_youth_reroll','sl_v434_renew_contract','sl_v436_friendly_begin','sl_v436_friendly_end','sl_v436_daily_rankings','sl_v437_snapshot','sl_v437_youth_draw','sl_v437_youth_decide','sl_v437_youth_reroll','sl_v440_release','sl_v440_snapshot','sl_v441_snapshot','sl_v442_snapshot','sl_v442_youth_trade','sl_v446_snapshot','sl_v446_legend_offer','sl_v453_legend_offer','sl_v446_legend_decide'].includes(method))return;
   const args=e.data.args||{};
   if(method==='sl_command'&&!['claim','offer','respond','cancel','fa_sign','release','advance','post'].includes(args.p_action))return;
   (async()=>{
@@ -2548,8 +2548,8 @@ window.addEventListener('message',e=>{
       response=await callRpc('sl_v435_budget',{p_token:tokenAtStart},false,12500);
     }else if(method==='sl_v446_snapshot'){
       response=await callRpc('sl_v446_snapshot',{p_token:tokenAtStart},false,16000);
-    }else if(method==='sl_v446_legend_offer'){
-      response=await callRpc('sl_v446_legend_offer',{p_token:tokenAtStart,
+    }else if(method==='sl_v446_legend_offer'||method==='sl_v453_legend_offer'){
+      response=await callRpc(method,{p_token:tokenAtStart,
         p_request:args.p_request,p_player:args.p_player,p_amount:args.p_amount},false,25000);
     }else if(method==='sl_v446_legend_decide'){
       response=await callRpc('sl_v446_legend_decide',{p_token:tokenAtStart,
