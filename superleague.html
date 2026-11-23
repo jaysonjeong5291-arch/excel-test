@@ -3466,7 +3466,7 @@ squadPage=function(){
  const old=slV423PrevSquad();
  if(!slEmbedded)return old;
  const payRows=[...new Set([...mine().roster,...(window.__slOnline?.ready?slV434AcademyIds():[])])].map(ply).filter(Boolean).map(p=>{const info=(sl.snapshot?.players||[]).find(x=>x.id===p.id);const academy=(sl.snapshot?.youth||[]).find(y=>y.id===p.id);return `<tr><td class="strong">${esc(p.name)}</td><td>${p.youth?'유망주':p.legend?'레전드':'현역'}</td><td class="num">${slV423Money(p.youth?academy?.annualWage:p.legend?info?.salary:0)}</td><td class="num">${p.age}세</td><td class="num">${p.ovr}</td></tr>`});
- return old+block('선수별 연봉 기준 · 최초 계약금',table(['이름','구분','연봉 기준 계약금','나이','OVR'],payRows)+`<div class="note">30세 미만: 잠재력 70% + OVR 30% / 30세는 기존 공식 / 31세부터 첫 계약은 OVR만 반영하고 기존 연봉은 시즌마다 10% 감액. 발탁하지 않은 20세 유망주는 잠재력 85 이상만 레전드 FA로 전환 · FA 영입 시 최초 계약금 1회 차감 · 현역 0P. 현역은 시즌이 지나도 나이/능력치가 고정됩니다. 레전드는 시즌 전환 때 나이/OVR이 바뀌고 37~42세에 계약과 무관하게 은퇴합니다.</div>`);
+ return old+block('선수별 연봉 기준 · 최초 계약금',table(['이름','구분','연봉 기준 계약금','나이','OVR'],payRows)+`<div class="note">30세 미만: 잠재력 70% + OVR 30% / 30세는 기존 공식 / 31세부터 첫 계약은 OVR만 반영하고 기존 연봉은 시즌마다 10% 감액. 발탁하지 않은 유망주는 20세에 잠재력 85 초과인 경우 성인 FA로 승격 · FA 영입 시 최초 계약금 1회 차감 · 현역 0P. 현역은 시즌이 지나도 나이/능력치가 고정됩니다. 레전드는 시즌 전환 때 나이/OVR이 바뀌고 37~42세에 계약과 무관하게 은퇴합니다.</div>`);
 };
 let slV423ActionBusy=false;
 async function slV423Action(action,player){
@@ -4558,7 +4558,10 @@ function slV445LegendVisible(row){
  const candidate=ply(row?.id);
  if(!candidate?.legend)return false;
  const age=Number(row?.age??(Number(candidate.ageBaseline||0)+Number(s.season)-1));
- return Number.isFinite(age)&&age>20;
+ // V4.50: ordinary legends still first appear at 21, but an academy-pool
+ // graduate is eligible for the adult FA list upon reaching 20.
+ const isGraduate=(sl.snapshot?.youthLegends||[]).some(y=>String(y.id)===String(row?.id));
+ return Number.isFinite(age)&&(age>20||(age===20&&isGraduate));
 }
 marketPage=function(){
  if(!slEmbedded)return page('선수 영입','온라인 게임에 로그인 후 이용하세요.');
@@ -4710,7 +4713,7 @@ const slV442PreviousSquad=squadPage;
 squadPage=function(){
  const h=slV442PreviousSquad();
  return h.replace('포지션별 순서(GK → DF → MF → FW) ·',
- '유망주는 20세에 1군 자리가 있으면 레전드로 승격합니다. 1군 10명이 가득 차면 유망주 등록이 자동 종료되고 잠재력 85 이상만 레전드 FA로 전환됩니다. 발탁 유망주는 23세까지 불만·파업이 없습니다.<div class="spacer"></div>포지션별 순서(GK → DF → MF → FW) ·');
+ '유망주는 20세에 1군 자리가 있으면 레전드로 승격합니다. 1군 10명이 가득 차면 유망주 등록이 자동 종료되고 잠재력 85 초과인 유망주는 20세에 성인 FA로 전환됩니다. 발탁 유망주는 23세까지 불만·파업이 없습니다.<div class="spacer"></div>포지션별 순서(GK → DF → MF → FW) ·');
 };
 
 // Variety in the visual match reel: tiki-taka, counter attacks, crosses, occasional solo dribbles.
