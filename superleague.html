@@ -291,16 +291,16 @@ function tick(){const m=s.match;if(!m||!['first','second'].includes(m.phase)){ha
 if(m.halfMin>=20){halt();if(m.phase==='first'){m.phase='halftime';m.halfMin=20;notice('전반 종료 · 교체 및 전술 변경이 가능합니다.')}else{m.phase='finished';m.halfMin=20;s.lineup=[...m.lineup];s.tactics={...m.tactics};if(m.kind==='league')saveRound(m.day,m);else{const f=s.friendlies[fkey(m.season,m.day)];if(f){f.status='finished';f.score=[m.hs,m.as]}}notice('후반 종료 · 경기 결과가 저장되었습니다.')}save();render();return}save();renderTick()}
 function startSecond(){let m=s.match;if(!m||m.phase!=='halftime')return;m.phase='second';m.halfMin=0;m.timeline=simulateHalf(m.lineup,defaultLineup(s.teams[m.opponent]),m.tactics,defaultT(),2);s.lineup=[...m.lineup];s.tactics={...m.tactics};save();render();runTimer()}
 function halfSub(){let m=s.match;if(!m||m.phase!=='halftime'){notice('교체는 하프타임에서만 가능합니다.');return}let slot=Number(s.ui.halfOut),id=s.ui.halfIn,p=ply(id);if(!Number.isInteger(slot)||slot<0||slot>4||!p){notice('교체 대상 선수와 후보를 선택하세요.');return}if(p.pos!==ROLES[slot]||!mine().roster.includes(id)||m.lineup.includes(id)){notice('같은 포지션의 후보만 투입할 수 있습니다.');return}let old=m.lineup[slot];m.lineup[slot]=id;m.changed++;m.subs.push({out:old,in:id});s.ui.halfIn='';save();render();notice(`${ply(old).name} OUT → ${p.name} IN`)}
-function switchTab(tab){if(!['dashboard','squad','market','calendar','friendly','league','match','clubs'].includes(tab))return;s.tab=tab;save();render()}
+function switchTab(tab){if(!['dashboard','squad','market','calendar','friendly','league','match','clubs','budget'].includes(tab))return;s.tab=tab;save();render()}
 function resetGame(){if(!confirm('데모 구단·경기·영입 기록을 초기화하고 다른 구단을 선택할까요? 실제 포인트에는 영향이 없습니다.'))return;halt();s=initial();save();render()}
 function page(title,sub,tag=''){return `<div class="pagehead"><div><div class="eyebrow">관리 현황 / 슈퍼리그 시뮬레이션</div><h1>${title}</h1><p>${sub}</p></div>${tag}</div>`}
 function block(title,content,right=''){return `<section class="block"><div class="blocktitle"><span>${title}</span>${right}</div><div class="blockcontent">${content}</div></section>`}
 function table(headers,rows,cls=''){return `<div class="scrolltable"><table class="excel ${cls}"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`}
 function dayLabel(){return `시즌 ${s.season} · ${DAYS[s.day]}요일`}
 function topRefresh(){$('r-club').textContent=hasSelected()?mine().name:'구단 선택';$('r-season').textContent=String(s.season);$('r-day').textContent=DAYS[s.day];$('r-points').textContent=`${fmt(s.points)} P`;}
-const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['items','아이템'],['calendar','경기 일정'],['friendly','친선경기'],['league','순위'],['match','경기 기록']];
+const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['items','아이템'],['budget','예산'],['calendar','경기 일정'],['friendly','친선경기'],['league','순위'],['match','경기 기록']];
 function sheetNav(){$('side-navigation').innerHTML=TABS.map(([key,label])=>`<button class="side-btn ${s.tab===key?'active':''}" type="button" data-action="tab" data-value="${key}" ${s.tab===key?'aria-current="page"':''} title="${label}"><span class="navtxt">${label}</span></button>`).join('')}
-function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${DAYS[s.day]}요일)`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 실제 포인트 또는 서버 DB를 사용하지 않습니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
+function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${DAYS[s.day]}요일)`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage,budget:slV427BudgetPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 온라인 테스트에서는 Supabase의 실제 회원 포인트와 공유 경기 데이터를 사용합니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
 function unselected(){return page('슈퍼리그 운영 대시보드','참가 구단 20개 · 구단 선택 후 테스트 시작')+block('초기 설정','<div class="note">구단을 선택하면 소속 선수 8명(GK·DF·MF·FW 각 2명), 초기 데모 포인트 12,500P로 게임을 시작합니다. 구단별 선수는 중복되지 않으며, 전설 선수 40명은 FA로 별도 등록되어 있습니다.</div>')}
 function renderChooser(){return `<div class="overlay"><div class="choose"><div class="choosehead"><div class="eyebrow">슈퍼리그 개막 준비 / 구단 배정</div><h1>운영할 구단을 선택하세요</h1><div class="muted">총 20개 구단 중 원하는 구단을 선택하세요 · 시작 후 변경하려면 초기화가 필요합니다</div></div><div class="choosebody"><div class="choosegrid">${s.teams.map(t=>`<button class="chooseclub" data-action="choose" data-id="${t.id}"><span class="tag">${flagLeague(t.league)}</span><b>${esc(t.name)}</b><span class="overall">기본 전력 ${power(t.id)}</span><br><small>GK 2 · DF 2 · MF 2 · FW 2</small></button>`).join('')}</div><div class="note" style="margin-top:12px">모든 구단은 GK·DF·MF·FW 각 2명으로 시작합니다. 전체 20개 구단의 대표 선수 구성은 게임 플레이를 위한 가상 편성입니다.</div></div></div></div>`}
 function overviewCalendar(){let next=todaysOpponent();const f=selectedFriend();return `<div class="line between"><div><b>${dayLabel()}</b> <span class="tag ${s.day>4?'gold':''}">${seasonStatus()}</span></div><button class="btn xs" data-action="tab" data-value="calendar">전체 일정 열기</button></div><div class="spacer"></div>${s.day<=4?`<div class="note">리그 상대: <b>${next===null?'완료':esc(s.teams[next].name)}</b> · ${s.results[s.day]?'오늘 경기 완료':'1게임일 10경기 CPU 자동 진행'}</div>`:'<div class="note">주말 FA 이적시장 운영 중 · 월~금 5개 라운드가 진행됩니다.</div>'}<div class="spacer"></div><div class="small">친선경기: ${f?`${esc(s.teams[f.opponent].name)} / ${f.status==='finished'?'완료':'등록됨'}`:'미등록'} · 친선 상대 지정은 왼쪽 경기 일정 메뉴에서만 가능합니다.</div>`}
@@ -469,10 +469,10 @@ function friendlyPage(){
   const lastResult=last?`<div class="match-result-box"><div class="small muted">가장 최근 도전 · ${new Date(last.stamp).toLocaleString('ko-KR')}</div><div class="big-score">${esc(s.teams[last.attacker].name)} ${last.sa} : ${last.sb} ${esc(s.teams[last.target].name)}</div><div class="small">도전자 사기 ${last.ownBefore} → ${last.ownAfter} (${formatMoraleChange(last.ownBefore,last.ownAfter)}) / 방어자 사기 ${last.foeBefore} → ${last.foeAfter} (${formatMoraleChange(last.foeBefore,last.foeAfter)})</div></div>`:'';
   return page('친선 도전전 · 오프라인 PvP','상대가 미접속이어도 저장된 선수와 전술로 즉시 자동 경기 · 패배 시 포인트 손실 없음',`<span class="tag">도전 ${used}/${V3_FRIENDLY_LIMIT}</span>`)
    +`<div class="friend-status"><div>우리 구단 사기<strong>${teamMorale(s.selected)}</strong>${moraleMeter(s.selected)}</div><div>선택 상대 사기<strong>${teamMorale(target)}</strong>${moraleMeter(target)}</div><div>남은 도전<strong>${V3_FRIENDLY_LIMIT-used}회</strong><span class="small muted">게임일 기준</span></div><div>리그 자동 진행<strong id="auto-countdown">—</strong><span class="small muted">데모 1분=1일</span></div></div>`
-   +block('공격할 구단 지정',`<div class="challenge-pick"><select id="friendly-select" class="field">${other.map(t=>`<option value="${t.id}" ${t.id===target?'selected':''}>${esc(t.name)} (사기 ${teamMorale(t.id)} · 전력 ${power(t.id)})</option>`).join('')}</select><button class="btn primary" data-action="friendly-challenge" ${error?'disabled':''}>⚔ 친선 도전 · 즉시 판정</button></div><div class="spacer"></div><div class="small muted">선택 상대: <b>${esc(current.name)}</b> · 전력 ${power(target)} · 사기 ${moraleMeter(target)} | 등록된 5명·전술 자동 사용</div><div class="note ${error?'warn':''}" style="margin-top:9px">${error||'동일 구단 2분 재도전 제한 · 게임일당 5회 · 방어자 하루 최대 -24 사기 · 포인트 변동 없음'}</div>`)
+   +block('공격할 구단 지정',`<div class="challenge-pick"><select id="friendly-select" class="field">${other.map(t=>`<option value="${t.id}" ${t.id===target?'selected':''}>${esc(t.name)} (사기 ${teamMorale(t.id)} · 전력 ${power(t.id)})</option>`).join('')}</select><button class="btn primary" data-action="friendly-challenge" ${error?'disabled':''}>⚔ 친선 도전 · 즉시 판정</button></div><div class="spacer"></div><div class="small muted">선택 상대: <b>${esc(current.name)}</b> · 전력 ${power(target)} · 사기 ${moraleMeter(target)} | 등록된 5명·전술 자동 사용</div><div class="note ${error?'warn':''}" style="margin-top:9px">${error||'동일 구단 2분 재도전 제한 · 게임일당 5회 · 방어자 하루 최대 -24 사기 · 도전자에게만 1~10억 P 범위의 결과별 보상 지급'}</div>`)
    +(lastResult?block('최근 친선 결과',lastResult):'')
    +block('도전 이력',s.pvp.history.length?table(['게임일','공격 구단','방어 구단','스코어','공격자 사기','방어자 사기'],s.pvp.history.slice(0,20).map(h=>`<tr><td class="num">S${h.season} · ${DAYS[h.day]}</td><td>${esc(s.teams[h.attacker].name)}</td><td>${esc(s.teams[h.target].name)}</td><td class="strong num">${h.sa} : ${h.sb}</td><td class="num">${h.ownBefore} → ${h.ownAfter} (${formatMoraleChange(h.ownBefore,h.ownAfter)})</td><td class="num">${h.foeBefore} → ${h.foeAfter} (${formatMoraleChange(h.foeBefore,h.foeAfter)})</td></tr>`)):'<div class="empty">아직 친선 도전 이력이 없습니다.</div>')
-   +block('친선전 규칙',`<div class="note">승리 사기 +6 · 패배 -12 · 무승부 -2. 사기 0~100, 기본 75. 동일 상대 2분 대기, 하루 최대 5회 도전. 방어자가 친선 공격으로 잃는 사기는 게임일당 최대 24. 리그 결과와 포인트는 변하지 않습니다.</div>`);
+   +block('친선전 규칙',`<div class="note">공격자 승리 +3 · 무승부 +1 · 패배 -1. 사기 0~100, 기본 75. 동일 상대 2분 대기, 하루 최대 5회 도전. 방어자가 친선 공격으로 잃는 사기는 게임일당 최대 24. 리그 승점에는 영향이 없으며 도전자에게만 친선 수익이 지급됩니다.</div>`);
 }
 const oldStandingsTable=standingsTable;
 standingsTable=function(limit=20){
@@ -482,7 +482,7 @@ standingsTable=function(limit=20){
 const oldOverview=overviewCalendar;
 overviewCalendar=function(){const next=todaysOpponent();return `<div class="line between"><b>${dayLabel()}</b><button class="btn xs" data-action="tab" data-value="calendar">리그 일정 보기</button></div><div class="spacer"></div><div class="note">${next===null?'오늘 정규 리그 일정 없음':`정규 리그 상대: <b>${esc(s.teams[next].name)}</b> · 10개 경기 자동 진행 예정`}</div><div class="spacer"></div><button class="btn xs primary" data-action="tab" data-value="friendly">⚔ 친선 도전 바로가기</button>`};
 const oldDash=dash;
-dash=function(){return oldDash()+block('팀 사기 · 경기력 관리',`<div class="line between"><div><span class="morale-big ${teamMorale(s.selected)<45?'morale-danger':'morale-good'}">${teamMorale(s.selected)} / 100</span> <span class="small muted">실전 전력 보정 ×${moraleMultiplier(s.selected).toFixed(3)}</span></div><button class="btn primary" data-action="tab" data-value="friendly">친선 도전 →</button></div><div class="morale-track"><div class="morale-fill ${moraleClass(teamMorale(s.selected))}" style="width:${teamMorale(s.selected)}%"></div></div><div class="league-live">다음 자동 리그 진행: <b id="auto-countdown">${Math.max(0,Math.ceil((s.auto.nextAt-Date.now())/1000))}초</b> · 데모 60초=게임 1일 · 2주 시즌. 실제 온라인 운영 시 서버 스케줄러 필요.</div><div class="small">친선전 승리 +6 / 패배 -12 · 정규 리그 승리 +4 / 패배 -7 · 주말 회복 +2. 포인트는 친선 결과로 차감되지 않습니다.</div>`)};
+dash=function(){return oldDash()+block('팀 사기 · 경기력 관리',`<div class="line between"><div><span class="morale-big ${teamMorale(s.selected)<45?'morale-danger':'morale-good'}">${teamMorale(s.selected)} / 100</span> <span class="small muted">실전 전력 보정 ×${moraleMultiplier(s.selected).toFixed(3)}</span></div><button class="btn primary" data-action="tab" data-value="friendly">친선 도전 →</button></div><div class="morale-track"><div class="morale-fill ${moraleClass(teamMorale(s.selected))}" style="width:${teamMorale(s.selected)}%"></div></div><div class="league-live">다음 자동 리그 진행: <b id="auto-countdown">${Math.max(0,Math.ceil((s.auto.nextAt-Date.now())/1000))}초</b> · 데모 60초=게임 1일 · 2주 시즌. 실제 온라인 운영 시 서버 스케줄러 필요.</div><div class="small">친선 공격자: 승리 +3 / 무승부 +1 / 패배 -1, 방어자: 승리 +1 / 무승부 0 / 패배 -1. 리그 승리 +2 / 무승부 0 / 패배 -2. 친선 공격자만 포인트 수당을 받습니다.</div>`)};
 const oldClubList=clubList;
 clubList=function(){return oldClubList()+block('참가 구단 사기 현황',table(['구단','기본 전력','사기','실전 전력(근사)'],s.teams.map(t=>`<tr><td>${esc(t.name)}</td><td class="num">${power(t.id)}</td><td>${moraleMeter(t.id)}</td><td class="num">${(power(t.id)*moraleMultiplier(t.id)).toFixed(1)}</td></tr>`)))};
 const oldSquad=squadPage;
@@ -1374,12 +1374,12 @@ friendlyPage=function(){
  const target=Number(s.ui.friendlyTarget),other=s.teams.filter(t=>t.id!==s.selected),used=s.pvp.attacks[friendDailyKey()]||0;
  const error=v47FriendlyRestriction(target),last=s.pvp.history[0];
  const left=Math.max(0,Math.ceil((Number(s.pvp.globalNextAt||0)-Date.now())/60000));
- return page('친선경기 · 비실시간 PvP','상대가 오프라인이어도 경기 가능 · 전반 1분 / 하프타임 교체 / 후반 1분',`<span class="tag">오늘 ${used}/${V47_FRIENDLY_DAILY_LIMIT}경기</span>`)
+ return page('친선경기 · 서버 결과 검증','상대가 오프라인이어도 경기 가능 · 전반 1분 / 하프타임 교체 / 후반 1분',`<span class="tag">오늘 ${used}/${V47_FRIENDLY_DAILY_LIMIT}경기</span>`)
  +block('양 팀 전력',`<div class="friend-status"><div>우리 구단 사기<strong>${teamMorale(s.selected)}</strong>${moraleMeter(s.selected)}</div><div>상대 구단 사기<strong>${teamMorale(target)}</strong>${moraleMeter(target)}</div><div>남은 친선<strong>${V47_FRIENDLY_DAILY_LIMIT-used}경기</strong><span class="small muted">게임 내 하루</span></div><div>휴식 시간<strong>${left?left+'분':'가능'}</strong><span class="small muted">경기 시작 사이 최소 8분</span></div></div>`)
  +block('상대 구단',`<div class="challenge-pick"><select class="field" id="friendly-select">${other.map(t=>`<option value="${t.id}" ${t.id===target?'selected':''}>${esc(t.name)} (전력 ${v47BestLineup(t.id).reduce((n,id)=>n+(ply(id)?.ovr||0),0)/5|0} · 사기 ${teamMorale(t.id)})</option>`).join('')}</select><button class="btn primary" data-action="friendly-challenge" ${error?'disabled':''}>친선경기 시작 · 2분 중계</button></div><div class="spacer"></div><div class="note ${error?'warn':''}">${error||'전·후반 각 60초 재생 · 3경기/일 · 동일 상대 재도전 불가 · 8분 휴식 · 방어 사기 하루 최대 -12'}</div>`)
  +(last?block('최근 경기',`<b>${esc(s.teams[last.attacker].name)} ${last.sa} : ${last.sb} ${esc(s.teams[last.target].name)}</b><div class="small">우리 팀 사기 ${last.ownBefore} → ${last.ownAfter} · 상대 사기 ${last.foeBefore} → ${last.foeAfter}</div>`):'')
  +block('최근 친선 결과',s.pvp.history.length?table(['시즌/일','도전자','상대','결과','우리 사기','상대 사기'],s.pvp.history.slice(0,16).map(h=>`<tr><td>S${h.season}/${DAYS[h.day%7]}</td><td>${esc(s.teams[h.attacker].name)}</td><td>${esc(s.teams[h.target].name)}</td><td class="strong">${h.sa}:${h.sb}</td><td>${h.ownBefore}→${h.ownAfter}</td><td>${h.foeBefore}→${h.foeAfter}</td></tr>`)):'<div class="empty">아직 진행한 친선경기가 없습니다.</div>')
- +block('안전장치',`<div class="note">포인트 손실 없이 승리 +6, 패배 -12, 무승부 -2 사기 적용. 반복 공격을 막기 위해 하루 최대 3경기, 동일 상대 하루 1회, 경기 시작 사이 8분 휴식이 적용됩니다. 정규리그 일정은 별도 자동 진행됩니다.</div>`);
+ +block('안전장치',`<div class="note">친선 공격자 사기: 승리 +3, 무승부 +1, 패배 -1. 방어자 사기: 승리 +1, 무승부 0, 패배 -1. 반복 공격을 막기 위해 하루 최대 3경기, 동일 상대 하루 1회, 경기 시작 사이 8분 휴식이 적용됩니다. 정규리그 일정은 별도 자동 진행됩니다.</div>`);
 };
 // Refresh a cooled-down challenge button without forcing a browser reload.
 let v47LastFriendlyAvailability=null;
@@ -2928,7 +2928,7 @@ function slRequest(method,args={}){
  return new Promise((resolve,reject)=>{
   if(!slEmbedded)return reject(new Error('엑셀 게임의 로그인 탭에서 실행해야 합니다.'));
   const requestId='sl'+(++sl.sequence);
-  const timer=setTimeout(()=>{sl.pending.delete(requestId);reject(new Error('서버 응답 시간 초과. 잠시 후 다시 시도하세요.'));},method==='sl_v425_admin_reset'?36000:14500);
+  const timer=setTimeout(()=>{sl.pending.delete(requestId);reject(new Error('서버 응답 시간 초과. 잠시 후 다시 시도하세요.'));},method==='sl_v427_admin_reset'?36000:14500);
   sl.pending.set(requestId,{resolve,reject,timer});
   window.parent.postMessage({type:'SL_RPC',requestId,method,args},location.origin);
  });
@@ -3281,7 +3281,7 @@ if(slEmbedded){
    if(!window.confirm('최종 확인: 전체 슈퍼리그 이용자에게 즉시 반영됩니다. 계속할까요?'))return;
    resetButton.disabled=true;
    try{
-    const result=await slRequest('sl_v425_admin_reset',{p_confirm:'RESET_SEASON_1'});
+    const result=await slRequest('sl_v427_admin_reset',{p_confirm:'RESET_SEASON_1'});
     if(!result?.ok)throw new Error(result?.error||'리셋 요청이 거부됐습니다.');
     try{if(sl.snapshot?.viewer?.id)sessionStorage.removeItem('sl_offer_attempt_'+sl.snapshot.viewer.id);}catch(_e){}
     sl.offerAttempt=null;
@@ -3453,9 +3453,8 @@ squadPage=function(){
  if(!slEmbedded||!sl.ready)return prev;
  const tag=slV424Dirty?'<span class="tag gold">변경사항 저장 필요</span>':
     sl.snapshot?.savedTactic?'<span class="tag">서버에 저장됨</span>':'<span class="tag gray">기본 전술 · 미저장</span>';
- return prev+block('온라인 전술 저장 · 친선 및 리그 공통',
-   `<div class="note">현재 포메이션 <b>${esc(s.formation)}</b> · 선발 5명 · 전술 3종을 이 구단의 서버 설정으로 저장합니다. 친선은 저장된 전술로 시작하고, 정규리그 자동 경기에도 반영됩니다.</div>`+
-   `<div class="v424-btnline"><button class="btn primary" type="button" data-action="sl-v424-save" ${slV424SaveBusy||active()?'disabled':''}>💾 전술 저장</button>${tag}</div>`);
+ const tools=`<div class="v424-btnline"><button class="btn primary" type="button" data-action="sl-v424-save" ${slV424SaveBusy||active()?'disabled':''}>💾 전술 저장</button>${tag}</div><div class="small muted" style="margin:4px 0 10px">현재 포메이션·선발 5명·전술을 서버에 저장합니다. 친선과 리그에 공통 적용됩니다.</div>`;
+ return prev.replace('<div class="small fw">경기 사전 전술</div>', '<div class="small fw">경기 사전 전술</div>'+tools);
 };
 function slV424AcceptSavedTactic(){
  const config=sl.snapshot?.savedTactic;
@@ -3498,5 +3497,184 @@ document.addEventListener('click',e=>{
 },true);
 // Do not hide the admin reset button for an authenticated club owner who lacks
 // the separate operator password. Keep it visibly locked with an actionable hint.
+
+
+// V4.27 -- Financial ledger, authoritative friendlies, budgets and bankruptcy.
+let slV427BudgetInfo=null;
+let slV427BudgetBusy=false;
+let slV427FriendlyBusy=false;
+let slV427FriendlyOutcome=null;
+const slV427Won=(a,b)=>a>b?'승리':a<b?'패배':'무승부';
+async function slV427FetchBudget(){
+ if(!slEmbedded||!sl.ready||!hasSelected()||slV427BudgetBusy)return;
+ slV427BudgetBusy=true;
+ try{
+  const result=await slRequest('sl_v427_budget');
+  if(!result?.ok)throw new Error(result?.error||'예산 조회에 실패했습니다.');
+  slV427BudgetInfo=result;
+ }catch(e){slV427BudgetInfo={ok:false,error:String(e?.message||e)};}
+ finally{slV427BudgetBusy=false;if(s.tab==='budget')render();}
+}
+function slV427BudgetPage(){
+ const data=slV427BudgetInfo;
+ const intro=page('구단 예산 · 시즌 결산', '시즌 종료 시 회원 공용 포인트에서 레전드 연봉과 구단 운영비를 차감합니다.',
+  `<span class="tag">시즌 ${s.season}</span>`);
+ if(!slEmbedded||!hasSelected())return intro+block('안내','회원 로그인 후 구단을 선택하세요.');
+ if(!data)return intro+block('예산 불러오기',`<div class="note">예산 자료를 서버에서 불러오고 있습니다.</div><button class="btn" data-action="sl-v427-budget-refresh">새로고침</button>`);
+ if(!data.ok)return intro+block('서버 연결 오류',`<div class="note warn">${esc(data.error||'예산 정보를 불러오지 못했습니다.')}</div><button class="btn primary" data-action="sl-v427-budget-refresh">다시 조회</button>`);
+ const toBig=x=>{try{return BigInt(String(x||'0'))}catch(_){return 0n}};
+ const payroll=toBig(data.payroll),overhead=toBig(data.operatingCost),cost=payroll+overhead;
+ const debt=toBig(data.debt),wallet=toBig(data.wallet);
+ const blocked=!!data.recruitBlocked;
+ const show=x=>slV423Money(x);
+ const rows=(data.players||[]).map(p=>`<tr><td>${esc(p.name)}</td><td class="num">${esc(p.age)}</td><td class="num">${esc(p.overall)}</td><td class="num">${show(p.salary)}</td></tr>`);
+ const old=data.previous;
+ return intro
+  +block('이번 시즌 예상 유지비',`<div class="grid2"><div class="note"><b>보유 공용 포인트</b><div class="strong">${show(wallet)}</div></div><div class="note"><b>예상 시즌 유지비</b><div class="strong">${show(cost)}</div></div></div><div class="spacer"></div>${table(['비용','금액'],[
+      `<tr><td>레전드 선수 연봉 합계</td><td class="num strong">${show(payroll)}</td></tr>`,
+      `<tr><td>구단 운영비</td><td class="num strong">${show(overhead)}</td></tr>`,
+      `<tr><td><b>시즌 종료 시 총 정산 예정</b></td><td class="num strong">${show(cost)}</td></tr>`
+    ])}<div class="note">매 시즌 종료 시 우승·순위 상금을 먼저 지급한 뒤 유지비를 차감합니다. 현역 선수 연봉은 0P입니다. 실제 결제는 서버에서 시즌당 한 번만 실행됩니다.</div>`)
+  +block('파산 및 미납금 관리',`<div class="note ${blocked?'warn':''}"><b>상태: ${blocked?'파산 절차 · 레전드 영입 제한':debt>0n?'파산 유예 종료 · 영입 가능':'정상 운영'}</b><div>미납 예산 <b>${debt>0n?'-'+show(debt):show(debt)}</b> ${blocked?`· 시즌 ${data.bankruptUntil}부터 재영입 가능 (또는 완납 즉시 해제)`:''}</div><div class="small">미납 발생 시 보유 포인트 0P, 레전드 전원 방출, 기존 현역 선수 최소 8명으로 경기 지속</div></div>`+
+     (debt>0n?`<div class="spacer"></div><label for="sl-v427-debt-input"><b>미납금 상환 (P)</b></label><div class="line" style="display:flex;gap:8px;flex-wrap:wrap"><input class="field" id="sl-v427-debt-input" type="text" inputmode="numeric" placeholder="상환할 포인트 입력" style="flex:1;min-width:160px"><button type="button" class="btn primary" data-action="sl-v427-repay" ${slV427BudgetBusy?'disabled':''}>미납금 갚기</button></div><div class="small muted">현재 잔액 이내에서 부분 상환 가능 · 전액 상환 시 즉시 영입 제한 해제</div>`:'<div class="small muted">현재 미납금이 없습니다.</div>'))
+  +block('선수별 시즌 연봉',rows.length?table(['선수','나이','OVR','연봉'],rows):'<div class="empty">등록 선수가 없습니다.</div>')
+  +block('직전 시즌 정산',old?table(['시즌','순위','상금','연봉','운영비','실제 차감','미납'],[`<tr><td>S${old.season}</td><td class="num">${old.rank}위</td><td>${show(old.prize)}</td><td>${show(old.payroll)}</td><td>${show(old.operatingCost)}</td><td>${show(old.deducted)}</td><td>${show(old.shortfall)}</td></tr>`]):'<div class="empty">아직 시즌 종료 정산 내역이 없습니다.</div>')
+  +block('수당 규정',`<div class="note">친선 공격자: 승리 5~10억P · 무승부 3~5억P · 패배 1~3억P. 방어자는 수당 0P.<div>정규리그 경기당 수당은 없습니다. 최종 1위 1,000억P · 2위 500억P · 3위 300억P · 4위 100억P · 5~20위 합계 100억P 차등 분배. 전체 시즌 상금은 전 시즌 대비 1~2%씩 누적 인상됩니다.</div></div><button class="btn" type="button" data-action="sl-v427-budget-refresh">⟳ 예산 새로고침</button>`);
+}
+const slV427PriorSwitchTab=switchTab;
+switchTab=function(tab){slV427PriorSwitchTab(tab);if(tab==='budget')void slV427FetchBudget();};
+const slV427PriorApply=slApply;
+slApply=function(data){
+ const priorSeason=s.season,priorClub=s.selected;
+ slV427PriorApply(data);
+ if(slEmbedded&&(priorSeason!==s.season||priorClub!==s.selected))slV427BudgetInfo=null;
+ if(slEmbedded&&priorSeason!==s.season)
+   window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
+};
+document.addEventListener('click',e=>{
+ const btn=e.target.closest?.('[data-action]');if(!btn||!slEmbedded)return;
+ if(btn.dataset.action==='sl-v427-budget-refresh'){
+  e.preventDefault();e.stopImmediatePropagation();void slV427FetchBudget();return;
+ }
+ if(btn.dataset.action==='sl-v427-repay'){
+  e.preventDefault();e.stopImmediatePropagation();
+  if(slV427BudgetBusy)return;
+  const raw=String($('sl-v427-debt-input')?.value||'').replaceAll(',','').trim();
+  if(!/^\d+$/.test(raw)||BigInt(raw)<=0n){notice('상환금은 1P 이상의 정수를 입력하세요.');return;}
+  if(!window.confirm('회원 포인트 '+slV423Money(raw)+'를 미납금 상환에 사용하시겠습니까?'))return;
+  slV427BudgetBusy=true;
+  void (async()=>{
+   try{
+    const res=await slRequest('sl_v427_budget_repay',{p_amount:raw,p_request:slV423Uuid()});
+    if(!res?.ok)throw new Error(res?.error||'상환 실패');
+    notice(res.message||'상환 완료 · 남은 미납금 '+slV423Money(res.remaining));
+    window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
+   }catch(err){notice('미납금 상환 실패: '+String(err?.message||err));}
+   finally{slV427BudgetBusy=false;slV427BudgetInfo=null;void slV427FetchBudget();}
+  })();
+ }
+},true);
+// Authoritative friendship: server determines the scores and credits only the challenger.
+function slV427GoalsForHalf(m,half){
+ const r=m.v427Outcome;if(!r)return;
+ const totalA=Number(r.scoreA)||0,totalB=Number(r.scoreB)||0;
+ const goalsA=half===1?Math.ceil(totalA/2):Math.floor(totalA/2);
+ const goalsB=half===1?Math.floor(totalB/2):Math.ceil(totalB/2);
+ const frames=Array.from({length:20},()=>[]);
+ const fill=(num,side)=>{
+  const used=new Set();
+  const ids=side==='home'?m.lineup:m.defendingLineup;
+  for(let g=0;g<num;g++){
+   let minute=Math.min(19,Math.floor((g+.75)*20/(num+1)));
+   while(used.has(minute)&&minute<19)minute++;
+   used.add(minute);
+   const player=ply(ids[(g%4)+1]);
+   frames[minute].push({kind:'goal',side,min:(half-1)*20+minute+1,player:player?.name||'선수'});
+  }
+ };
+ fill(goalsA,'home');fill(goalsB,'away');
+ m.timeline=frames;
+}
+const slV427OriginalFriendlyStart=v47StartFriendly;
+v47StartFriendly=function(target){
+ slV427OriginalFriendlyStart(target);
+ const m=s.match;
+ if(m?.kind==='friendly-pvp'&&slV427FriendlyOutcome&&m.opponent===Number(target)){
+  m.v427Outcome=slV427FriendlyOutcome;
+  slV427GoalsForHalf(m,1);
+  save();
+ }
+};
+const slV427OriginalInstantFriendly=instantFriendly;
+instantFriendly=function(target){
+ if(!slEmbedded)return slV427OriginalInstantFriendly(target);
+ if(slV427FriendlyBusy)return notice('이전 친선 요청을 확인하는 중입니다.');
+ target=Number(target);
+ const problem=v47FriendlyRestriction(target);
+ if(problem)return notice(problem);
+ slV427FriendlyBusy=true;
+ void (async()=>{
+  try{
+   const res=await slRequest('sl_v427_friendly_play',{p_target:target,p_request:slV423Uuid()});
+   if(!res?.ok)throw new Error(res?.error||'친선 서버 확정 실패');
+   slV427FriendlyOutcome=res;
+   slV427OriginalInstantFriendly(target);
+   // Earlier v4.8-v4.11 wrappers may have rebuilt the simulated timeline.
+   // Re-apply the server's authoritative result after the full wrapper chain.
+   const match=s.match;
+   if(match?.kind==='friendly-pvp'&&match.opponent===target){
+     match.v427Outcome=res;
+     slV427GoalsForHalf(match,1);
+     if(typeof v410BuildTrack==='function'){
+       match.v410Track=v410BuildTrack(match);
+       match.v410Sig=v410TimelineSignature(match);
+     }
+     if(typeof v49Scenes==='function')match.v49Scenes=v49Scenes(match);
+     if(typeof v411ReelCache!=='undefined')v411ReelCache=null;
+     save();render();
+   }
+   notice('서버 확정 · '+slV427Won(res.scoreA,res.scoreB)+' '+res.scoreA+':'+res.scoreB+' · 도전자 상금 '+slV423Money(res.prize));
+   window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
+  }catch(err){notice('친선경기 요청 실패: '+String(err?.message||err));}
+  finally{slV427FriendlyOutcome=null;slV427FriendlyBusy=false;}
+ })();
+};
+const slV427OriginalSecond=startSecond;
+startSecond=function(){
+ slV427OriginalSecond();
+ const m=s.match;
+ if(m?.kind==='friendly-pvp'&&m.phase==='second'&&m.v427Outcome){
+  slV427GoalsForHalf(m,2);
+  if(typeof v410BuildTrack==='function'){
+   m.v410Track=v410BuildTrack(m);m.v410Sig=v410TimelineSignature(m);
+  }
+  if(typeof v49Scenes==='function')m.v49Scenes=v49Scenes(m);
+  if(typeof v411ReelCache!=='undefined')v411ReelCache=null;
+  save();render();
+ }
+};
+const slV427OriginalComplete=v47CompleteFriendly;
+v47CompleteFriendly=function(m){
+ slV427OriginalComplete(m);
+ if(m?.v427Outcome){
+  s.morale[s.selected]=Number(m.v427Outcome.moraleA);
+  s.morale[m.opponent]=Number(m.v427Outcome.moraleB);
+  const h=s.pvp?.history?.[0];
+  if(h&&h.attacker===s.selected&&h.target===m.opponent){
+   h.ownAfter=Number(m.v427Outcome.moraleA);h.foeAfter=Number(m.v427Outcome.moraleB);
+   h.prize=String(m.v427Outcome.prize);
+  }
+  m.lastFlash='서버 정산 완료 · '+slV427Won(m.hs,m.as)+' · 도전자 '+slV423Money(m.v427Outcome.prize)+' 지급';
+  slV427BudgetInfo=null;
+  window.parent.postMessage({type:'SUPERLEAGUE_WALLET_REFRESH'},location.origin);
+ }
+};
+const slV427PriorFriendlyPage=friendlyPage;
+friendlyPage=function(){
+ const html=slV427PriorFriendlyPage();
+ const last=s.pvp?.history?.[0];
+ const receipt=last?.prize!==undefined?`<div class="note"><b>최근 도전자 수익: ${slV423Money(last.prize)}</b> · 수당은 서버에서 확정한 공격자에게만 지급됩니다.</div>`:'<div class="note">공격자만 승 5~10억 · 무 3~5억 · 패 1~3억P 수령 · 방어자는 수익 없음</div>';
+ return html+block('친선 상금 · 서버 정산',receipt);
+};
 
 </script></body></html>

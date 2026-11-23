@@ -2467,7 +2467,7 @@ window.addEventListener('message',e=>{
  if(e.data?.type==='SL_RPC'&&activeSuperleague){
   const rid=String(e.data.requestId||'');
   const method=e.data.method;
-  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics'].includes(method))return;
+  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics','sl_v427_budget','sl_v427_budget_repay','sl_v427_friendly_play','sl_v427_admin_reset'].includes(method))return;
   const args=e.data.args||{};
   if(method==='sl_command'&&!['claim','offer','respond','cancel','fa_sign','release','advance','post'].includes(args.p_action))return;
   (async()=>{
@@ -2481,6 +2481,22 @@ window.addEventListener('message',e=>{
       p_token:tokenAtStart,p_client:CLIENT_ID,p_admin_token:adminToken,
       p_confirm:args.p_confirm
      },false,30000);
+    }else if(method==='sl_v427_admin_reset'){
+      if(!adminToken||myNickname!=='운영자')throw new Error('운영자 인증 후에만 시즌 리셋을 사용할 수 있습니다.');
+      response=await callRpc('sl_v427_admin_reset',{
+        p_token:tokenAtStart,p_client:CLIENT_ID,p_admin_token:adminToken,
+        p_confirm:args.p_confirm
+      },false,30000);
+    }else if(method==='sl_v427_budget'){
+      response=await callRpc('sl_v427_budget',{p_token:tokenAtStart},false,11000);
+    }else if(method==='sl_v427_budget_repay'){
+      response=await callRpc('sl_v427_budget_repay',{
+        p_token:tokenAtStart,p_amount:args.p_amount,p_request:args.p_request
+      },false,12000);
+    }else if(method==='sl_v427_friendly_play'){
+      response=await callRpc('sl_v427_friendly_play',{
+        p_token:tokenAtStart,p_target:args.p_target,p_request:args.p_request
+      },false,12000);
     }else if(method==='sl_v424_save_tactics'){
       response=await callRpc('sl_v424_save_tactics',{
         p_token:tokenAtStart,p_payload:args.p_payload||{}
