@@ -2505,12 +2505,12 @@ window.addEventListener('message',e=>{
     }else if(method==='sl_v436_friendly_begin'){
       response=await callRpc('sl_v436_friendly_begin',{
         p_token:tokenAtStart,p_target:args.p_target,p_request:args.p_request
-      },false,16000);
+      },false,25000);
     }else if(method==='sl_v436_friendly_end'){
       response=await callRpc('sl_v436_friendly_end',{
         p_token:tokenAtStart,p_match:args.p_match,p_tactics:args.p_tactics,
         p_formation:args.p_formation,p_lineup:args.p_lineup
-      },false,16000);
+      },false,25000);
     }else if(method==='sl_v436_daily_rankings'){
       response=await callRpc('sl_v436_daily_rankings',{p_token:tokenAtStart},false,16000);
     }else if(method==='sl_v427_friendly_play'){
@@ -2522,7 +2522,7 @@ window.addEventListener('message',e=>{
     }else if(method==='sl_v428_facility_upgrade'){
       response=await callRpc('sl_v428_facility_upgrade',{
         p_token:tokenAtStart,p_kind:args.p_kind,p_request:args.p_request
-      },false,15000);
+      },false,25000);
     }else if(method==='sl_v431_budget'){
       response=await callRpc('sl_v431_budget',{p_token:tokenAtStart},false,11500);
     }else if(method==='sl_v435_budget'){
@@ -2534,13 +2534,13 @@ window.addEventListener('message',e=>{
        p_token:tokenAtStart,p_action:args.p_action,p_offer:args.p_offer||null,
        p_youth:args.p_youth||null,p_amount:args.p_amount==null?null:String(args.p_amount),
        p_request:args.p_request||null
-      },false,18000);
+      },false,25000);
     }else if(method==='sl_v441_snapshot'){
       response=await callRpc('sl_v441_snapshot',{p_token:tokenAtStart},false,13000);
     }else if(method==='sl_v440_snapshot'){
       response=await callRpc('sl_v440_snapshot',{p_token:tokenAtStart},false,13000);
     }else if(method==='sl_v440_release'){
-      response=await callRpc('sl_v440_release',{p_token:tokenAtStart,p_player:args.p_player,p_request:args.p_request},false,17000);
+      response=await callRpc('sl_v440_release',{p_token:tokenAtStart,p_player:args.p_player,p_request:args.p_request},false,25000);
     }else if(method==='sl_v437_snapshot'){
       response=await callRpc('sl_v437_snapshot',{p_token:tokenAtStart},false,13000);
     }else if(method==='sl_v437_youth_draw'){
@@ -2559,11 +2559,11 @@ window.addEventListener('message',e=>{
     }else if(method==='sl_v435_snapshot'){
       response=await callRpc('sl_v435_snapshot',{p_token:tokenAtStart},false,13000);
     }else if(method==='sl_v435_youth_reroll'){
-      response=await callRpc('sl_v435_youth_reroll',{p_token:tokenAtStart,p_youth:args.p_youth,p_request:args.p_request},false,15000);
+      response=await callRpc('sl_v435_youth_reroll',{p_token:tokenAtStart,p_youth:args.p_youth,p_request:args.p_request},false,25000);
     }else if(method==='sl_v434_snapshot'){
       response=await callRpc('sl_v434_snapshot',{p_token:tokenAtStart},false,12500);
     }else if(method==='sl_v434_renew_contract'){
-      response=await callRpc('sl_v434_renew_contract',{p_token:tokenAtStart,p_player:args.p_player,p_request:args.p_request},false,15000);
+      response=await callRpc('sl_v434_renew_contract',{p_token:tokenAtStart,p_player:args.p_player,p_request:args.p_request},false,25000);
     }else if(method==='sl_v432_snapshot'){
       response=await callRpc('sl_v432_snapshot',{p_token:tokenAtStart},false,12500);
     }else if(method==='sl_v431_snapshot'){
@@ -2571,7 +2571,7 @@ window.addEventListener('message',e=>{
     }else if(method==='sl_v431_youth_action'){
       response=await callRpc('sl_v431_youth_action',{
         p_token:tokenAtStart,p_action:args.p_action,p_request:args.p_request,p_youth:args.p_youth||null
-      },false,15000);
+      },false,25000);
     }else if(method==='sl_v430_snapshot'){
       response=await callRpc('sl_v430_snapshot',{p_token:tokenAtStart},false,11500);
     }else if(method==='sl_v428_snapshot'){
@@ -2579,11 +2579,13 @@ window.addEventListener('message',e=>{
     }else if(method==='sl_v424_save_tactics'){
       response=await callRpc('sl_v424_save_tactics',{
         p_token:tokenAtStart,p_payload:args.p_payload||{}
-      },false,11500);
+      },false,25000);
     }else if(method==='sl_v423_item_action'){
-     response=await callRpc('sl_v423_item_action',{p_token:tokenAtStart,p_action:args.p_action,p_player:args.p_player||null,p_request:args.p_request},false,11500);
+     response=await callRpc('sl_v423_item_action',{p_token:tokenAtStart,p_action:args.p_action,p_player:args.p_player||null,p_request:args.p_request},false,25000);
     }else{
-    response=await callRpc(method,method==='sl_snapshot'?{p_token:tokenAtStart}:method==='sl_offer_submit'?{p_token:tokenAtStart,p_request:args.p_request,p_player:args.p_player,p_amount:args.p_amount}:method==='sl_offer_status'?{p_token:tokenAtStart,p_request:args.p_request||null}:{p_token:tokenAtStart,p_action:args.p_action,p_payload:args.p_payload||{}},false,11500);
+    // Use a larger budget for potentially committing writes, not read-only status checks.
+    const leagueWrite=method==='sl_offer_submit'||method==='sl_command';
+    response=await callRpc(method,method==='sl_snapshot'?{p_token:tokenAtStart}:method==='sl_offer_submit'?{p_token:tokenAtStart,p_request:args.p_request,p_player:args.p_player,p_amount:args.p_amount}:method==='sl_offer_status'?{p_token:tokenAtStart,p_request:args.p_request||null}:{p_token:tokenAtStart,p_action:args.p_action,p_payload:args.p_payload||{}},false,leagueWrite?25000:11500);
     }
     if(memberToken!==tokenAtStart)throw new Error('로그인 계정이 변경되어 요청이 취소됐습니다.');
     if((method==='sl_snapshot'||method==='sl_v428_snapshot')&&$('superleague-frame')?.contentWindow){
