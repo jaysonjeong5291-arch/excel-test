@@ -3438,7 +3438,7 @@ recruit=function(id){
 marketPage=function(){
  if(!slEmbedded)return page('레전드 영입','온라인 게임에 로그인 후 이용하세요.');
  const pos=s.ui.marketPos||'ALL',q=(s.ui.marketSearch||'').trim().toLowerCase();
- const all=(sl.snapshot?.players||[]).filter(v=>!v.retired&&ply(v.id)?.legend&&(pos==='ALL'||ply(v.id).pos===pos)&&(!q||ply(v.id).name.toLowerCase().includes(q)))
+ const all=(sl.snapshot?.players||[]).filter(v=>!v.retired&&slV445LegendVisible(v)&&(pos==='ALL'||ply(v.id).pos===pos)&&(!q||ply(v.id).name.toLowerCase().includes(q)))
   .sort((a,b)=>Number(a.retired)-Number(b.retired)||Number(a.club!==null)-Number(b.club!==null)||Number(b.ovr)-Number(a.ovr));
  const start=Math.max(0,Math.min(Math.ceil(all.length/12)-1,Number(s.ui.marketPage)||0));s.ui.marketPage=start;
  const mineClub=sl.snapshot?.clubs?.[s.selected];const legendCount=mine().roster.filter(id=>ply(id)?.legend).length;
@@ -4016,7 +4016,14 @@ document.addEventListener('click',e=>{
  if(a==='decline'&&!confirm('이 유망주를 발탁하지 않고 즉시 공용 추첨 풀로 반환할까요?'))return;
  if(a==='reroll'){if(!confirm('지금 후보를 포기하고 즉시 다른 유망주를 추첨할까요? 뽑기권 1장을 사용하며 새 후보를 바로 표시합니다.'))return;void slV435InstantReroll(btn.dataset.id||null);return;}
  if(a==='appoint'&&!confirm('유망주를 발탁하면 화면에 표시된 최초 계약금이 공용 포인트에서 차감됩니다. 계속할까요?'))return;
- if(a==='release'&&!confirm('발굴한 선수를 포기하면 되돌릴 수 없습니다. 진행할까요?'))return;
+ if(a==='release'){
+  const prospect=(sl.snapshot?.youth||[]).find(y=>String(y.id)===String(btn.dataset.id));
+  if(prospect?.status==='academy'){
+   const fee=slV440ReleaseFee(btn.dataset.id);
+   if(fee>BigInt(String(sl.snapshot?.wallet||'0')))return notice('유망주 방출 위약금을 낼 포인트가 부족합니다.');
+   if(!confirm(`${prospect.name} 유망주를 방출할까요?\n재계약 비용(1시즌) × 잔여 계약 ${Math.max(0,Number(prospect.contractEnd??s.season)-Number(s.season)+1)}시즌 = ${slV423Money(fee.toString())} 차감됩니다.`))return;
+  }else if(!confirm('발굴한 선수를 포기하면 되돌릴 수 없습니다. 진행할까요?'))return;
+ }
  void slV431Action(a,btn.dataset.id||null);
 },true);
 
@@ -4215,10 +4222,16 @@ function slV436DailyPage(){
  if(!slV436Daily)return intro+block('순위 불러오기',refresh+'<div class="empty">일일 순위표를 서버에서 조회 중입니다.</div>');
  if(!slV436Daily.ok)return intro+block('조회 오류',refresh+`<div class="note warn">${esc(slV436Daily.error||'오류')}</div>`);
  const prize=String(slV436Daily.myTotalPaid||'0');
- const rows=Array.isArray(slV436Daily.rows)?slV436Daily.rows:[];
- const clubs=rows.map(r=>{
+ const rows=(Array.isArray(slV436Daily.rows)?slV436Daily.rows:[])
+  .slice().sort((a,b)=>Number(b.pts||0)-Number(a.pts||0)
+   ||Number(Number(b.games||0)>0)-Number(Number(a.games||0)>0)
+   ||Number(b.gd||0)-Number(a.gd||0)
+   ||Number(b.gf||0)-Number(a.gf||0)
+   ||Number(b.win||0)-Number(a.win||0)
+   ||Number(a.club||0)-Number(b.club||0));
+  const clubs=rows.map((r,index)=>{
   const active=Number(r.games)>0,own=Number(r.club)===Number(s.selected);
-  return `<tr ${own?'class="mine"':''}><td class="num strong">${r.rank}</td><td class="strong">${esc(r.name||s.teams[Number(r.club)]?.name||'구단')} ${own?'<span class="tag">내 구단</span>':''}</td><td class="num">${r.games||0}</td><td class="num">${r.win||0}</td><td class="num">${r.draw||0}</td><td class="num">${r.loss||0}</td><td class="num">${r.gf||0}</td><td class="num">${r.ga||0}</td><td class="num">${Number(r.gd)>0?'+':''}${r.gd||0}</td><td class="num strong">${r.pts||0}</td><td class="num">${active&&String(r.prize)!=='0'?slV423Money(r.prize):'-'}</td></tr>`;
+  return `<tr ${own?'class="mine"':''}><td class="num strong">${index+1}</td><td class="strong">${esc(r.name||s.teams[Number(r.club)]?.name||'구단')} ${own?'<span class="tag">내 구단</span>':''}</td><td class="num">${r.games||0}</td><td class="num">${r.win||0}</td><td class="num">${r.draw||0}</td><td class="num">${r.loss||0}</td><td class="num">${r.gf||0}</td><td class="num">${r.ga||0}</td><td class="num">${Number(r.gd)>0?'+':''}${r.gd||0}</td><td class="num strong">${r.pts||0}</td><td class="num">${active&&String(r.prize)!=='0'?slV423Money(r.prize):'-'}</td></tr>`;
  });
  const yesterday=slV436Daily.yesterdaySettled?(slV436Daily.yesterdayAwards||[]).map(a=>`<tr><td class="num">${a.rank}위</td><td>${esc(s.teams[Number(a.club)]?.name||'구단')}</td><td class="num">${slV423Money(a.prize)}</td><td class="num">${String(a.paid)==='0'?'미지급 · 감독 없음':slV423Money(a.paid)}</td></tr>`).join(''):'';
  return intro
@@ -4443,7 +4456,13 @@ function slV440ImportReserves(rows){
  }
 }
 function slV440ReleaseFee(id){
- const p=ply(id);if(!p)return 0n;
+  const prospect=(sl.snapshot?.youth||[]).find(y=>String(y.id)===String(id)&&y.status==='academy');
+  if(prospect){
+   const annual=BigInt(String(prospect.annualWage??prospect.signingFee??0));
+   const end=Number(prospect.contractEnd??s.season);
+   return annual*BigInt(Math.max(0,end-Number(s.season)+1));
+  }
+  const p=ply(id);if(!p)return 0n;
  if(!p.legend)return 100000000n;
  const c=(sl.snapshot?.contractInfo||[]).find(x=>String(x.id)===String(id));
  const wage=BigInt(String(c?.annualWage??p.signingFee??0));
@@ -4494,7 +4513,7 @@ recruit=function(id){
  if(!sl?.ready||!sl?.verified)return notice('서버 연결을 확인하세요.');
  if(Number(sl.snapshot?.seasonSigned??2)>=2)return notice('이번 시즌 일반 레전드 FA 영입은 2명까지입니다. 선수영입권 사용은 별도입니다.');
  const player=ply(id),row=(sl.snapshot.players||[]).find(x=>x.id===id);
- if(!player||!row||row.club!==null||row.retired)return notice('현재 영입 가능한 FA 선수가 아닙니다.');
+ if(!player||!row||row.club!==null||row.retired||!slV445LegendVisible(row))return notice('21세 이상 FA 선수만 영입할 수 있습니다.');
  if(!confirm(`${player.name} 선수를 이번 시즌 일반 FA로 영입할까요?\n회원 공용 포인트에서 최초 계약금 ${slV423Money(row.salary||0)}이 차감됩니다.`))return;
  let req=slV441SignRequestKeys.get(id);
  const key='sl_v441_sign_'+(sl.snapshot?.viewer?.id||'guest')+'_'+id;
@@ -4517,17 +4536,23 @@ recruit=function(id){
 v47WeekendKey=function(){return String(s.season)+':season';};
 v47WeekendSigned=function(){return Object.entries(s.v47Signed||{}).reduce((sum,[key,value])=>sum+(key.split(':')[0]===String(s.season)?Number(value)||0:0),0);};
 
+function slV445LegendVisible(row){
+ const candidate=ply(row?.id);
+ if(!candidate?.legend)return false;
+ const age=Number(row?.age??(Number(candidate.ageBaseline||0)+Number(s.season)-1));
+ return Number.isFinite(age)&&age>20;
+}
 marketPage=function(){
  if(!slEmbedded)return page('선수 영입','온라인 게임에 로그인 후 이용하세요.');
  const allRows=Array.isArray(sl.snapshot?.players)?sl.snapshot.players:[];
  const pos=s.ui.marketPos||'ALL',q=String(s.ui.marketSearch||'').trim().toLocaleLowerCase('ko');
- const all=allRows.filter(v=>!v.retired&&ply(v.id)?.legend&&(pos==='ALL'||ply(v.id).pos===pos)&&(!q||ply(v.id).name.toLocaleLowerCase('ko').includes(q)))
+ const all=allRows.filter(v=>!v.retired&&slV445LegendVisible(v)&&(pos==='ALL'||ply(v.id).pos===pos)&&(!q||ply(v.id).name.toLocaleLowerCase('ko').includes(q)))
   .sort((a,b)=>Number(a.club!==null)-Number(b.club!==null)||Number(b.ovr)-Number(a.ovr));
  const maxPage=Math.max(0,Math.ceil(all.length/12)-1),pageNum=Math.max(0,Math.min(maxPage,Number(s.ui.marketPage)||0));s.ui.marketPage=pageNum;
  const seasons=Number(sl.snapshot?.seasonSigned??2),seasonSlots=Math.max(0,2-seasons),rosterCount=mine().roster.length;
  const c=sl.snapshot?.clubs?.[s.selected],morale=Number(c?.morale||0),wallet=BigInt(String(sl.snapshot?.wallet||0));
- const countBy={ALL:allRows.filter(v=>!v.retired&&ply(v.id)?.legend).length};
- for(const x of ['GK','DF','MF','FW'])countBy[x]=allRows.filter(v=>!v.retired&&ply(v.id)?.legend&&ply(v.id).pos===x).length;
+ const countBy={ALL:allRows.filter(v=>!v.retired&&slV445LegendVisible(v)).length};
+ for(const x of ['GK','DF','MF','FW'])countBy[x]=allRows.filter(v=>!v.retired&&slV445LegendVisible(v)&&ply(v.id).pos===x).length;
  return page('선수 영입','일반 레전드 FA 영입: 구단당 시즌 최대 2명 · 선수영입권 사용은 횟수 제외 · 총 1군 10명 제한')
   +block('이번 시즌 FA 영입 현황',`<div class="recruit-summary"><b>회원 포인트 ${slV423Money(wallet.toString())}</b><span>현재 레전드 ${mine().roster.filter(id=>ply(id)?.legend).length}명</span><span>이번 시즌 일반 FA ${seasons}/2명</span><span>1군 ${rosterCount}/10명</span></div><div class="note">레전드 소유는 2명으로 제한되지 않습니다. 시즌마다 일반 FA 영입만 2회 가능하며, 아이템 상점에서 구매한 선수영입권으로 계약하면 일반 FA 영입 횟수를 사용하지 않습니다. 레전드 FA 선수 수는 시즌별 성장·은퇴·방출에 따라 변동됩니다.</div><div class="spacer"></div><button class="btn xs" data-action="tab" data-value="items">아이템 상점 열기</button>`)
   +block('레전드 FA 목록',`<div class="line"><div class="tabs">${[['ALL','전체'],['GK','GK'],['DF','DF'],['MF','MF'],['FW','FW']].map(([p,n])=>`<button class="btn xs ${pos===p?'active':''}" data-action="market-pos" data-value="${p}">${n} ${countBy[p]||0}</button>`).join('')}</div><input class="field search" id="market-search" placeholder="선수 이름 검색" value="${esc(s.ui.marketSearch||'')}"></div><div class="spacer"></div>${table(['포지션','선수','나이','OVR','최초 계약금','FA 영입'],all.slice(pageNum*12,pageNum*12+12).map(v=>{
@@ -4564,8 +4589,8 @@ squadPage=function(){
   const renewState=slEmbedded?slV434RenewEligibility(id):null;
   const renewal=slEmbedded?`<button class="btn xs ${renewState.allowed?'primary':''}" data-action="sl-v434-renew" data-id="${esc(id)}" title="${esc(renewState.reason||'1시즌 연장 가능')}" ${renewState.allowed?'':'disabled'}>+1시즌</button>`:p.legend?`<button class="btn xs" data-action="legend-renew" data-id="${esc(id)}">+1시즌</button>`:'<span class="muted">-</span>';
   const releaseAction=y?'sl-v431-release':'release';
-  const fee=y?'':slV440ReleaseFee(id);
-  const releaseLabel=y?'유망주 방출':'방출 · '+slV423Money(fee.toString());
+  const fee=slV440ReleaseFee(id);
+  const releaseLabel=y?'유망주 방출 · '+slV423Money(fee.toString()):'방출 · '+slV423Money(fee.toString());
   const releaseButton=busy?'<span class="muted">경기 종료 후</span>':`<button class="btn xs warn" data-action="${releaseAction}" data-id="${esc(id)}">${releaseLabel}</button>`;
   const fit=s.lineup.includes(id)?'<span class="tag">선발</span>':'<span class="tag gray">후보</span>';
   const injury=(typeof v49InjuryText==='function'?v49InjuryText(id):'정상');
@@ -4613,7 +4638,7 @@ transferPage=function(){
  const status={proposed:'상대 감독 응답 대기',accepted:'수락 · 주말 이적 대기',rejected:'자동·수동 거절 / 환불',cancelled:'철회 / 환불',completed:'이적 완료',failed:'이적 무산 / 환불'};
  const renderOffer=(o,incoming)=>`<div class="v412-deal"><b>${title(o.player,o.playerName)} · ${slV423Money(o.amount)}</b> <span class="tag">${status[o.status]||esc(o.status)}</span><div class="small muted">${esc(s.teams[o.seller]?.name||'판매팀')} → ${esc(s.teams[o.buyer]?.name||'영입팀')}</div>${incoming?`<button class="btn xs primary" data-action="sl-v442-accept" data-id="${esc(o.id)}">수락</button> <button class="btn xs" data-action="sl-v442-reject" data-id="${esc(o.id)}">거절</button>`:o.status==='proposed'?`<button class="btn xs" data-action="sl-v442-cancel" data-id="${esc(o.id)}">철회</button>`:''}</div>`;
  const filled=slV434Academy().length>=2;
- const form=`<div class="note">이제 레전드뿐 아니라 타 구단의 <b>17~19세 유망주</b>도 완전 이적할 수 있습니다. 유망주 슬롯은 구단당 2명이며, 제안은 언제든 가능하고 수락된 이적은 주말에 확정됩니다. 3게임일 미응답 시 전액 환불됩니다. 선수 잠재력은 공개하지 않습니다.</div><div class="spacer"></div><div class="v412-form-grid"><label>영입할 유망주<select id="sl-v442-youth-select" class="field">${opts||'<option value="">현재 이적 가능한 유망주 없음</option>'}</select></label><label>제안 이적료 (P)<input id="sl-v442-youth-amount" class="field" type="number" inputmode="numeric" min="100000000" step="100000000" value="1000000000"></label></div><div class="spacer"></div><button class="btn primary" data-action="sl-v442-propose" ${!chosen||filled||slV442TradeBusy?'disabled':''}>유망주 이적 제안</button>${filled?'<div class="note warn">유망주 2명 슬롯이 가득 찼습니다. 선수를 방출한 다음 제안할 수 있습니다.</div>':''}`;
+ const form=`<div class="v412-form-grid"><label>영입할 유망주<select id="sl-v442-youth-select" class="field">${opts||'<option value="">현재 이적 가능한 유망주 없음</option>'}</select></label><label>제안 이적료 (P)<input id="sl-v442-youth-amount" class="field" type="number" inputmode="numeric" min="100000000" step="100000000" value="1000000000"></label></div><div class="spacer"></div><button class="btn primary" data-action="sl-v442-propose" ${!chosen||filled||slV442TradeBusy?'disabled':''}>유망주 이적 제안</button>${filled?'<div class="note warn">유망주 2명 슬롯이 가득 찼습니다. 선수를 방출한 다음 제안할 수 있습니다.</div>':''}`;
  return h+block('유망주 구단 간 이적',form)
   +block(`들어온 유망주 이적 제안 (${inbox.length})`,inbox.length?inbox.map(o=>renderOffer(o,true)).join(''):'<div class="empty">현재 제안 없음</div>')
   +block(`내가 보낸 유망주 이적 제안 (${own.length})`,own.length?own.map(o=>renderOffer(o,false)).join(''):'<div class="empty">아직 제안 없음</div>');
@@ -4675,7 +4700,16 @@ function v442PoseFor(m,scene,f,mode){
  const point=(xx,yy)=>({x:clamp(x(xx),4,96),y:clamp(yy,12,88)});
  const run=(start,end)=>v411Smooth(clamp((f-start)/(end-start),0,1));
  const link=pose.link,wing=pose.wing,sup=pose.support,shot=pose.shooter,lane=pose.lane;
- if(mode==='tiki'){
+  // V4.45: Only through balls trigger high-line pressing. Other patterns retain a
+  // coherent back line and the defender tracks runners inside the final third.
+  if(mode!=='through'){
+   const r=v411Smooth(clamp((f-.30)/(.79-.30),0,1));
+   d[1]=point(83-4*r,lane-10);
+   d[2]=point(86-4*r,lane+11);
+   d[3]=point(86-2*r,lane-28);
+   d[4]=point(88-3*r,lane+29);
+  }
+  if(mode==='tiki'){
   a[sup]=point(31+24*run(.12,.7),lane+10*Math.sin(Math.PI*f)+4);
   a[link]=point(39+23*run(.14,.7),lane-12-4*Math.sin(Math.PI*f));
   a[wing]=point(33+32*run(.32,.8),lane+25-8*run(.32,.8));
@@ -4685,17 +4719,20 @@ function v442PoseFor(m,scene,f,mode){
   a[sup]=point(29+28*run(.16,.74),lane<50?27:71);
   a[shot]=point(50+31*run(.43,.78),46+6*Math.sin(Math.PI*f));
   a[link]=point(47+21*run(.38,.8),lane<50?67:33);
-  d[1]=point(75-10*run(.33,.68),44);d[2]=point(78-12*run(.4,.74),57);
+  // Near-post and far-post defenders actively contest the cross.
+   const duel=run(.59,.78);
+   d[1]=point(86-7*duel,44+3*duel);
+   d[2]=point(88-8*duel,59-4*duel);
  }else if(mode==='counter'){
   a[link]=point(25+46*run(.06,.62),lane-17);
   a[wing]=point(37+39*run(.14,.66),lane+21);
   a[shot]=point(43+43*run(.24,.73),lane-3);
-  d[1]=point(70-9*run(.2,.64),lane-7);d[3]=point(77-8*run(.3,.72),lane+22);
+  d[1]=point(83-5*run(.2,.64),lane-7);d[3]=point(85-4*run(.3,.72),lane+22);
  }else if(mode==='solo'){
   a[shot]=point(38+50*run(.26,.79),lane-9*Math.sin(Math.PI*f*2.2));
   a[sup]=point(30+22*run(.06,.62),lane+25);
-  d[1]=point(68-9*run(.3,.5),lane-11*Math.sin(Math.PI*f*1.8));
-  d[2]=point(76-11*run(.43,.64),lane+11*Math.cos(Math.PI*f*1.6));
+  d[1]=point(82-4*run(.3,.5),lane-11*Math.sin(Math.PI*f*1.8));
+  d[2]=point(85-5*run(.43,.64),lane+11*Math.cos(Math.PI*f*1.6));
  }
  return {p,pose,point};
 }
@@ -4727,8 +4764,8 @@ v411Pose=function(m,scene,f){
   if(f<.12){ball=foot(sup,.10);label='측면 전개 시작';}
   else if(f<.36){ball=arc(sup,wing,.12,.36,5);stage='pass';label='측면 전환 패스';}
   else if(f<.59){ball=foot(wing,f);label='윙어의 측면 돌파';}
-  else if(f<.78){ball=arc(wing,shot,.59,.78,12);stage='pass';label=`크로스! ${shooterName} 문전 침투`;}
-  else if(f<shotStart){ball=foot(shot,f);label='헤더 또는 발리 슈팅 준비';}
+  else if(f<.78){ball=arc(wing,shot,.59,.78,12);stage='pass';label=`크로스! ${shooterName}과 수비수 공중 볼 경합`;}
+  else if(f<shotStart){ball=foot(shot,f);label='문전에서 몸싸움 · 경합 끝에 슈팅 준비';}
  }else if(mode==='counter'){
   if(f<.12){ball=foot(link,.08);label='공 탈취 · 빠른 역습!';}
   else if(f<.34){ball=arc(link,wing,.12,.34,4);stage='pass';label='역습 첫 패스';}
