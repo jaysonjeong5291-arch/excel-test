@@ -604,7 +604,7 @@ body.superleague-active #superleague-view{height:calc(100dvh - 145px);min-height
 <div id="chat" class="chat" hidden><button type="button" id="chat-title-button" class="chat-title" aria-expanded="true" aria-controls="chat-body" title="메모 접기/펼치기"><span>메모 <span id="chat-count"></span></span><span class="chat-toggle" id="chat-toggle-glyph">−</span></button><div class="chat-body" id="chat-body"><div id="chat-messages" class="chat-messages"><div class="chat-empty">내용 없음</div></div><div id="admin-chat-feedback" class="admin-chat-feedback" role="status" hidden></div><form class="chat-form" id="chat-form"><input id="chat-input" class="chat-input" placeholder="메시지 입력" maxlength="280" autocomplete="off" aria-label="채팅 메시지"><button type="submit" class="chat-send">보내기</button></form></div></div>
 <section id="superleague-view" hidden aria-label="슈퍼리그 매니저 시트"><iframe id="superleague-frame" title="슈퍼리그" data-src="./superleague.html" referrerpolicy="same-origin"></iframe></section>
 <section id="race-view" class="race-sheet-view" hidden aria-label="레이스 게임 시트"><iframe id="race-frame" title="업무현황_레이스_VER.2026" data-src="./race-demo.html" referrerpolicy="same-origin"></iframe></section>
-<footer class="footer"><div id="sheet-nav" class="sheet-nav"><span class="sheet-chev">‹</span><span class="sheet-chev">›</span><button class="sheet-tab active" type="button" data-sheet="lobby">Sheet1</button><button id="race-sheet-tab" class="sheet-tab" type="button" data-sheet="race" hidden>🏁 레이스 <span class="tab-close" data-close-race title="레이스 시트 닫기">×</span></button><button id="add-sheet-btn" class="sheet-plus" type="button" title="방 만들기">＋</button></div><span class="footer-fill"></span><span class="footer-status" id="footer-label">준비 중</span><span class="footer-right" title="레벨 등급 v3.0">100% · v1.0.1 인증 안정화</span></footer>
+<footer class="footer"><div id="sheet-nav" class="sheet-nav"><span class="sheet-chev">‹</span><span class="sheet-chev">›</span><button class="sheet-tab active" type="button" data-sheet="lobby">Sheet1</button><button id="race-sheet-tab" class="sheet-tab" type="button" data-sheet="race" hidden>🏁 레이스 <span class="tab-close" data-close-race title="레이스 시트 닫기">×</span></button><button id="superleague-sheet-tab" class="sheet-tab" type="button" data-sheet="superleague" hidden>⚽ 슈퍼리그 <span class="tab-close" data-close-superleague title="슈퍼리그 시트 닫기">×</span></button><button id="add-sheet-btn" class="sheet-plus" type="button" title="방 만들기">＋</button></div><span class="footer-fill"></span><span class="footer-status" id="footer-label">준비 중</span><span class="footer-right" title="레벨 등급 v3.0">100% · v1.0.1 인증 안정화</span></footer>
 <script>
 'use strict';
 const SIZE = 15;
@@ -1315,7 +1315,7 @@ const CLIENT_ID=makeClientId();
 const ROOM_REGEX=/^(?:r-[0-9a-f]{10}|h-[0-9a-f]{12}|e-[0-9a-f]{12})$/;
 let geometry={size:600,header:31,step:37.93},hover=null;
 let state=null,myNumber=null,mySeat='waiting',connected=false;
-let activeRoom=null,openRooms=[],roomCache=new Map(),roomList=[],waitingList=[]; let activeRace=false,raceSheetOpen=false,activeSuperleague=false;
+let activeRoom=null,openRooms=[],roomCache=new Map(),roomList=[],waitingList=[]; let activeRace=false,raceSheetOpen=false,activeSuperleague=false,superleagueSheetOpen=false;
 let chatLastSeen='',movePending=false,pendingMovePoint=null,chatPending=false,revision=-1;
 let tick=0,polling=false,stopped=false,pollTimer=null,initialDeepLink=new URLSearchParams(location.search).get('room');
 let lobbyHealthy=false,lobbyReady=false,creating=false,lobbySignature="";
@@ -2120,6 +2120,7 @@ function updateSheetTabs(){const nav=$('sheet-nav');nav.querySelectorAll('[data-
  for(const id of openRooms){const tab=document.createElement('button');tab.type='button';tab.className='sheet-tab'+(id===activeRoom?' active':'');tab.dataset.roomTab=id;tab.title='시트 열기';tab.textContent=roomLabel(id)+(roomList.find(r=>r.id===id)?.game==='tetris'?' · T':roomList.find(r=>r.id===id)?.game==='mine_battle'?' · M':id.startsWith('h-')?' · H':id.startsWith('e-')?' · O':'');
   const close=document.createElement('span');close.className='tab-close';close.textContent='×';close.title='시트 닫기';close.dataset.closeRoom=id;tab.append(close);nav.insertBefore(tab,$('add-sheet-btn'));}
  const raceTab=$('race-sheet-tab');raceTab.hidden=!raceSheetOpen;raceTab.classList.toggle('active',activeRace);
+ const slTab=$('superleague-sheet-tab');slTab.hidden=!superleagueSheetOpen;slTab.classList.toggle('active',activeSuperleague);
  const superTab=$('superleague-lobby-btn');if(superTab)superTab.classList.toggle('active',activeSuperleague);
  const lobby=nav.querySelector('[data-sheet="lobby"]');lobby.classList.toggle('active',activeRoom===null&&!activeRace&&!activeSuperleague);}
 function changeUrl(id){const url=new URL(location.href);if(id)url.searchParams.set('room',id);else url.searchParams.delete('room');try{history.replaceState(null,'',url.pathname+url.search+url.hash);}catch(_){}}
@@ -2136,7 +2137,7 @@ function switchView(id){
   if(!memberToken||!memberProfile){lobbyNotify('슈퍼리그는 회원 로그인 후 이용할 수 있습니다.',true);openMemberPanel('login');return;}
   if(!requireNickname())return;
   document.body.classList.add('superleague-active');
-  activeSuperleague=true;activeRoom=null;activeRace=false;
+  activeSuperleague=true;superleagueSheetOpen=true;activeRoom=null;activeRace=false;
   $('race-view').hidden=true;$('lobby-view').hidden=true;$('room-view').hidden=true;$('chat').hidden=true;
   $('holdem-view').hidden=true;$('oddeven-view').hidden=true;
   $('superleague-view').hidden=false;
@@ -2584,6 +2585,8 @@ window.addEventListener('message',e=>{
 });
 $('sheet-nav').addEventListener('click',e=>{
  if(e.target.closest('[data-close-race]')){e.stopPropagation();raceSheetOpen=false;if(activeRace)switchView(null);else updateSheetTabs();return;}
+ if(e.target.closest('[data-close-superleague]')){e.stopPropagation();superleagueSheetOpen=false;if(activeSuperleague)switchView(null);else updateSheetTabs();return;}
+ if(e.target.closest('[data-sheet="superleague"]')){switchView('__superleague__');return;}
  if(e.target.closest('[data-sheet="race"]')){switchView('__race__');return;}
  const closer=e.target.closest('[data-close-room]');if(closer){e.stopPropagation();closeRoom(closer.dataset.closeRoom);return;}
  const tab=e.target.closest('[data-room-tab]');if(tab){switchView(tab.dataset.roomTab);return;}
