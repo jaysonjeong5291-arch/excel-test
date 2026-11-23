@@ -212,7 +212,32 @@ const CLUBS=DATA.clubs,LEGENDS=DATA.legends,PLAYERS=[...DATA.modern,...LEGENDS],
 const DAYS=['월','화','수','목','금','토','일'],ROLES=['GK','DF','MF','FW','FW'],ROLE_KO={GK:'골키퍼',DF:'수비수',MF:'미드필더',FW:'공격수'};
 const STYLES={organizer:'지휘형',reflex:'선방형',sweeper:'스위퍼',stopper:'대인마크',fullback:'오버래핑',playmaker:'빌드업',creator:'플레이메이커',engine:'활동량',anchor:'수비형',winger:'측면 돌파',finisher:'골 결정력',dribbler:'드리블',speedster:'스피드',target:'타깃형'};
 const TACTICS={style:{balanced:'균형',attack:'공격',defend:'수비'},press:{low:'낮음',medium:'보통',high:'강함'},pace:{slow:'점유',normal:'보통',fast:'역습'}};
-const STORE=window.__excelManagerNickname?SUPERLEAGUE_LEGACY_STORE+':excel:'+encodeURIComponent(window.__excelManagerNickname.toLowerCase()):SUPERLEAGUE_LEGACY_STORE, $=id=>document.getElementById(id),clamp=(n,l,h)=>Math.min(h,Math.max(l,n)),fmt=n=>Number(n||0).toLocaleString('ko-KR'),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// V4.26: UI-only Korean large-number grouping; preserve source amounts for server RPCs.
+function slFormatMoneyUnits(amount){
+ let raw=String(amount??0).trim().replace(/[\s,]/g,'');
+ if(!/^-?\d+$/.test(raw)){
+  const n=Number(amount);
+  return Number.isFinite(n)?Math.trunc(n).toLocaleString('ko-KR'):'0';
+ }
+ let negative=false;
+ if(raw[0]==='-'){negative=true;raw=raw.slice(1);}
+ raw=raw.replace(/^0+(?=\d)/,'');
+ if(raw==='0')return '0';
+ const units=['','만','억','조','경','해','자','양'];
+ const chunks=[];
+ let order=0;
+ while(raw.length){
+  const piece=raw.slice(-4);
+  raw=raw.slice(0,-4);
+  if(Number(piece)!==0){
+   const suffix=units[order]??`10^${order*4}`;
+   chunks.unshift(Number(piece).toLocaleString('ko-KR')+suffix);
+  }
+  order++;
+ }
+ return (negative?'-':'')+chunks.join(' ');
+}
+const STORE=window.__excelManagerNickname?SUPERLEAGUE_LEGACY_STORE+':excel:'+encodeURIComponent(window.__excelManagerNickname.toLowerCase()):SUPERLEAGUE_LEGACY_STORE, $=id=>document.getElementById(id),clamp=(n,l,h)=>Math.min(h,Math.max(l,n)),fmt=n=>slFormatMoneyUnits(n),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ply=id=>BY_ID.get(id);
 const price=p=>{const rating=Math.max(0,p.ovr-65),youth=p.legend&&p.age<26?Math.max(0,p.potential-p.ovr)*83:0;return Math.round((320+rating*rating*3.5+youth)/10)*10;};
 const defaultT=()=>({style:'balanced',press:'medium',pace:'normal'});
@@ -3274,7 +3299,7 @@ if(slEmbedded){
 
 // V4.23 — online-only item shop and legend signing bonus.
 const SL_V423_TICKET_COST=500000000000;
-function slV423Money(n){try{return BigInt(n??0).toLocaleString('ko-KR')+'P'}catch(_){return Number(n||0).toLocaleString('ko-KR')+'P'}}
+function slV423Money(n){return slFormatMoneyUnits(n)+'P'}
 function slV423Uuid(){
  const c=window.crypto;
  if(!c?.getRandomValues)throw new Error('보안 난수 생성이 지원되지 않는 브라우저입니다. HTTPS 환경에서 접속하세요.');
