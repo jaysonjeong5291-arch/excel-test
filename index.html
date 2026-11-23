@@ -1156,6 +1156,9 @@ function useMemberProfile(profile){
   try{localStorage.setItem(NICKNAME_STORAGE,myNickname);}catch(_){}
  }
  updateNicknameInput();paintMemberPanel();refreshNicknameAccess();
+ if(typeof activeSuperleague!=='undefined'&&activeSuperleague&&$('superleague-frame')?.contentWindow){
+  $('superleague-frame').contentWindow.postMessage({type:'EXCEL_SUPERLEAGUE_IDENTITY',nickname:memberProfile?.nickname||myNickname,online:true,adminResetAvailable:Boolean(adminToken&&memberProfile?.nickname==='운영자'&&memberToken),walletPoints:memberProfile?.points==null?null:String(memberProfile.points)},location.origin);
+ }
  // The initial member login and room list take priority over optional streak status.
  if(lobbyReady)setTimeout(()=>{syncGomokuRewards(true);syncArcadeRewards(true);},3500);
  renderLobby();if(activeRoom){if(isTetrisRoom())tDisplayStatus();else if(isMineRoom())renderMineRoom();else if(state)paintState();}
@@ -2451,7 +2454,7 @@ window.addEventListener('message',e=>{
 $('superleague-frame').addEventListener('load',()=>{
  const frame=$('superleague-frame');
  if(activeSuperleague&&frame.contentWindow){
-  frame.contentWindow.postMessage({type:'EXCEL_SUPERLEAGUE_IDENTITY',nickname:memberProfile?.nickname||myNickname,online:true,adminResetAvailable:Boolean(adminToken&&memberProfile?.nickname==='운영자'&&memberToken)},location.origin);
+  frame.contentWindow.postMessage({type:'EXCEL_SUPERLEAGUE_IDENTITY',nickname:memberProfile?.nickname||myNickname,online:true,adminResetAvailable:Boolean(adminToken&&memberProfile?.nickname==='운영자'&&memberToken),walletPoints:memberProfile?.points==null?null:String(memberProfile.points)},location.origin);
  }
 });
 function frameSafeSlReply(requestId,payload){
@@ -2467,7 +2470,7 @@ window.addEventListener('message',e=>{
  if(e.data?.type==='SL_RPC'&&activeSuperleague){
   const rid=String(e.data.requestId||'');
   const method=e.data.method;
-  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics','sl_v427_budget','sl_v427_budget_repay','sl_v427_friendly_play','sl_v427_admin_reset','sl_v428_snapshot','sl_v428_facility_info','sl_v428_facility_upgrade'].includes(method))return;
+  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_v425_admin_reset','sl_v423_item_action','sl_v424_save_tactics','sl_v427_budget','sl_v427_budget_repay','sl_v427_friendly_play','sl_v427_admin_reset','sl_v429_test_advance','sl_v428_snapshot','sl_v428_facility_info','sl_v428_facility_upgrade'].includes(method))return;
   const args=e.data.args||{};
   if(method==='sl_command'&&!['claim','offer','respond','cancel','fa_sign','release','advance','post'].includes(args.p_action))return;
   (async()=>{
@@ -2486,6 +2489,11 @@ window.addEventListener('message',e=>{
       response=await callRpc('sl_v427_admin_reset',{
         p_token:tokenAtStart,p_client:CLIENT_ID,p_admin_token:adminToken,
         p_confirm:args.p_confirm
+      },false,30000);
+    }else if(method==='sl_v429_test_advance'){
+      if(!adminToken||myNickname!=='운영자')throw new Error('관리자 비밀번호 인증 후에만 하루 진행이 가능합니다.');
+      response=await callRpc('sl_v429_test_advance',{
+        p_token:tokenAtStart,p_client:CLIENT_ID,p_admin_token:adminToken
       },false,30000);
     }else if(method==='sl_v427_budget'){
       response=await callRpc('sl_v427_budget',{p_token:tokenAtStart},false,11000);
@@ -2518,7 +2526,7 @@ window.addEventListener('message',e=>{
     if((method==='sl_snapshot'||method==='sl_v428_snapshot')&&$('superleague-frame')?.contentWindow){
       $('superleague-frame').contentWindow.postMessage({type:'EXCEL_SUPERLEAGUE_IDENTITY',
         nickname:memberProfile?.nickname||myNickname,online:true,
-        adminResetAvailable:Boolean(adminToken&&memberProfile?.nickname==='운영자')},location.origin);
+        adminResetAvailable:Boolean(adminToken&&memberProfile?.nickname==='운영자'),walletPoints:memberProfile?.points==null?null:String(memberProfile.points)},location.origin);
     }
     frameSafeSlReply(rid,{ok:true,data:response});
    }catch(err){frameSafeSlReply(rid,{ok:false,error:String(err?.message||err)});}

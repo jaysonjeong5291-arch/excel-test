@@ -305,7 +305,26 @@ function table(headers,rows,cls=''){return `<div class="scrolltable"><table clas
 function slV428Weekday(){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',weekday:'short'}).format(new Date()).replace(/요일$/,'');}
 function slV428OperationalDay(){return `${s.day<7?'상반기':'하반기'} (${slV428Weekday()})`;}
 function dayLabel(){return `시즌 ${s.season} · ${slV428OperationalDay()}`;}
-function topRefresh(){$('r-club').textContent=hasSelected()?mine().name:'구단 선택';$('r-season').textContent=String(s.season);$('r-day').textContent=slV428OperationalDay();$('r-points').textContent=`${fmt(s.points)} P`;}
+function topRefresh(){
+ $('r-club').textContent=hasSelected()?mine().name:'구단 선택';
+ $('r-season').textContent=String(s.season);
+ $('r-day').textContent=slV428OperationalDay();
+ const wallet=window.__slMemberPoints??window.__slOnline?.snapshot?.wallet;
+ const walletEl=$('r-points');
+ walletEl.textContent=slEmbedded
+  ?(wallet===null||wallet===undefined?'동기화 중':slFormatMoneyUnits(wallet)+' P')
+  :slFormatMoneyUnits(s.points)+' P';
+ const walletLabel=walletEl.previousElementSibling;
+ if(walletLabel?.classList.contains('minor'))walletLabel.textContent=slEmbedded?'회원 포인트':'데모 포인트';
+ const group=walletEl.parentElement;
+ if(slEmbedded&&group&&!document.getElementById('sl-v429-club-balance')){
+  const label=document.createElement('span');label.className='minor';label.textContent='구단 예산';
+  const amount=document.createElement('b');amount.id='sl-v429-club-balance';
+  group.append(label,amount);
+ }
+ const budget=document.getElementById('sl-v429-club-balance');
+ if(budget)budget.textContent=slFormatMoneyUnits(s.points)+' P';
+}
 const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['items','아이템'],['budget','예산'],['calendar','경기 일정'],['friendly','친선경기'],['league','순위'],['match','경기 기록']];
 function sheetNav(){$('side-navigation').innerHTML=TABS.map(([key,label])=>`<button class="side-btn ${s.tab===key?'active':''}" type="button" data-action="tab" data-value="${key}" ${s.tab===key?'aria-current="page"':''} title="${label}"><span class="navtxt">${label}</span></button>`).join('')}
 function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${slV428OperationalDay()})`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage,budget:slV427BudgetPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 온라인 테스트에서는 Supabase의 실제 회원 포인트와 공유 경기 데이터를 사용합니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
@@ -2936,7 +2955,7 @@ function slRequest(method,args={}){
  return new Promise((resolve,reject)=>{
   if(!slEmbedded)return reject(new Error('엑셀 게임의 로그인 탭에서 실행해야 합니다.'));
   const requestId='sl'+(++sl.sequence);
-  const timer=setTimeout(()=>{sl.pending.delete(requestId);reject(new Error('서버 응답 시간 초과. 잠시 후 다시 시도하세요.'));},method==='sl_v427_admin_reset'?36000:14500);
+  const timer=setTimeout(()=>{sl.pending.delete(requestId);reject(new Error('서버 응답 시간 초과. 잠시 후 다시 시도하세요.'));},['sl_v427_admin_reset','sl_v429_test_advance'].includes(method)?36000:14500);
   sl.pending.set(requestId,{resolve,reject,timer});
   window.parent.postMessage({type:'SL_RPC',requestId,method,args},location.origin);
  });
@@ -3210,7 +3229,7 @@ render=function(){
  slRenderOffline();
  if(slEmbedded){
   const footer=document.querySelector('#screen .footer');
-  if(footer)footer.innerHTML='공용 온라인 리그 · 구단·선수·이적·리그 기록은 Supabase 서버 기준 · 친선 연습/경기 중계는 로컬 실행 · 엑셀 포인트와 구단 예산은 별도입니다.';
+  if(footer)footer.innerHTML='공용 온라인 리그 · 구단·선수·이적·리그 기록은 Supabase 서버 기준 · 친선 연습/경기 중계는 로컬 실행 · 회원 공용 포인트와 구단 예산은 서로 다른 잔액입니다.';
  }
 };
 document.addEventListener('click',e=>{
@@ -3275,6 +3294,14 @@ window.addEventListener('message',e=>{
 });
 if(slEmbedded)render();
 
+
+window.addEventListener('message',e=>{
+ if(!slEmbedded||e.source!==window.parent||e.origin!==location.origin)return;
+ if(e.data?.type==='EXCEL_SUPERLEAGUE_IDENTITY'&&e.data.walletPoints!==undefined){
+  window.__slMemberPoints=e.data.walletPoints===null?null:String(e.data.walletPoints);
+  topRefresh();
+ }
+});
 
 // V4.22 · shared online season reset. Authorization is verified in Supabase.
 if(slEmbedded){
@@ -3720,12 +3747,40 @@ slApply=function(data){const clubBefore=s.selected;slV428PreviousApply(data);if(
 // 1 civil day = 1 server game day. Remove acceleration controls in online mode.
 function slV428DisableSpeed(){
  if(!slEmbedded)return;
- document.querySelectorAll('[data-action="next-day"],[data-action="fast-forward"]').forEach(b=>b.hidden=true);
+ document.querySelectorAll('[data-action="fast-forward"]').forEach(b=>b.hidden=true);
+ const day=document.querySelector('[data-action="next-day"]');
+ if(day){
+  const allowed=Boolean(sl.adminResetAvailable);
+  day.hidden=!allowed;
+  day.disabled=!allowed||Boolean(window.__slV429AdvanceBusy);
+  day.textContent='1일 진행 (운영자 테스트)';
+  day.title='테스트용: 버튼을 누를 때마다 서버 리그를 정확히 하루 진행합니다.';
+ }
 }
 const slV428OldRender=render;
 render=function(){slV428OldRender();slV428DisableSpeed();};
 // Re-check initial DOM after setup, since render() was invoked before this wrapper.
 slV428DisableSpeed();
+// V4.29: Authorized manual one-day simulation; never batches weeks or seasons.
+const slV429PreviousNextDay=nextDay;
+nextDay=function(...args){
+ if(!slEmbedded)return slV429PreviousNextDay(...args);
+ if(!sl.adminResetAvailable)return notice('관리자 비밀번호 인증 후 1일 진행을 사용할 수 있습니다.');
+ if(window.__slV429AdvanceBusy)return;
+ if(!window.confirm('테스트용으로 공용 슈퍼리그를 정확히 1일 진행할까요? 리그·시즌 정산이 발생할 수 있습니다.'))return;
+ window.__slV429AdvanceBusy=true;
+ slV428DisableSpeed();
+ void (async()=>{
+  try{
+   const r=await slRequest('sl_v429_test_advance');
+   if(!r?.ok)throw new Error(r?.error||'서버에서 하루 진행을 거부했습니다.');
+   notice('하루 진행 완료 · 시즌 '+r.season+' / '+(Number(r.day)+1)+'일');
+   await slLoad(false);
+  }catch(e){notice('하루 진행 실패: '+String(e?.message||e));}
+  finally{window.__slV429AdvanceBusy=false;slV428DisableSpeed();}
+ })();
+};
+
 document.addEventListener('click',e=>{
  if(!slEmbedded)return;
  const btn=e.target.closest?.('[data-action]');if(!btn)return;
