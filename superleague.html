@@ -4224,7 +4224,7 @@ marketPage=function(){
   content+=`<div class="note">이번 추첨 <b>${batch.count}명</b> · 발탁 가능한 인원 ${Math.max(0,limit)}명. 선택한 선수만 최초 계약금(1년치 연봉)을 지급하고, 나머지는 공용 추첨 풀로 돌아갑니다.</div><div class="spacer"></div>`;
   content+=`<div class="grid2" style="align-items:stretch">${candidates.map(y=>{
    const checked=slV437Selected.has(y.id),disabled=(!checked&&slV437Selected.size>=limit)||busy;
-   return `<label style="display:block;border:1px solid var(--line,#c8d6ce);border-radius:8px;padding:12px;cursor:pointer"><input type="checkbox" data-action="sl-v437-toggle" data-id="${esc(y.id)}" ${checked?'checked':''} ${disabled?'disabled':''} style="margin-right:8px"><b>${esc(y.name)}</b> <span class="tag">${esc(y.pos)}</span><div class="small muted">${y.age}세 · OVR ${y.ovr} · 최초 계약금 ${slV437Price(y)}</div></label>`;
+   return `<label style="display:block;border:2px solid ${checked?'#148a54':'var(--line,#c8d6ce)'};background:${checked?'rgba(26,153,90,.08)':'transparent'};border-radius:8px;padding:12px;cursor:pointer"><input type="checkbox" data-action="sl-v437-toggle" data-id="${esc(y.id)}" ${checked?'checked':''} ${disabled?'disabled':''} style="margin-right:8px"><b>${esc(y.name)}</b> <span class="tag">${esc(y.pos)}</span><div class="small muted">${y.age}세 · OVR ${y.ovr} · 최초 계약금 ${slV437Price(y)}</div></label>`;
   }).join('')}</div><div class="spacer"></div>`;
   content+=`<div class="note">선택 <b>${slV437Selected.size}명</b> · 최초 계약금 합계 <b>${slV423Money(slV437SelectionFee().toString())}</b></div><div class="spacer"></div>
    <div class="line" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-action="sl-v437-appoint" ${busy||slV437Selected.size<1||slV437Selected.size>limit?'disabled':''}>선택 선수 ${slV437Selected.size}명 발탁</button>
@@ -4255,19 +4255,26 @@ async function slV437Do(method,args,tag){
  }catch(e){notice('요청 확인 필요: '+String(e?.message||e)+' · 재시도 시 같은 요청번호로 확인합니다.');}
  finally{slV437Busy=false;render();}
 }
-document.addEventListener('change',e=>{
- const el=e.target;if(!el?.matches?.('[data-action="sl-v437-toggle"]'))return;
- const id=el.dataset.id,b=slV437Batch(),max=2-slV434Academy().length;
- if(!b?.candidates?.some(y=>y.id===id))return;
- if(el.checked){if(slV437Selected.size>=max){el.checked=false;notice('유망주 선수단은 구단당 최대 2명입니다.');return;}slV437Selected.add(id);}
- else slV437Selected.delete(id);
- render();
-},true);
+// V4.37.1: The action click listener below previously preventDefault()'d the
+// checkbox BEFORE the browser could emit change. Selection is now handled
+// directly on click and immediately re-rendered (including mobile label taps).
 document.addEventListener('click',e=>{
  const btn=e.target.closest?.('[data-action^="sl-v437-"]');if(!btn)return;
+ const action=btn.dataset.action,b=slV437Batch();
+ // Handle the checkbox inside the click, not in 'change'. In the older
+ // version preventDefault blocked native checkbox change on mobile.
+ if(action==='sl-v437-toggle'){
+  e.preventDefault();e.stopImmediatePropagation();
+  if(slV437Busy||!sl?.ready||!b)return;
+  const id=String(btn.dataset.id||'');
+  if(!b.candidates?.some(y=>String(y.id)===id))return;
+  if(slV437Selected.has(id)){slV437Selected.delete(id);render();return;}
+  const capacity=Math.max(0,2-slV434Academy().length);
+  if(slV437Selected.size>=capacity){notice(`발탁은 최대 ${capacity}명까지 선택할 수 있습니다.`);return;}
+  slV437Selected.add(id);render();return;
+ }
  e.preventDefault();e.stopImmediatePropagation();
  if(slV437Busy||!sl?.ready)return;
- const action=btn.dataset.action,b=slV437Batch();
  if(action==='sl-v437-draw'){
   const n=Number(btn.dataset.count);if(![1,10].includes(n))return;
   if(Number(sl.snapshot?.youthCards||0)<n)return notice('뽑기권이 부족합니다.');
