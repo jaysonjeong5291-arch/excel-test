@@ -178,6 +178,19 @@ html.excel-embedded .app{min-height:100vh}
 /* V4.18 — server-verified owner and account identity */
 .chooseclub:disabled{opacity:.5;cursor:not-allowed;border-color:#adbab0;background:#eef1ed}
 .chooseclub:disabled:hover{transform:none;box-shadow:none}
+
+/* V4.24: readable five-player formation on narrow and wide screens. */
+.pitch.v48-pitch{height:455px;min-height:455px;padding:0 12px;overflow:hidden}
+.pitch.v48-pitch .player-dot{min-width:78px;max-width:130px;line-height:1.15;word-break:keep-all;z-index:3}
+.pitch.v48-pitch .player-dot span{display:block;font-size:10px;line-height:1.35;background:rgba(255,255,255,.94);border-radius:3px;padding:2px 3px;font-weight:700}
+.pitch.v48-pitch .player-dot small{display:block;background:rgba(255,255,255,.85);line-height:1.2;padding:1px 2px}
+@media(max-width:650px){.pitch.v48-pitch{height:470px;min-height:470px}.pitch.v48-pitch .player-dot{min-width:68px;max-width:100px}.pitch.v48-pitch .player-dot span{font-size:9px}}
+.v424-btnline{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:8px 0 12px}
+.v424-pill{font-size:11px;color:#286e43;font-weight:800}
+.v424-goal{font-weight:700;color:#225e40}
+.v424-review details{margin:6px 0;border:1px solid #d6e1d8;background:#fff}
+.v424-review summary{cursor:pointer;padding:10px 12px;font-weight:700}
+.v424-review .v424-body{padding:9px 12px;border-top:1px solid #d6e1d8}
 </style><style>
 .sl-user-compose{border:1px solid #c5dfce;background:#f4faf6;padding:11px 12px;margin:10px 0 13px}
 .sl-compose-row{display:flex;gap:8px;margin:9px 0;align-items:center}
@@ -260,7 +273,7 @@ function block(title,content,right=''){return `<section class="block"><div class
 function table(headers,rows,cls=''){return `<div class="scrolltable"><table class="excel ${cls}"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`}
 function dayLabel(){return `시즌 ${s.season} · ${DAYS[s.day]}요일`}
 function topRefresh(){$('r-club').textContent=hasSelected()?mine().name:'구단 선택';$('r-season').textContent=String(s.season);$('r-day').textContent=DAYS[s.day];$('r-points').textContent=`${fmt(s.points)} P`;}
-const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['items','아이템'],['calendar','경기 일정'],['friendly','친선경기'],['league','리그 순위'],['match','경기 기록']];
+const TABS=[['dashboard','업무 현황'],['clubs','참가 구단'],['squad','선수단·전술'],['market','레전드 영입'],['items','아이템'],['calendar','경기 일정'],['friendly','친선경기'],['league','순위'],['match','경기 기록']];
 function sheetNav(){$('side-navigation').innerHTML=TABS.map(([key,label])=>`<button class="side-btn ${s.tab===key?'active':''}" type="button" data-action="tab" data-value="${key}" ${s.tab===key?'aria-current="page"':''} title="${label}"><span class="navtxt">${label}</span></button>`).join('')}
 function render(){topRefresh();sheetNav();$('cell-address').textContent=({dashboard:'B2',clubs:'A3',squad:'C7',market:'E4',calendar:'D6',friendly:'F4',league:'B4',transfer:'G5',match:'E10',news:'A2'})[s.tab];$('formula-text').textContent=`=슈퍼리그(${hasSelected()?mine().name:'구단선택'},${s.season}시즌,${DAYS[s.day]}요일)`;const panels={dashboard:dash,clubs:clubList,squad:squadPage,market:marketPage,calendar:calendarPage,friendly:friendlyPage,league:leaguePage,transfer:transferPage,match:matchPage,news:newsPage,items:slV423ItemsPage};$('screen').innerHTML=hasSelected()?panels[s.tab]()+`<div class="footer">본 자료는 플레이 가능한 로컬 시뮬레이션입니다. 실제 2026년 선수 등록 명단이 아닌 게임용 대표 선수 편성이며, 전설 40명은 2005년 기준 초기 능력치 및 시즌 성장형 자체 평가입니다.<br>공식 클럽·선수 라이선스 상품이 아니며, 실제 포인트 또는 서버 DB를 사용하지 않습니다.</div>`:unselected();$('chooser').innerHTML=hasSelected()?'':renderChooser();if(s.tab==='match')renderTick()}
 function unselected(){return page('슈퍼리그 운영 대시보드','참가 구단 20개 · 구단 선택 후 테스트 시작')+block('초기 설정','<div class="note">구단을 선택하면 소속 선수 8명(GK·DF·MF·FW 각 2명), 초기 데모 포인트 12,500P로 게임을 시작합니다. 구단별 선수는 중복되지 않으며, 전설 선수 40명은 FA로 별도 등록되어 있습니다.</div>')}
@@ -1382,7 +1395,7 @@ const V48_FORMATIONS={
 function v48Form(v){return V48_FORMATIONS[v]?v:'1-1-2';}
 function v48Roles(form){const f=V48_FORMATIONS[v48Form(form)].lines;return ['GK',...Array(f[0]).fill('DF'),...Array(f[1]).fill('MF'),...Array(f[2]).fill('FW')];}
 function v48Locations(form){
- const f=V48_FORMATIONS[v48Form(form)].lines,pts=[{x:50,y:86,role:'GK'}],levels=[['DF',f[0],68],['MF',f[1],46],['FW',f[2],22]];
+ const f=V48_FORMATIONS[v48Form(form)].lines,pts=[{x:50,y:87,role:'GK'}],levels=[['DF',f[0],64],['MF',f[1],41],['FW',f[2],17]];
  for(const [role,n,dy]of levels){
   const xvals=n===1?[50]:n===2?[28,72]:n===3?[17,50,83]:n===4?[12,37,63,88]:[];
   for(const x of xvals)pts.push({x,y:role==='MF'&&f[2]===0?35:dy,role});
@@ -2890,7 +2903,7 @@ function slRequest(method,args={}){
  return new Promise((resolve,reject)=>{
   if(!slEmbedded)return reject(new Error('엑셀 게임의 로그인 탭에서 실행해야 합니다.'));
   const requestId='sl'+(++sl.sequence);
-  const timer=setTimeout(()=>{sl.pending.delete(requestId);reject(new Error('서버 응답 시간 초과. 잠시 후 다시 시도하세요.'));},14500);
+  const timer=setTimeout(()=>{sl.pending.delete(requestId);reject(new Error('서버 응답 시간 초과. 잠시 후 다시 시도하세요.'));},method==='sl_admin_reset'?36000:14500);
   sl.pending.set(requestId,{resolve,reject,timer});
   window.parent.postMessage({type:'SL_RPC',requestId,method,args},location.origin);
  });
@@ -3214,7 +3227,12 @@ window.addEventListener('message',e=>{
  if(e.data?.type==='EXCEL_SUPERLEAGUE_IDENTITY'&&e.data.online){
    sl.adminResetAvailable=Boolean(e.data.adminResetAvailable);
    const resetButton=document.getElementById('sl-season-reset-btn');
-   if(resetButton)resetButton.hidden=!sl.adminResetAvailable;
+   if(resetButton){
+    resetButton.hidden=false;
+    resetButton.disabled=!sl.adminResetAvailable;
+    resetButton.title=sl.adminResetAvailable?'운영자 인증 완료 · 시즌 1 초기화 가능':'Sheet1에서 운영자 비밀번호 인증 후 다시 시도하세요.';
+    resetButton.textContent=sl.adminResetAvailable?'⟲ 시즌 1 초기화 (운영자)':'🔒 시즌 초기화 · 운영자 인증 필요';
+   }
    const offlineReset=document.getElementById('sl-offline-reset');
    if(offlineReset)offlineReset.hidden=true;
   const nick=String(e.data.nickname||'').trim().slice(0,16);
@@ -3245,7 +3263,8 @@ if(slEmbedded){
     sl.offerFeedback=null;
     s=initial();
     const loaded=await slLoad(false);
-    if(!loaded)throw new Error('초기화는 성공했으나 서버 상태를 다시 불러오지 못했습니다. 다시 접속해 주세요.');
+    if(!loaded||sl.snapshot?.season!==1||sl.snapshot?.day!==0)
+      throw new Error('초기화 결과를 확인하지 못했습니다. 서버 월드 상태를 다시 확인하세요.');
     notice('슈퍼리그 시즌 1 · 첫날로 초기화했습니다. 리셋 전 서버 백업 번호: '+result.backupId);
    }catch(error){notice('리셋 실패/상태 재확인 필요: '+String(error?.message||error));}
    finally{resetButton.disabled=false;}
@@ -3292,7 +3311,7 @@ marketPage=function(){
   .sort((a,b)=>Number(a.retired)-Number(b.retired)||Number(a.club!==null)-Number(b.club!==null)||Number(b.ovr)-Number(a.ovr));
  const start=Math.max(0,Math.min(Math.ceil(all.length/12)-1,Number(s.ui.marketPage)||0));s.ui.marketPage=start;
  const mineClub=sl.snapshot?.clubs?.[s.selected];const legendCount=mine().roster.filter(id=>ply(id)?.legend).length;
- return page('레전드 FA 영입','2005년 전후 실제 연봉 기반 추정 계약금 · 최초 영입할 때 공용 포인트에서 1회 차감',`<span class="tag">${s.day%7>=5?'주말 FA 진행':'평일: 영입권 사용 가능'}</span>`)
+ return page('레전드 FA 영입','잠재력·현재 OVR 평균으로 산출한 연봉 = 최초 계약금 · FA 영입 시 1회 차감',`<span class="tag">${s.day%7>=5?'주말 FA 진행':'평일: 영입권 사용 가능'}</span>`)
  +block('FA 계약금 및 영입 규정',`<div class="note">회원 공용 잔액: <b>${slV423Money(sl.snapshot?.wallet)}</b> · 구단 이적 예산과 별도 · 현역 계약금 0P · 주말 일반 FA 최대 레전드 2명 및 전체 10명 · 영입권은 아이템 탭에서 언제든 1명 즉시 영입</div><div class="spacer"></div><button class="btn xs" data-action="tab" data-value="items">아이템 상점 열기 →</button>`)
  +block('레전드 선수 목록',`<div class="line"><div class="tabs">${[['ALL','전체'],['GK','GK'],['DF','DF'],['MF','MF'],['FW','FW']].map(([v,l])=>`<button class="btn xs ${pos===v?'active':''}" data-action="market-pos" data-value="${v}">${l}</button>`).join('')}</div><input class="field search" id="market-search" placeholder="선수 이름 검색" value="${esc(s.ui.marketSearch||'')}"></div><div class="spacer"></div>${table(['선수','나이','OVR','은퇴 시점','최초 계약금','상태 / FA 영입'],all.slice(start*12,start*12+12).map(v=>{
    const p=ply(v.id);const retired=!!v.retired;const can=!retired&&v.club===null&&s.day%7>=5&&mine().roster.length<10&&legendCount<2&&Number(sl.snapshot?.wallet)>=Number(v.salary)&&Number(v.age)>=16&&Number(mineClub?.morale)>=Math.min(98,50+Math.max(0,p.potential-80)*3);
@@ -3306,7 +3325,7 @@ squadPage=function(){
  const old=slV423PrevSquad();
  if(!slEmbedded)return old;
  const payRows=mine().roster.map(ply).filter(Boolean).map(p=>{const info=(sl.snapshot?.players||[]).find(x=>x.id===p.id);return `<tr><td class="strong">${esc(p.name)}</td><td>${p.legend?'레전드':'현역'}</td><td class="num">${slV423Money(p.legend?info?.salary:0)}</td><td class="num">${p.age}세</td><td class="num">${p.ovr}</td></tr>`});
- return old+block('선수별 연봉 기준 · 최초 계약금',table(['이름','구분','연봉 기준 계약금','나이','OVR'],payRows)+`<div class="note">레전드 최초 영입 때만 계약금 1회 차감 · 현역 0P. 현역은 시즌이 지나도 나이/능력치가 고정됩니다. 레전드는 시즌 전환 때 나이/OVR이 바뀌고 37~42세에 계약과 무관하게 은퇴합니다.</div>`);
+ return old+block('선수별 연봉 기준 · 최초 계약금',table(['이름','구분','연봉 기준 계약금','나이','OVR'],payRows)+`<div class="note">레전드 잠재력·현재 OVR 평균으로 산출 · 최초 FA 영입 시 계약금 1회 차감 · 현역 0P. 현역은 시즌이 지나도 나이/능력치가 고정됩니다. 레전드는 시즌 전환 때 나이/OVR이 바뀌고 37~42세에 계약과 무관하게 은퇴합니다.</div>`);
 };
 let slV423ActionBusy=false;
 async function slV423Action(action,player){
@@ -3341,5 +3360,118 @@ document.addEventListener('click',e=>{
 document.addEventListener('change',e=>{
  if(e.target?.id==='sl-v423-target')s.ui.v423SelectedLegend=e.target.value;
 });
+
+
+
+// V4.24 — server-backed tactics, player rankings, goal-scoring record.
+let slV424Dirty=false;
+let slV424SaveBusy=false;
+let slV424LastSavedClub=null;
+function slV424GoalList(){return slEmbedded&&Array.isArray(sl.snapshot?.goals)?sl.snapshot.goals:[];}
+function slV424PlayerRank(which){
+ const goals=slV424GoalList(),totals=new Map();
+ for(const g of goals){
+  const id=which==='goal'?g.scorerId:g.assistId;
+  const name=which==='goal'?g.scorer:g.assist;
+  if(!id||!name)continue;
+  const key=String(id),v=totals.get(key)||{id:key,name,team:g.club,count:0};
+  v.count++;totals.set(key,v);
+ }
+ return [...totals.values()].sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko'));
+}
+function slV424RankTable(kind){
+ const data=slV424PlayerRank(kind);
+ return data.length?table(['순위','선수','소속 구단','기록'],data.slice(0,30).map((x,i)=>`<tr><td class="num">${i+1}</td><td class="strong">${esc(x.name)}</td><td>${esc(s.teams[x.team]?.name||'이전 구단')}</td><td class="num strong">${x.count}${kind==='goal'?'골':'도움'}</td></tr>`)):'<div class="empty">아직 기록된 선수 통계가 없습니다. V4.24 설치 후 진행된 정규리그부터 집계합니다.</div>';
+}
+const slV424OldLeague=leaguePage;
+leaguePage=function(){
+ if(!slEmbedded||!sl.ready)return slV424OldLeague();
+ const count=slV424GoalList().length;
+ return page('순위','슈퍼리그 구단 순위 · 득점왕 · 도움왕',`<span class="tag">시즌 ${s.season}</span>`)
+ +block('팀 순위 · 20구단',standingsTable())
+ +`<div class="grid2">${block('선수 득점 순위',slV424RankTable('goal'))}${block('선수 어시스트 순위',slV424RankTable('assist'))}</div>`
+ +block('득점·도움 집계 기준',`<div class="note">현재 시즌 기록된 득점 이벤트 <b>${count}건</b> · 서버에 확정 저장된 득점/어시스트만 집계합니다. V4.24 설치 이전 경기는 득점자 정보가 없어 임의로 생성하지 않습니다.</div>`);
+};
+function slV424MatchScorers(m){
+ const goals=slV424GoalList().filter(g=>g.day===m.day&&g.a===m.a&&g.b===m.b).sort((a,b)=>a.minute-b.minute);
+ if(!goals.length)return (m.sa+m.sb)>0?'<div class="small muted">득점 선수 기록 없음 (구버전 경기)</div>':'<div class="small muted">득점 없음 · 0:0</div>';
+ return goals.map(g=>`<div class="v424-goal">⚽ ${g.minute}분 · ${esc(s.teams[g.club]?.name||'구단')} · ${esc(g.scorer)}${g.assist?' <span class="small muted">(도움 '+esc(g.assist)+')</span>':''}</div>`).join('');
+}
+const slV424OldMatch=matchPage;
+matchPage=function(){
+ if(!slEmbedded||!sl.ready)return slV424OldMatch();
+ if(s.match&&['first','second','halftime'].includes(s.match.phase))return slV424OldMatch();
+ const matches=(sl.snapshot?.matches||[]).slice().sort((a,b)=>b.day-a.day||a.a-b.a);
+ const rows=matches.map(m=>`<details><summary>S${s.season} · ${m.day<7?'1주':'2주'} ${DAYS[m.day%7]}요일 · ${esc(s.teams[m.a]?.name||'?')} ${m.sa} : ${m.sb} ${esc(s.teams[m.b]?.name||'?')}</summary><div class="v424-body">${slV424MatchScorers(m)}</div></details>`).join('');
+ const f=(s.pvp?.history||[]).slice(0,15).map(h=>{
+  const ev=(h.v424Goals||[]).map(g=>`<div>⚽ ${g.minute}분 · ${esc(g.team)} · ${esc(g.scorer)}</div>`).join('');
+  return `<details><summary>친선 S${h.season} · ${esc(s.teams[h.attacker]?.name||'우리 구단')} ${h.sa}:${h.sb} ${esc(s.teams[h.target]?.name||'상대')}</summary><div class="v424-body">${ev||'<span class="small muted">득점자 기록 없음</span>'}</div></details>`;
+ }).join('');
+ return page('경기 기록','정규리그 확정 스코어와 득점자 · 친선경기 기록')
+  +block('정규리그 경기 결과 · 클릭하여 득점자 확인',`<div class="v424-review">${rows||'<div class="empty">아직 완료된 리그 경기가 없습니다.</div>'}</div>`)
+  +block('내 친선 경기 기록 · 이 브라우저의 테스트 내역',`<div class="v424-review">${f||'<div class="empty">완료한 친선 경기가 없습니다.</div>'}</div>`);
+};
+const slV424OldFriendlyComplete=v47CompleteFriendly;
+v47CompleteFriendly=function(m){
+ slV424OldFriendlyComplete(m);
+ const h=s.pvp?.history?.[0];
+ if(h&&h.season===m.season&&h.day===m.day){
+  h.v424Goals=(m.events||[]).filter(e=>e.kind==='goal').map(e=>({
+    minute:Number(e.min),scorer:String(e.player||'선수'),
+    team:e.side==='home'?mine().name:s.teams[m.opponent]?.name||'상대'
+  }));
+ }
+};
+const slV424PrevSquad=squadPage;
+squadPage=function(){
+ const prev=slV424PrevSquad();
+ if(!slEmbedded||!sl.ready)return prev;
+ const tag=slV424Dirty?'<span class="tag gold">변경사항 저장 필요</span>':
+    sl.snapshot?.savedTactic?'<span class="tag">서버에 저장됨</span>':'<span class="tag gray">기본 전술 · 미저장</span>';
+ return prev+block('온라인 전술 저장 · 친선 및 리그 공통',
+   `<div class="note">현재 포메이션 <b>${esc(s.formation)}</b> · 선발 5명 · 전술 3종을 이 구단의 서버 설정으로 저장합니다. 친선은 저장된 전술로 시작하고, 정규리그 자동 경기에도 반영됩니다.</div>`+
+   `<div class="v424-btnline"><button class="btn primary" type="button" data-action="sl-v424-save" ${slV424SaveBusy||active()?'disabled':''}>💾 전술 저장</button>${tag}</div>`);
+};
+function slV424AcceptSavedTactic(){
+ const config=sl.snapshot?.savedTactic;
+ if(!slEmbedded||!config||!hasSelected()||slV424Dirty||active())return;
+ if(!Array.isArray(config.lineup)||config.lineup.length!==5||new Set(config.lineup).size!==5||!config.lineup.every(x=>mine().roster.includes(x)))return;
+ if(!V48_FORMATIONS[config.formation])return;
+ if(!Object.keys(TACTICS).every(k=>config.tactics&&Object.hasOwn(TACTICS[k],config.tactics[k])))return;
+ s.formation=config.formation;s.lineup=[...config.lineup];s.tactics={...config.tactics};
+}
+const slV424PreviousApply=slApply;
+slApply=function(data){
+ slV424PreviousApply(data);
+ if(!slEmbedded||!data)return;
+ if(slV424LastSavedClub!==data.mine){slV424Dirty=false;slV424LastSavedClub=data.mine;}
+ slV424AcceptSavedTactic();
+};
+document.addEventListener('change',e=>{
+ if(!slEmbedded||!sl.ready)return;
+ if(['formation','lineup','tactic'].includes(e.target?.dataset?.change)&&!active())slV424Dirty=true;
+},true);
+document.addEventListener('click',e=>{
+ if(!slEmbedded)return;
+ const button=e.target.closest?.('[data-action]');if(!button)return;
+ if(button.dataset.action==='v48-auto-lineup'&&!active())slV424Dirty=true;
+ if(button.dataset.action!=='sl-v424-save')return;
+ e.preventDefault();e.stopPropagation();
+ if(slV424SaveBusy||!sl.ready||!sl.verified||!hasSelected()||active())return;
+ if(!validLineup(s.lineup)){notice('5명 선발을 먼저 점검하세요.');return;}
+ slV424SaveBusy=true;
+ const form=s.formation,lineup=[...s.lineup],tactics={...s.tactics};
+ void (async()=>{
+  try{
+   const res=await slRequest('sl_v424_save_tactics',{p_payload:{formation:form,lineup,tactics}});
+   if(!res?.ok)throw new Error(res?.error||'전술 저장 실패');
+   slV424Dirty=false;await slLoad(false);
+   notice('전술·포메이션·선발 5명을 서버에 저장했습니다.');
+  }catch(e){notice('전술 저장 실패: '+String(e?.message||e));}
+  finally{slV424SaveBusy=false;render();}
+ })();
+},true);
+// Do not hide the admin reset button for an authenticated club owner who lacks
+// the separate operator password. Keep it visibly locked with an actionable hint.
 
 </script></body></html>

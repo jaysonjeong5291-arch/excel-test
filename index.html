@@ -2450,7 +2450,7 @@ window.addEventListener('message',e=>{
 $('superleague-frame').addEventListener('load',()=>{
  const frame=$('superleague-frame');
  if(activeSuperleague&&frame.contentWindow){
-  frame.contentWindow.postMessage({type:'EXCEL_SUPERLEAGUE_IDENTITY',nickname:memberProfile?.nickname||myNickname,online:true,adminResetAvailable:Boolean(adminToken&&myNickname==='운영자'&&memberToken&&memberProfile)},location.origin);
+  frame.contentWindow.postMessage({type:'EXCEL_SUPERLEAGUE_IDENTITY',nickname:memberProfile?.nickname||myNickname,online:true,adminResetAvailable:Boolean(adminToken&&memberProfile?.nickname==='운영자'&&memberToken)},location.origin);
  }
 });
 function frameSafeSlReply(requestId,payload){
@@ -2466,7 +2466,7 @@ window.addEventListener('message',e=>{
  if(e.data?.type==='SL_RPC'&&activeSuperleague){
   const rid=String(e.data.requestId||'');
   const method=e.data.method;
-  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_admin_reset','sl_v423_item_action'].includes(method))return;
+  if(!/^[a-zA-Z0-9_-]{1,60}$/.test(rid)||!['sl_snapshot','sl_command','sl_offer_submit','sl_offer_status','sl_admin_reset','sl_v423_item_action','sl_v424_save_tactics'].includes(method))return;
   const args=e.data.args||{};
   if(method==='sl_command'&&!['claim','offer','respond','cancel','fa_sign','release','advance','post'].includes(args.p_action))return;
   (async()=>{
@@ -2479,13 +2479,22 @@ window.addEventListener('message',e=>{
      response=await callRpc('sl_admin_reset',{
       p_token:tokenAtStart,p_client:CLIENT_ID,p_admin_token:adminToken,
       p_confirm:args.p_confirm
-     },false,11500);
+     },false,30000);
+    }else if(method==='sl_v424_save_tactics'){
+      response=await callRpc('sl_v424_save_tactics',{
+        p_token:tokenAtStart,p_payload:args.p_payload||{}
+      },false,11500);
     }else if(method==='sl_v423_item_action'){
      response=await callRpc('sl_v423_item_action',{p_token:tokenAtStart,p_action:args.p_action,p_player:args.p_player||null,p_request:args.p_request},false,11500);
     }else{
     response=await callRpc(method,method==='sl_snapshot'?{p_token:tokenAtStart}:method==='sl_offer_submit'?{p_token:tokenAtStart,p_request:args.p_request,p_player:args.p_player,p_amount:args.p_amount}:method==='sl_offer_status'?{p_token:tokenAtStart,p_request:args.p_request||null}:{p_token:tokenAtStart,p_action:args.p_action,p_payload:args.p_payload||{}},false,11500);
     }
     if(memberToken!==tokenAtStart)throw new Error('로그인 계정이 변경되어 요청이 취소됐습니다.');
+    if(method==='sl_snapshot'&&$('superleague-frame')?.contentWindow){
+      $('superleague-frame').contentWindow.postMessage({type:'EXCEL_SUPERLEAGUE_IDENTITY',
+        nickname:memberProfile?.nickname||myNickname,online:true,
+        adminResetAvailable:Boolean(adminToken&&memberProfile?.nickname==='운영자')},location.origin);
+    }
     frameSafeSlReply(rid,{ok:true,data:response});
    }catch(err){frameSafeSlReply(rid,{ok:false,error:String(err?.message||err)});}
   })();
