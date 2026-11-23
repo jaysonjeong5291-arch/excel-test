@@ -1324,6 +1324,7 @@ let hunterLobbyStatuses=new Map(),matchGateLobbyStatuses=new Map(),holdemLobbyRo
 // Freshly created races must be visible immediately even before Supabase's next heartbeat/list refresh.
 // Optimistic rows expire quickly and can never revive an abandoned historical room.
 const raceNewlyCreated=new Map();
+const worksheetJustCreated=new Map(); // 60s optimistic creation cache; never overrides later server state
 let raceCurrentInviteId='',raceLobbyLastSuccess=0,raceLobbyLastError='';
 let matchGateByRoom=new Map(),matchGateActionPending=false,matchGateRestarting=new Map();
 // Rematch UX: keep the small ready/start gate fresh independently of the heavier room/game poll.
@@ -1842,7 +1843,8 @@ function mergedRoomList(){
  const protectedGomoku=[...gomokuLiveRoomGrace.values()]
   .filter(x=>now-x.seenAt<GOMOKU_LOBBY_GRACE_MS)
   .map(x=>({...x.room,status:'playing'}));
- const incoming=[...raceOnlineRooms,...visibleOddEvenRooms(oddEvenLobbyRooms),...visibleHoldemRooms(holdemLobbyRooms),...legacyRooms,...protectedGomoku];
+ for(const [key,item] of worksheetJustCreated){if(now-item.at>60000||legacyRooms.some(x=>x.id===key))worksheetJustCreated.delete(key);}
+ const incoming=[...raceOnlineRooms,...visibleOddEvenRooms(oddEvenLobbyRooms),...visibleHoldemRooms(holdemLobbyRooms),...legacyRooms,...[...worksheetJustCreated.values()].map(x=>x.room),...protectedGomoku];
  const seen=new Set();
  return incoming.filter(r=>{
   if(['mine_battle','underover'].includes(r?.game)||/^u-/.test(String(r?.id||'')))return false;
@@ -2275,7 +2277,24 @@ async function doCreateRoom(game){if(['mine_battle','underover'].includes(game))
    holdemLobbyRooms=[{id:data.created_room,sheet:data.sheet,title:'홀덤',game:'holdem',status:'waiting',count:1,waiting:5,moves:0},...holdemLobbyRooms];
    roomList=[...roomList.filter(x=>x.id!==data.created_room),holdemLobbyRooms[0]];
    renderLobby();applyHoldemData(data.created_room,data);await openRoom(data.created_room);lobbyNotify('');
-  }else{const data=await lobbyRpc('create','',game);lastLegacyLobbyPayload=data;refreshCombinedLobby();if(!data.created_room)throw new Error('방 생성 정보가 없습니다.');await openRoom(data.created_room);lobbyNotify('');}}
+  }else{
+   const data=await lobbyRpc('create','',game);
+   if(!data.created_room)throw new Error('방 생성 정보가 없습니다.');
+   const id=data.created_room;
+   const serverRoom=(data.rooms||[]).find(x=>x.id===id)||{};
+   const optimistic={id,game,sheet:serverRoom.sheet||data.sheet||'Sheet'+(roomList.length+2),
+     title:serverRoom.title|| (game==='tetris'?'테트리스':'오목'),status:'waiting',
+     black:serverRoom.black||myLobbyNumber||null,white:null,waiting:1,count:1,moves:0,...serverRoom};
+   worksheetJustCreated.set(id,{at:Date.now(),room:optimistic});
+   if(!roomList.some(x=>x.id===id))roomList=[...roomList,optimistic];
+   if(!openRooms.includes(id)&&openRooms.length>=8)throw new Error('동시에 열 수 있는 시트는 최대 8개입니다.');
+   renderLobby();updateSheetTabs();
+   // Enter immediately; the lobby refresh may still be serving the previous version.
+   await openRoom(id);
+   lastLegacyLobbyPayload=data;
+   refreshCombinedLobby();
+   if(activeRoom===id)lobbyNotify('');
+  }}
  catch(e){lobbyNotify(e.message,true);}
  finally{creating=false;$('create-room-btn').disabled=false;$('add-sheet-btn').disabled=false;}
 }
@@ -3393,8 +3412,20 @@ function renderHoldemReadout(own,board,isPlayer){
  return new Set(best.cards);
 }
 
-function holdemRpc(action='list',room=null,amount=null){
- return callRpc('renju_holdem_v2_big_rpc',{p_action:action,p_client:CLIENT_ID,p_token:memberToken||null,p_room:room,p_amount:amount});
+let holdemBigRpcAvailability='unknown';
+async function holdemRpc(action='list',room=null,amount=null){
+ const params={p_action:action,p_client:CLIENT_ID,p_token:memberToken||null,p_room:room,p_amount:amount};
+ const missing=/PGRST202|Could not find the function|schema cache/i;
+ if(holdemBigRpcAvailability!=='missing'){
+  try{
+   const data=await callRpc('renju_holdem_v2_big_rpc',params);
+   holdemBigRpcAvailability='installed';return data;
+  }catch(error){if(!missing.test(String(error?.message||'')))throw error;holdemBigRpcAvailability='missing';}
+ }
+ if(amount!==null&&( !Number.isSafeInteger(Number(amount)) || Math.abs(Number(amount))>2147483647))
+  throw new Error('홀덤 고액 베팅 서버 SQL이 설치되지 않았습니다. 02_holdem_bigint.sql을 실행하세요.');
+ // Existing authenticated RPC supports room creation, joining and normal small-stake games.
+ return callRpc('renju_holdem_rpc',params);
 }
 function applyHoldemData(id,data){
  if(!data||data.ok!==true)return;
