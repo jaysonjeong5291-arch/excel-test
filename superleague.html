@@ -5010,4 +5010,28 @@ document.getElementById('excel-bridge-back')?.addEventListener('click',()=>{
 setInterval(slV451UpdateClock,1000);
 slV451Schedule();
 
+
+// TEST ONLY — isolated overseas tour prototype. No live RPC or wallet changes.
+TABS.splice(TABS.findIndex(x=>x[0]==='friendly')+1,0,['tourtest','해외투어']);
+let tourTestMode=false;
+const tourTestOldSwitch=switchTab,tourTestOldRender=render;
+switchTab=function(tab){
+ if(tab==='tourtest'){tourTestMode=true;render();return;}
+ tourTestMode=false;return tourTestOldSwitch(tab);
+};
+render=function(){
+ if(!tourTestMode)return tourTestOldRender();
+ sheetNav();
+ document.querySelectorAll('#side-navigation .side-btn').forEach(b=>{
+  const active=b.dataset.value==='tourtest';b.classList.toggle('active',active);
+  if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
+ });
+ $('cell-address').textContent='H4';
+ $('formula-text').textContent='=해외투어(격리 테스트)';
+ $('chooser').innerHTML='';
+ if(!$('tour-test-frame')){
+  $('screen').innerHTML='<iframe id="tour-test-frame" title="해외투어 격리 테스트" src="./tour-test.html?v=1" style="border:0;width:100%;height:calc(100vh - 150px);min-height:780px;display:block"></iframe>';
+ }
+};
+sheetNav();
 </script></body></html>
